@@ -1,0 +1,14 @@
+UseLaser,1
+UseTargetCross,1
+TimeBetweenTargets,1
+TargetSpeed,8
+TargetSizeNear,0.1
+TargetSizeFar,2
+NumberOfTargetsPerTrial,10
+NumberOfTrials,3
+RadiusNearspace,0.55
+RadiusFarspace,10
+HorizontalAngleLeft,-90
+HorizontalAngleRight,90
+VerticalAngleTop,15
+VerticalAngleBottom,-15

@@ -1,0 +1,346 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Events;
+
+public class GOEventInvoker : MonoBehaviour
+{
+    protected Dictionary<EventName, UnityEvent<GameObject>> GO_unityEvents =
+        new Dictionary<EventName, UnityEvent<GameObject>>();
+
+    /// <summary>
+    /// Adds the given listener for the given event name
+    /// </summary>
+    /// <param name="eventName">event name</param>
+    /// <param name="listener">listener</param>
+    public void AddGOListener(EventName eventName, UnityAction<GameObject> listener)
+    {
+
+        // only add listeners for supported events
+        if (GO_unityEvents.ContainsKey(eventName))
+        {
+            GO_unityEvents[eventName].AddListener(listener);
+        }
+        //Debug.Log(listener + "added");
+    }
+}
+
+
+
+
+    private void OnTriggerEnter(Collider other)
+    {
+
+        print(other.gameObject);
+        //if (other.tag == "Target" && other.GetComponent<TargetControll>().hit == false)
+        //{
+        //    other.GetComponent<TargetControll>().hit = true;
+        //    other.GetComponent<TargetControll>().reasonOfDeath = "Hit";
+        //    other.GetComponent<AudioSource>().Play();
+
+        //    if (gameControll.startGame)
+        //    {
+        //        gameControll.HitCount++;
+        //        gameControll.Total_HitCounter++;
+        //        gameControll.ShotCounter++;
+        //        gameControll.accuracy = 100 * (float)gameControll.Total_HitCounter / gameControll.ShotCounter;
+
+        //        gameControll.AddToList(other.gameObject, gameControll.DeathList);
+        //    }
+        //    other.GetComponent<Rigidbody>().useGravity = true;
+        //    other.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
+
+
+        }
+        //}
+
+        //private bool isTracked()
+        //{
+        //    if (JoyNames.Length > 0)
+        //    {
+        //        if (JoyNames[0].Contains("Controller"))
+        //        {
+        //            isConnected = true;
+        //        }
+        //        else
+        //        {
+        //            //Debug.LogWarning("no Controller found");
+        //            isConnected = false;
+        //        }
+        //    }
+
+        //    return isConnected;
+        //}
+
+        //public bool getSqueeze()
+        //{
+        //    if (SteamVR_Actions.default_Squeeze.axis > 0.02)
+        //        return true;
+        //    else
+        //        return false;
+
+        //}
+
+
+
+		
+
+
+    //public GameControll gameControll;
+    //public SteamVR_TrackedObject trackedObject;
+    public bool isConnected;
+
+    //public SteamVR_Action_In_Source Squeeze; //= Controller;
+    private bool b_squeeze;
+
+    public bool _Squeeze;
+    //{
+    //    get { return b_squeeze; }
+    //    set
+    //    {
+    //        if (value == b_squeeze)
+    //            return;
+
+    //        b_squeeze = value;
+    //        if (b_squeeze)
+    //        {
+    //            gameControll.ShotCounter++;
+    //            gameControll.Shotlist.Add(gameControll.ConvertToTimestamp(DateTime.UtcNow).ToString() + ',' + gameControll.getTargetCrossPosition() + ',' + gameControll.CheckIfShot());
+
+    //        }
+    //    }
+    //}
+    //public SteamVR_Input_Sources inputSource = SteamVR_Input_Sources.Any;//which controller
+
+    //public string[] JoyNames;
+
+
+    //// Use this for initialization
+    //void Start () {
+    //    trackedObject = GetComponent<SteamVR_TrackedObject>();
+
+    //    //Get a reference to the tracked object class 
+    //    if (this.GetComponent<SteamVR_TrackedObject>() == null)
+    //        gameObject.AddComponent<SteamVR_TrackedObject>();
+
+    //    JoyNames = Input.GetJoystickNames();
+    //    gameControll = GameObject.FindGameObjectWithTag("ScriptContainer").GetComponent<GameControll>();
+    //}
+
+    //// Update is called once per frame
+    //void Update () {
+    //    if (gameControll == null)
+    //    {
+    //        gameControll = GameObject.FindGameObjectWithTag("ScriptContainer").GetComponent<GameControll>();
+    //    }
+    //    JoyNames = Input.GetJoystickNames();
+
+    //    if (this.GetComponent<SteamVR_TrackedObject>() == null)
+    //        gameObject.AddComponent<SteamVR_TrackedObject>();
+
+    //    isTracked();
+
+    //    _Squeeze = getSqueeze();
+
+    //}
+
+
+
+	        //Vector3 CamRot = Camera.main.transform.rotation.eulerAngles;
+        //print(CamRot);
+        //TargetContainer.transform.eulerAngles = new Vector3(0, CamRot.y, 0);
+
+        //Target = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        //Target.transform.localScale = new Vector3(.3f, .3f, .3f);
+        //Target.transform.position = new Vector3(Random.Range(-1, 1), Random.Range(1, 2), Random.Range(2, 3));
+
+
+
+		
+            //if (startposition_L.magnitude <= end_L.magnitude + .1f)
+            //    TargetCross_L.transform.position = startposition_L + Laserdistance* direction_L;
+            //else
+            //    TargetCross_L.transform.position = end_L;
+
+            //if (startposition_R.magnitude <= end_R.magnitude + .1f)
+            //    TargetCross_R.transform.position = startposition_R + Laserdistance * direction_R;
+            //else
+            //    TargetCross_R.transform.position = end_R;
+
+
+
+			    ///// <summary>
+    ///// Creates the Laser, dependent if the useLaser is true or false
+    ///// ToDo: Define Distance where the laser is
+    ///// </summary>
+    ///// <param name="useLaser"></param>
+    ///// <returns>Collider of the Object that was hit</returns>
+    //public void createLaser(bool useLaser)
+    //{
+    //    if (useLaser)
+    //    {
+    //        // Left Laser
+    //        startposition_L = LaserLeft.transform.position;
+    //        direction_L = LaserLeft.transform.forward;
+    //        LaserLeft.SetPosition(0, startposition_L);
+    //        TargetCross_L.transform.rotation = LaserLeft.transform.rotation;
+    //        RaycastHit TargetCrossHit_L = useRayCast(startposition_L, direction_L);
+
+    //        if (TargetCrossHit_L.collider != null)
+    //        {
+    //            TargetCross_L.transform.position = TargetCrossHit_L.point;
+    //            if (B_Squeeze_Left)
+    //            {
+    //                end_L = TargetCrossHit_L.point;
+    //                EventManager.CallColliderInteractionEvent(TargetCrossHit_L.collider.gameObject);
+    //            }
+    //            else
+    //                end_L = startposition_L;
+    //        }
+    //        else
+    //        {
+    //            TargetCross_L.transform.position = startposition_L + direction_L.normalized * Laserdistance;
+    //            if (B_Squeeze_Left)
+    //                end_L = TargetCross_L.transform.position;
+    //            else
+    //                end_L = startposition_L;
+    //        }
+
+    //        // Right Laser
+    //        startposition_R = LaserRight.transform.position;
+    //        direction_R = LaserRight.transform.forward;
+    //        LaserRight.SetPosition(0, startposition_R);
+    //        TargetCross_R.transform.rotation = LaserRight.transform.rotation;
+    //        RaycastHit TargetCrossHit_R = useRayCast(startposition_R, direction_R);
+
+    //        if (TargetCrossHit_R.collider != null)
+    //        {
+    //            TargetCross_R.transform.position = TargetCrossHit_R.point;
+    //            if (B_Squeeze_Right)
+    //            {
+    //                end_R = TargetCrossHit_R.point;
+    //                EventManager.CallColliderInteractionEvent(TargetCrossHit_R.collider.gameObject);
+    //            }
+    //            else
+    //                end_R = startposition_R;
+    //        }
+    //        else
+    //        {
+    //            TargetCross_R.transform.position = startposition_R + direction_R.normalized * Laserdistance;
+    //            if (B_Squeeze_Right)
+    //                end_R = TargetCross_R.transform.position;
+    //            else
+    //                end_R = startposition_R;
+
+    //        }
+    //        LaserRight.SetPosition(1, end_R);
+    //        LaserLeft.SetPosition(1, end_L);
+
+
+            //if (TargetCrossHit_L.collider != null)
+            //{
+            //    TargetCross_L.transform.position = TargetCrossHit_L.point;
+            //}
+            //else
+            //    TargetCross_L.transform.position = startposition_L + Laserdistance * direction_L;
+
+            //if (TargetCrossHit_R.collider != null)
+            //{
+            //    TargetCross_R.transform.position = TargetCrossHit_R.point;
+            //}
+            //else
+            //    TargetCross_R.transform.position = startposition_R + Laserdistance * direction_R;
+
+    //    }
+    //}
+
+    //RaycastHit useRayCast(Vector3 start, Vector3 direction)
+    //{
+    //    RaycastHit hit;
+    //    //Bit shift the index of the layer(8) to get a bit mask
+    //    int layerMask = 1 << 8;  // This would cast rays only against colliders in layer 8. 
+    //    layerMask = ~layerMask;  // But instead we want to collide against everything except layer 8. The ~ operator does this, it inverts a bitmask.
+
+    //    if (Physics.Raycast(start, direction, out hit, Mathf.Infinity, layerMask))
+    //    {
+    //        // TODO:
+    //        //print(hit.collider.gameObject);
+    //    }
+    //    return hit;
+    //}
+
+
+
+	                //print(hit.collider);
+                //if (hit.collider.gameObject.tag == "Target")
+                //{
+                //    //infoTextField.text += "\n" + "Target Hit";
+
+                //    //hit.collider.gameObject.GetComponent<Target>().HitSound.Play();
+                   
+
+
+                //}
+
+            //    Button button = hit.collider.GetComponent<Button>();
+            //    if (button != null)
+            //    {
+            //        button.Select();
+            //        button.OnSubmit(null);
+            //    }
+            //    else if (button != null)
+            //    {
+            //        button.OnDeselect(null);
+            //        button = null;
+            //    }
+
+
+
+			//if (other.tag == "Target" && other.GetComponent<TargetControll>().hit == false)
+        //{
+        //    other.GetComponent<TargetControll>().hit = true;
+        //    other.GetComponent<TargetControll>().reasonOfDeath = "Hit";
+        //    other.GetComponent<AudioSource>().Play();
+
+        //    if (gameControll.startGame)
+        //    {
+        //        gameControll.HitCount++;
+        //        gameControll.Total_HitCounter++;
+        //        gameControll.ShotCounter++;
+        //        gameControll.accuracy = 100 * (float)gameControll.Total_HitCounter / gameControll.ShotCounter;
+
+        //        gameControll.AddToList(other.gameObject, gameControll.DeathList);
+        //    }
+        //    other.GetComponent<Rigidbody>().useGravity = true;
+        //    other.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
+
+
+
+		  //}
+
+        //private bool isTracked()
+        //{
+        //    if (JoyNames.Length > 0)
+        //    {
+        //        if (JoyNames[0].Contains("Controller"))
+        //        {
+        //            isConnected = true;
+        //        }
+        //        else
+        //        {
+        //            //Debug.LogWarning("no Controller found");
+        //            isConnected = false;
+        //        }
+        //    }
+
+        //    return isConnected;
+        //}
+
+        //public bool getSqueeze()
+        //{
+        //    if (SteamVR_Actions.default_Squeeze.axis > 0.02)
+        //        return true;
+        //    else
+        //        return false;
+
+        //}
