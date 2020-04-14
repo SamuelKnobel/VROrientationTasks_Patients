@@ -108,15 +108,16 @@
     <Compile Include="Assets\Scripts\EventHandling\EventManager.cs" />
     <Compile Include="Assets\Scripts\EventHandling\TimerChangedEvent.cs" />
     <Compile Include="Assets\Scripts\EventHandling\TimerFinishedEvent.cs" />
+    <Compile Include="Assets\Scripts\FixationCross.cs" />
     <Compile Include="Assets\Scripts\GameController.cs" />
     <Compile Include="Assets\Scripts\GameInitializer.cs" />
+    <Compile Include="Assets\Scripts\HUD.cs" />
     <Compile Include="Assets\Scripts\Tactal\HapticMotor.cs" />
     <Compile Include="Assets\Scripts\Tactal\Tactal.cs" />
     <Compile Include="Assets\Scripts\TactalHandler.cs" />
     <Compile Include="Assets\Scripts\Target\Target.cs" />
     <Compile Include="Assets\Scripts\Target\TargetConfiguration.cs" />
     <Compile Include="Assets\Scripts\Target\TargetSpawner.cs" />
-    <Compile Include="Assets\Scripts\TestTactal.cs" />
     <Compile Include="Assets\Scripts\Utils\ConfigurationData.cs" />
     <Compile Include="Assets\Scripts\Utils\ConfigurationDataValueName.cs" />
     <Compile Include="Assets\Scripts\Utils\ConfigurationUtils.cs" />

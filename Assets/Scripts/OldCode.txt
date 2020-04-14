@@ -344,3 +344,25 @@ public class GOEventInvoker : MonoBehaviour
         //        return false;
 
         //}
+
+
+
+
+		//void GenerateStartButtons()
+    //{
+    //    if (GameObject.Find("start1") == null)
+    //    {
+    //        GameObject start1 = Instantiate(StartCube);
+    //        start1.name = "start1";
+    //    }
+    //    if (GameObject.Find("start2") == null)
+    //    {
+    //        GameObject start2 = Instantiate(StartCube);
+    //        start2.transform.position += new Vector3(1, 0, 0);
+    //        start2.name = "start2";
+
+
+    //    }
+    //}
+
+

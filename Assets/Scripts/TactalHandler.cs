@@ -84,7 +84,7 @@ public class TactalHandler : MonoBehaviour
         hapticPlayer = FindObjectOfType<BhapticsManager>();
 
         // Instantiate HapticSource object from HapticMotorPrefab
-        GameObject TactalObj = Instantiate(TactalPrefab, GameObject.Find("Testing").transform);
+        GameObject TactalObj = Instantiate(TactalPrefab, GameObject.Find("GameControll").transform);
         HeadTactSource = TactalObj.GetComponent<TactSource>();
 
         // Set up TactSource parameters

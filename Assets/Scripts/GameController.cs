@@ -6,22 +6,23 @@ using UnityEngine.UI;
 public class GameController : MonoBehaviour
 {
     // Script References
-    [SerializeField]
-    GameObject StartCube;
     TargetSpawner spawner;
 
-    // UI References : TODO-->make the own UI script
-    public Button RestartButton;
+    // Fixation Cross Reference
+    public GameObject FixationCross;
+
+    // General Informations
+    public static string SubjectID;
 
     // General Task Skript
     public static Condition currentCondition;
+    public static GameState currentState;
 
     // Task 1
-    public bool b_StartTask1;
-    Timer CountdownTimerTask1;
+    //Timer CountdownTimerTask1;
 
     // Task 2
-    public List<GameObject> Targets = new List<GameObject>();
+    public static List<GameObject> Targets = new List<GameObject>();
     public GameObject currentTarget;
     public bool b_StartTask2;
     Timer CountdownTimerTask2;
@@ -29,122 +30,91 @@ public class GameController : MonoBehaviour
 
     void OnEnable()
     {
-        EventManager.ColliderInteractionEvent += StartCountdownTimerTask1;
-        EventManager.ColliderInteractionEvent += StartTimerTask2; ;
+        //EventManager.ColliderInteractionEvent += StartCountdownTimerTask1;
+        //EventManager.ColliderInteractionEvent += StartTimerTask2; ;
         EventManager.TouchLeftEvent += GiveClue;
         EventManager.TouchRightEvent += GiveClue;
     }
     void OnDisable()
     {
-        EventManager.ColliderInteractionEvent -= StartCountdownTimerTask1;
-        EventManager.ColliderInteractionEvent -= StartTimerTask2; ;
+        //EventManager.ColliderInteractionEvent -= StartCountdownTimerTask1;
+        //EventManager.ColliderInteractionEvent -= StartTimerTask2; ;
         EventManager.TouchLeftEvent -= GiveClue;
         EventManager.TouchRightEvent -= GiveClue;
     }
 
     private void Awake()
     {
+        currentState = GameState.Initializing;
         // TODO: make  things dependent from Type of HMD -->Use ENUM
         DefineHMD();
 
     }
     void Start()
     {
-        if (FindObjectOfType<GameController>() == null)
+        currentState = GameState.MainMenu;
+        DoNotDestroyOnLoad();
+        OnStart();
+    }
+    void DoNotDestroyOnLoad()
+    {
+        if (FindObjectOfType<GameController>() != null)
         {
-                DontDestroyOnLoad(this);
+            DontDestroyOnLoad(this.gameObject);
         }
         else
         {
-            print("multiple scripts found("+ FindObjectsOfType<GameController>().Length + "), destroy the additional");
-            Destroy(this);
+            print("multiple scripts found(" + FindObjectsOfType<GameController>().Length + "), destroy the additional");
+            Destroy(this.gameObject);
         }
-        OnStart();
     }
     void OnStart()
     {
         spawner = FindObjectOfType<TargetSpawner>();
         currentCondition = Condition.None;
-        GenerateStartButtons();
-        CountdownTimerTask2 = gameObject.AddComponent<Timer>();
-        CountdownTimerTask2.AddTimerFinishedEventListener(StartTask2);
+        //CountdownTimerTask2 = gameObject.AddComponent<Timer>();
+        //CountdownTimerTask2.AddTimerFinishedEventListener(spawner.SpawnTarget);
     }
 
-    void GenerateStartButtons()
-    {
-        if (GameObject.Find("start1") == null)
-        {
-            GameObject start1 = Instantiate(StartCube);
-            start1.name = "start1";
-        }
-        if (GameObject.Find("start2") == null)
-        {
-            GameObject start2 = Instantiate(StartCube);
-            start2.transform.position += new Vector3(1, 0, 0);
-            start2.name = "start2";
+    
 
-            Material m = new Material(Shader.Find("Diffuse"));
-            m.color = Color.green;
-            start2.GetComponent<MeshRenderer>().material = m;
-        }
-    }
-    void Update()
+    public void startOrientationTask()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            Application.Quit();
-        }
+
+        //CountdownTimerTask1 = gameObject.AddComponent<Timer>();
+        //CountdownTimerTask1.AddTimerFinishedEventListener(startLocalizationTask);
+        //CountdownTimerTask1.Duration = 2;
+        //CountdownTimerTask1.Run();
+        currentState = GameState.OrientationTask;
+        spawner.SpawnTarget();
+        //EventManager.ColliderInteractionEvent -= StartTimerTask2;
     }
 
-    void StartTimerTask2(GameObject go)
+    public void startLocalizationTask()
     {
-        if (go.tag == "Target")
-        {
-            CountdownTimerTask2.Duration = 2;
-            CountdownTimerTask2.Run();
-        }
-    }
-    void StartCountdownTimerTask1(GameObject go)
-    {
-        if (go.name.Contains("start1")) 
-        {
-            if (!b_StartTask1)
-            {
-                CountdownTimerTask1 = gameObject.AddComponent<Timer>();
-                CountdownTimerTask1.AddTimerFinishedEventListener(StartTask1);
-                CountdownTimerTask1.Duration = 2;
-                CountdownTimerTask1.Run();
-                Destroy(go);
-                Destroy(GameObject.Find("start2"));
-                EventManager.ColliderInteractionEvent -= StartTimerTask2; 
-            }
-        }     
-        if (go.name.Contains("start2")) 
-        {
-            if (!b_StartTask2)
-            {
-                print("start Task2"); 
-                b_StartTask2 = true;
-                StartTask2();
-                Destroy(go);
-                Destroy(GameObject.Find("start1"));
-                EventManager.ColliderInteractionEvent -= StartCountdownTimerTask1;
-               
-            }
-        }
+
+        currentState = GameState.LokalisationTask;
+        spawner.SpawnTarget();
     }
 
+
+    //void StartTimerTask2(GameObject go)
+    //{
+    //    if (go.tag == "Target")
+    //    {
+    //        CountdownTimerTask2.Duration = 2;
+    //        CountdownTimerTask2.Run();
+    //    }
+    //}
 
     public void Restart()
     {
+        currentState = GameState.MainMenu;
         currentTarget = null;
         currentCondition = Condition.None;
-        EventManager.ColliderInteractionEvent -= StartCountdownTimerTask1;
-        EventManager.ColliderInteractionEvent -= StartTimerTask2; 
-        EventManager.ColliderInteractionEvent += StartCountdownTimerTask1;
-        EventManager.ColliderInteractionEvent += StartTimerTask2;
-        b_StartTask1 = false;
-        b_StartTask2 = false;
+        //EventManager.ColliderInteractionEvent -= StartTimerTask2; 
+        //EventManager.ColliderInteractionEvent += StartTimerTask2
+        ;
         GameObject[] tars = GameObject.FindGameObjectsWithTag("Target");
         for (int i = tars.Length-1; i >=0 ; i--)
         {
@@ -155,59 +125,17 @@ public class GameController : MonoBehaviour
             Destroy(item);
         }
         Targets.Clear();
-        GenerateStartButtons();
-        GenerateStartButtons();
-
-
-    }
-    void StartTask1()
-    {
-      b_StartTask1 = true;
-        Destroy(CountdownTimerTask1);
-        spawner.SpawnTarget();
-
     }
 
-    void StartTask2()
-    {
-        if (b_StartTask2)
-        {
-            foreach (GameObject item in Targets)
-            {
-                //item    .GetComponent<Rigidbody>().useGravity = true;
-                Destroy(item);
-            }
-            Targets.Clear();
-
-            GameObject GO1 = spawner.SpawnTarget(TargetSpace.FarSpace, -80, 0);
-            GameObject GO2 = spawner.SpawnTarget(TargetSpace.FarSpace, -50, 0);
-            GameObject GO3 = spawner.SpawnTarget(TargetSpace.FarSpace, -20, 0);
-            GameObject GO4 = spawner.SpawnTarget(TargetSpace.FarSpace, 20, 0);
-            GameObject GO5 = spawner.SpawnTarget(TargetSpace.FarSpace, 50, 0);
-            GameObject GO6 = spawner.SpawnTarget(TargetSpace.FarSpace, 80, 0);
-            Targets.Add(GO1);
-            Targets.Add(GO2);
-            Targets.Add(GO3);
-            Targets.Add(GO4);
-            Targets.Add(GO5);
-            Targets.Add(GO6);
-            currentTarget = Targets[Random.Range(0, 5)];
-
-            foreach (GameObject item in Targets)
-            {
-                if (!item.Equals(currentTarget))
-                    item.tag = "Untagged";
-            }
-            int condition = Random.Range(2, 5);
-            GameController.currentCondition = (Condition)condition;
-        }
-    }
 
     public void GiveClue()
     {
-        if (currentTarget != null&& b_StartTask2)
+        if (currentState == GameState.LokalisationTask)
         {
-            currentTarget.GetComponent<Target>().GiveClue();
+            if (currentTarget != null)
+            {
+                currentTarget.GetComponent<Target>().GiveClue();
+            }
         }
     }
 

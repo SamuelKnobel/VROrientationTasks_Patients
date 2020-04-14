@@ -6,9 +6,7 @@ public enum GameState
 {
     Initializing,
     MainMenu,
-    Task1,
-    Task2,
+    OrientationTask,
+    LokalisationTask,
     End
-
-
 }

@@ -11,24 +11,24 @@ public class TargetSpawner : MonoBehaviour
     [SerializeField]
     GameObject Target ;
 
-    GameController gameController;
+    // GameObject References
     GameObject TargetContainer;
 
+
+    // ScriptReferences
+    GameController gameController;
+
+
     public Sprite[] TargetSprites;
+    public Sprite TargetSprite;
 
     void OnEnable()
     {
         EventManager.ColliderInteractionEvent += TargetShotOrHit_StartCountdownTimer;
     }
-
     void OnDisable()
     {
         EventManager.ColliderInteractionEvent -= TargetShotOrHit_StartCountdownTimer;
-    }
-
-    public void ChangeColliderEventListener()
-    {
-
     }
 
 
@@ -39,8 +39,8 @@ public class TargetSpawner : MonoBehaviour
         TargetContainer = GameObject.FindGameObjectWithTag("TargetContainer");
 
         TimeBetweenTimer = gameObject.AddComponent<Timer>();
-        TimeBetweenTimer.AddTimerFinishedEventListener(EndTimer);
-        TimeBetweenTimer.Duration = .5f;
+        TimeBetweenTimer.AddTimerFinishedEventListener(SpawnTarget);
+        TimeBetweenTimer.Duration = ConfigurationUtils.TimeBetweenTargets;
     }
 
     // Update is called once per frame
@@ -48,40 +48,55 @@ public class TargetSpawner : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.T))
         {
-            foreach (var go in GameObject.FindGameObjectsWithTag("Target"))
+            foreach (var t in FindObjectsOfType<Target>())
             {
-                Destroy(go);
+                Destroy(t.gameObject);
             }
             SpawnTarget();
         }
     }
+    // TO Check
     void TargetShotOrHit_StartCountdownTimer(GameObject shotObject)
     {
-
         if (shotObject.tag == "Target")
         {
-            //Destroy(shotObject);
             shotObject.GetComponent<Target>().deathTimer.Run();
             shotObject.GetComponent<Rigidbody>().useGravity = true;
+            TimeBetweenTimer.Duration = ConfigurationUtils.TimeBetweenTargets;
+            TimeBetweenTimer.Run();
 
-            if (gameController.b_StartTask1)
+            switch (GameController.currentState)
             {
-                TimeBetweenTimer.Duration = ConfigurationUtils.TimeBetweenTargets;
-                TimeBetweenTimer.Run();
-            }
-            else
-                gameController.currentTarget = null;
 
+                case GameState.OrientationTask:
+                    break;
+                case GameState.LokalisationTask:
+                    gameController.currentTarget = null;
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
-    void EndTimer()
+   public void SpawnTarget()
     {
-        SpawnTarget();
+        switch (GameController.currentState)
+        {
+            case GameState.OrientationTask:
+                 SpawnTarget_OrientationTask();
+                break;
 
+            case GameState.LokalisationTask:
+                 SpawnTargets_LokalizationTask();
+                break;
+
+            default:
+                break;
+        }
     }
 
-    public void SpawnTarget()
+    GameObject SpawnTarget_OrientationTask()
     {
         int condition = Random.Range(1, 5);
 
@@ -97,7 +112,6 @@ public class TargetSpawner : MonoBehaviour
         else
             newSpace = TargetSpace.NearSpace;
 
-
         int rndLeftRight = Random.Range(0, 2);
         if (rndLeftRight ==0)
             newposition = TargetPosition.left;
@@ -106,12 +120,41 @@ public class TargetSpawner : MonoBehaviour
         GameObject NewTarget = Instantiate(Target);
         NewTarget.GetComponent<Target>().defineConfiguration(newSpace, newposition);
         NewTarget.transform.SetParent(TargetContainer.transform, false);
-        NewTarget.GetComponent<SpriteRenderer>().sprite = TargetSprites[Random.Range(0, TargetSprites.Length)];
+        //NewTarget.GetComponent<SpriteRenderer>().sprite = TargetSprites[Random.Range(0, TargetSprites.Length)];      
+        NewTarget.GetComponent<SpriteRenderer>().sprite = TargetSprite;
         NewTarget.GetComponent<Target>().GiveClue();
         //EventManager.CallDefineSpaceEvent((int)newSpace);
+        return NewTarget;
 
     }
-    public GameObject SpawnTarget(TargetSpace targetSpace, float anglePhi, float angleTheata)
+    GameObject SpawnTargets_LokalizationTask()
+    {
+        foreach (GameObject item in GameController.Targets)
+        {
+            Destroy(item);
+        }
+        GameController.Targets.Clear();
+
+        GameObject GO1 = SetTargetConfiguration(TargetSpace.FarSpace, -80, 0);
+        GameObject GO2 = SetTargetConfiguration(TargetSpace.FarSpace, -50, 0);
+        GameObject GO3 = SetTargetConfiguration(TargetSpace.FarSpace, -20, 0);
+        GameObject GO4 = SetTargetConfiguration(TargetSpace.FarSpace, 20, 0);
+        GameObject GO5 = SetTargetConfiguration(TargetSpace.FarSpace, 50, 0);
+        GameObject GO6 = SetTargetConfiguration(TargetSpace.FarSpace, 80, 0);
+
+        gameController.currentTarget = GameController.Targets[Random.Range(0, 5)];
+
+        foreach (GameObject item in GameController.Targets)
+        {
+            if (!item.Equals(gameController.currentTarget))
+                item.tag = "Untagged";
+        }
+        int condition = Random.Range(2, 5);
+        GameController.currentCondition = (Condition)condition;
+        return gameController.currentTarget;
+    }
+
+    GameObject SetTargetConfiguration(TargetSpace targetSpace, float anglePhi, float angleTheata)
     {
         TargetContainer.transform.position = Camera.main.transform.position;
 
@@ -121,9 +164,11 @@ public class TargetSpawner : MonoBehaviour
         NewTarget.transform.SetParent(TargetContainer.transform, false);
         NewTarget.GetComponent<Target>().angle = anglePhi;
 
-        NewTarget.GetComponent<SpriteRenderer>().sprite = TargetSprites[Random.Range(0, TargetSprites.Length)];
-        NewTarget.transform.eulerAngles = new Vector3(0, anglePhi, 0);
+        //NewTarget.GetComponent<SpriteRenderer>().sprite = TargetSprites[Random.Range(0, TargetSprites.Length)];
+        NewTarget.GetComponent<SpriteRenderer>().sprite = TargetSprite;
 
+        NewTarget.transform.eulerAngles = new Vector3(0, anglePhi, 0);
+        GameController.Targets.Add(NewTarget);
         return NewTarget;
     }
 }
