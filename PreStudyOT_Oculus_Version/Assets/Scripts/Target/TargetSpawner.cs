@@ -13,10 +13,6 @@ public class TargetSpawner : MonoBehaviour
     // GameObject References
     public GameObject TargetContainer;
 
-
-    // ScriptReferences
-    GameController gameController;
-
     public static TargetSpawner instance;
 
     void OnEnable()
@@ -36,12 +32,11 @@ public class TargetSpawner : MonoBehaviour
     void Start()
     {
         instance = FindObjectOfType<TargetSpawner>();
-        gameController = FindObjectOfType<GameController>();
         TargetContainer = GameObject.FindGameObjectWithTag("TargetContainer");
 
-        TimeBetweenTimer = gameObject.AddComponent<Timer>();
-        //TimeBetweenTimer.AddTimerFinishedEventListener(SpawnTarget); // Call new function where the parameters are random, so it can be called from Timer event
-        TimeBetweenTimer.Duration = ConfigurationUtils.TimeBetweenTargets;
+        //TimeBetweenTimer = gameObject.AddComponent<Timer>();
+        ////TimeBetweenTimer.AddTimerFinishedEventListener(SpawnTarget); // Call new function where the parameters are random, so it can be called from Timer event
+        //TimeBetweenTimer.Duration = ConfigurationUtils.TimeBetweenTargets;
     }
 
     // Update is called once per frame
@@ -61,28 +56,32 @@ public class TargetSpawner : MonoBehaviour
     // TO Check
     void TargetShot(GameObject shotObject)
     {
-        if (shotObject.tag == "Target")
+        if (shotObject != null)
         {
-            shotObject.GetComponent<Target>().deathTimer.Run();
-            shotObject.GetComponent<Rigidbody>().useGravity = true;
-            Feedback.AddTextToBottom("Target Shot", true);
-            if (GameController.currentState == GameState.Task_Orientation_Task)
+            if (shotObject.tag == "Target")
             {
-                EventManager.CallDefineNewTargetEvent();
-            }
-            //TimeBetweenTimer.Duration = ConfigurationUtils.TimeBetweenTargets;
-            //TimeBetweenTimer.Run();
+                shotObject.tag = "Untagged";
+                shotObject.GetComponent<Target>().deathTimer.Run();
+                shotObject.GetComponent<Rigidbody>().useGravity = true;
+                Feedback.AddTextToBottom("Target Shot", true);
+                if (GameController.currentState == GameState.Task_Orientation_Task)
+                {
+                    EventManager.CallDefineNewTargetEvent();
+                }
+                //TimeBetweenTimer.Duration = ConfigurationUtils.TimeBetweenTargets;
+                //TimeBetweenTimer.Run();
 
-            //switch (GameController.currentState)
-            //{
-            //    case GameState.Task_Orientation:
-            //        break;
-            //    case GameState.Task_Lokalisation:
-            //        GameController.currentTarget = null;
-            //        break;
-            //    default:
-            //        break;
-            //}
+                //switch (GameController.currentState)
+                //{
+                //    case GameState.Task_Orientation:
+                //        break;
+                //    case GameState.Task_Lokalisation:
+                //        GameController.currentTarget = null;
+                //        break;
+                //    default:
+                //        break;
+                //}
+            }
         }
     }
 

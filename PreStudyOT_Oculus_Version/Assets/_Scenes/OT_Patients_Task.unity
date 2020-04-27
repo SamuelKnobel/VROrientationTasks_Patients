@@ -2398,6 +2398,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   FeedbackInfo1: 
   FeedbackInfo2: 
+  FeedbackInfo3: 
 --- !u!114 &958296677
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3610,6 +3611,10 @@ MonoBehaviour:
   Part2: {fileID: 179047000}
   isSeen: 0
   TimeSeen: 0
+  borderLeft: 0.275
+  borderRight: 0.725
+  borderTop: 0.775
+  borderBottom: 0.225
 --- !u!4 &1475058674
 Transform:
   m_ObjectHideFlags: 0
@@ -4500,7 +4505,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 0, y: 8.97e-43, z: 0, w: 0}
+  m_BoundingSphereOverride: {x: 9.5e-43, y: 0, z: 0, w: 1.05e-43}
   m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0

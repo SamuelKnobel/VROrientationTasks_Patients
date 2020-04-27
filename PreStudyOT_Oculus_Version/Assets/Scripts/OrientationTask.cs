@@ -14,14 +14,28 @@ public class OrientationTask : MonoBehaviour
 
     public float timerToShowStartTaskButton;
 
+    public int currentTargetNbr = 0;
+    public int currentRoundNumber = 0;
+    public int[] currentCueOrder;
+    public int currentSessionNumber = 0;
+
+    public int maxTargetNbr = 0;
+    public int maxRoundNumber = 0;
+    public int maxSessionNumber = 0;
+
+    public int[] NumTargetsPerRound;
+    public List<int[]> OrderCues;
 
     void OnEnable()
     {
         EventManager.DefineNewTargetEvent += DefineNextTarget;
+        EventManager.StartSeachringEvent += ShowNextTarget;
     }
     void OnDisable()
     {
         EventManager.DefineNewTargetEvent -= DefineNextTarget;
+        EventManager.StartSeachringEvent -= ShowNextTarget;
+
     }
 
 
@@ -31,7 +45,9 @@ public class OrientationTask : MonoBehaviour
     {
         GameController.currentState = GameState.Task_Orientation_Tutorial;
 
-        Feedback.AddTextToButton("Press X for first SpawnPostion", true);
+        Feedback.AddTextToButton("Hold MenuButton for Activating Task Start Button", true);
+
+        Feedback.AddTextToButton("Press X for first SpawnPostion", false);
         Feedback.AddTextToButton("Press Y for second SpawnPostion", false);
         Feedback.AddTextToButton("Press A for third SpawnPostion", false);
         Feedback.AddTextToButton("Press B for forth SpawnPostion", false);
@@ -40,7 +56,7 @@ public class OrientationTask : MonoBehaviour
         Feedback.AddTextToButton("Hold R - HandTrigger and Press Y for CueType: Audio", false);
         Feedback.AddTextToButton("Hold R - HandTrigger and Press A for CueType: Tactile", false);
         Feedback.AddTextToButton("Hold R - HandTrigger and Press B for CueType: Combined", false);
-        Feedback.AddTextToButton("Hold MenuButton for Activating FixationCross", false);
+        Feedback.AddTextToButton("Press MenuButton for Activating FixationCross", false);
 
 
         B_X = OVRInput.Button.Three;
@@ -118,23 +134,10 @@ public class OrientationTask : MonoBehaviour
        TargetSpawner.SpawnTarget(cueType, angle);
     }
 
-
-
-
-    public int currentTargetNbr = 0;
-    public int currentRoundNumber = 0;
-    public int[] currentCueOrder;
-    public int currentSessionNumber = 0; 
-
-    public int maxTargetNbr = 0;
-    public int maxRoundNumber = 0;
-    public int maxSessionNumber = 0;
-
-    public int[] NumTargetsPerRound;
-    public List<int[]> OrderCues;
-
     public bool StartTask(int[] numTargetsPerRound, List<int[]> orderCues)
     {
+        Feedback.AddTextToButton("GameStarts", true);
+
         Debug.Log("StartTask");
         NumTargetsPerRound = new int[numTargetsPerRound.Length];
         NumTargetsPerRound = numTargetsPerRound;
@@ -151,10 +154,12 @@ public class OrientationTask : MonoBehaviour
         maxSessionNumber = OrderCues.Count;
         maxRoundNumber = orderCues[0].Length;
         maxTargetNbr = NumTargetsPerRound[currentSessionNumber];
-
-        SpawnObjectAtPosition((int)condition, getRandomAngle());
         currentTargetNbr++;
         return true;
+    }
+    void ShowNextTarget()
+    {
+        SpawnObjectAtPosition((int)GameController.currentCondition, getRandomAngle());
     }
 
     // called if the Target is Hit
@@ -170,21 +175,21 @@ public class OrientationTask : MonoBehaviour
             currentTargetNbr = 0;
             currentRoundNumber = 0;
             currentSessionNumber++;
-            maxTargetNbr = NumTargetsPerRound[currentSessionNumber];
 
         }
         if (currentSessionNumber >= maxSessionNumber)
         {
-            Feedback.AddTextToBottom("Game Ends",true);
+            Feedback.AddTextToButton("Game Ends",true);
             Debug.Log("Game Ends");
            
         }
         else
         {
+            maxTargetNbr = NumTargetsPerRound[currentSessionNumber];
             currentCueOrder = OrderCues[currentSessionNumber];
             Condition condition = (Condition)currentCueOrder[currentRoundNumber];
             GameController.currentCondition = condition;
-            SpawnObjectAtPosition((int)condition, getRandomAngle());
+            FindObjectOfType<GameController>().FixationCross.SetActive(true);
             currentTargetNbr++;
         }
     }

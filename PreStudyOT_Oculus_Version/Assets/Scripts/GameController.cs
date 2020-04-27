@@ -118,12 +118,16 @@ public class GameController : MonoBehaviour
 
     public void StartTask(GameState gameState)
     {
+        if (currentTarget != null)
+        {
+            Destroy(currentTarget);
+        }
         if (gameState == GameState.Task_Orientation)
         {
             currentState = GameState.Task_Orientation_Task;
             int[] nbTargetsPerRound = new int[2];
-            nbTargetsPerRound[0] = 4;
-            nbTargetsPerRound[1] = 10;
+            nbTargetsPerRound[0] = 2;
+            nbTargetsPerRound[1] = 3;
              
             List<int[]> CueOder = new List<int[]>();
             int[] orderSession1 = new int[4];
@@ -138,13 +142,8 @@ public class GameController : MonoBehaviour
             orderSession2[3] = 2;
             CueOder.Add(orderSession1);
             CueOder.Add(orderSession2);
-            
-
-
-            orientationTask.StartTask(nbTargetsPerRound, CueOder);
-
-
-
+           
+            orientationTask.StartTask(nbTargetsPerRound, CueOder);  
         }
         //else if (gameState == GameState.Task_Lokalisation)
         //{
@@ -154,25 +153,7 @@ public class GameController : MonoBehaviour
         //}
     }
 
-    //public void Restart()
-    //{
-    //    currentState = GameState.MainMenu_EnterSubjectID;
-    //    currentTarget = null;
-    //    currentCondition = Condition.None;
-    //    //EventManager.ColliderInteractionEvent -= StartTimerTask2; 
-    //    //EventManager.ColliderInteractionEvent += StartTimerTask2
-    //    ;
-    //    GameObject[] tars = GameObject.FindGameObjectsWithTag("Target");
-    //    for (int i = tars.Length-1; i >=0 ; i--)
-    //    {
-    //        Destroy(tars[i].gameObject);
-    //    }
-    //    foreach (GameObject item in Targets)
-    //    {
-    //        Destroy(item);
-    //    }
-    //    Targets.Clear();
-    //}
+
 
     void TriggerCalledEvent()
     {
@@ -211,7 +192,8 @@ public class GameController : MonoBehaviour
         float ver_top = ConfigurationUtils.VerticalAngleTop;
         float ver_bot = ConfigurationUtils.VerticalAngleBottom;
 
-        angelTheta = UnityEngine.Random.Range(ver_bot, ver_top) + 90;  // have to be turned by 90 degree!
+        //angelTheta = UnityEngine.Random.Range(ver_bot, ver_top) + 90;  // have to be turned by 90 degree!
+        angelTheta = 0 + 90;  // have to be turned by 90 degree!
 
         float x_cor = radius * Mathf.Sin(angelPhi / 180 * Mathf.PI) * Mathf.Sin(angelTheta / 180 * Mathf.PI);
         float y_cor = radius * Mathf.Cos(angelTheta / 180 * Mathf.PI);

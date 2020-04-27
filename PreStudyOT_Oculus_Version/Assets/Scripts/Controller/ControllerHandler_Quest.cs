@@ -71,20 +71,26 @@ public class ControllerHandler_Quest : MonoBehaviour
         if (OVRInput.GetDown(squeeze)|| Input.GetKeyDown(KeyCode.L))
         {
             EventManager.CallTriggerEvent();
-            if (hit.collider.gameObject.tag == "Target")
+            if (hit.collider != null)
             {
-                Feedback.AddTextToBottom("Target Hit",true);
-                EventManager.CallTargetShotEvent(hit.collider.gameObject);
+                if (hit.collider.gameObject.tag == "Target")
+                {
+                    Feedback.AddTextToBottom("Target Hit", true);
+                    EventManager.CallTargetShotEvent(hit.collider.gameObject);
+                }
+                var uiButton = hit.collider.GetComponent<Button>();
+                if (uiButton != null)
+                {
+                    uiButton.OnSubmit(null);
+                }
             }
+ 
 
             //gameControll.ButtonFunctions(hit.collider.gameObject.name);
 
-            var uiButton = hit.collider.GetComponent<Button>();
 
-            if (uiButton != null)
-            {
-                uiButton.OnSubmit(null);
-            }
+
+
         }
 
     }

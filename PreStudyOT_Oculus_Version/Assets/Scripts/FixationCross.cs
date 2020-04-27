@@ -13,21 +13,36 @@ public class FixationCross : MonoBehaviour
     public bool isSeen;
     public float TimeSeen = 0;
     Vector3 screenPoint;
-    float borderLeft= 0.225f;
-    float borderRight = 0.775f;  
-    float borderTop= 0.775f;
-    float borderBottom = 0.225f;
+    public float borderLeft;
+    public float borderRight;
+    public float borderTop;
+    public float borderBottom;
 
 
     // Start is called before the first frame update
     void Start()
     {
         m = new Material(Shader.Find("Diffuse"));
-    }
+        borderLeft = 0.275f;
+        borderRight = 0.725f;
+        borderTop = 0.775f;
+        borderBottom = 0.225f;
+}
 
     private void Update()
     {
-        checkInFOV();
+        if (GameController.currentState == GameState.Task_Orientation_Task)
+        {
+            checkInFOV();
+            if (isSeen && TimeSeen > 2)
+            {
+                EventManager.CallStartSearchingEvent();
+                TimeSeen = 0;
+                isSeen = false;
+                gameObject.SetActive(false);
+            }
+        }
+
     }
 
     public void ChangeColorToRed()

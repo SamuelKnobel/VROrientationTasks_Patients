@@ -31,7 +31,19 @@ public static class  EventManager
 
     public static event EventAction TriggerEvent;// NO listener yet    
     public static event EventAction DefineNewTargetEvent;
+    public static event EventAction StartSeachringEvent;
 
+    public static void CallStartSearchingEvent()
+    {
+        if (StartSeachringEvent != null)
+        {
+            StartSeachringEvent.Invoke();
+        }
+        else
+        {
+            Feedback.AddTextToSide("No Listener for StartSeachringEvent", false);
+        }
+    }      
     public static void CallDefineNewTargetEvent()
     {
         if (DefineNewTargetEvent != null)
