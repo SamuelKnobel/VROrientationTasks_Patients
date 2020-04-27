@@ -1,6 +1,7 @@
 ﻿
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class Target : MonoBehaviour
@@ -17,12 +18,6 @@ public class Target : MonoBehaviour
     AudioSource audioSource;
     public bool hit;
 
-    Rigidbody rb;
-
-    void Start()
-    {
-
-    }
     public void GiveClue(int CueType)
     {
         Condition c = (Condition)CueType;
@@ -66,20 +61,19 @@ public class Target : MonoBehaviour
         }
     }
 
-    public void defineConfiguration(TargetSpace space, TargetPosition position)
+    public void defineConfiguration(float angle)
     {
-        switch (space)
-        {
-            case TargetSpace.NearSpace:
-                targetConfiguration = new TargetNear(space,position);
-                break;
-            case TargetSpace.FarSpace:
-                targetConfiguration = new TargetFar(space, position);
-                break;
-        }
+        TargetPosition position;
+        if (angle < 0)
+            position = TargetPosition.left;
+        else
+            position = TargetPosition.right;
+
+        transform.eulerAngles = new Vector3(0, angle, 0);
+        targetConfiguration = new TargetConfiguration(position);
         targetConfiguration.Initialize();
         transform.localScale = targetConfiguration.getSize()* Vector3.one;
-        transform.position = GameController.SpherToCart(space, position);
+        transform.position = GameController.SpherToCart(angle);
         b_settingsdefined = true;
     }
 

@@ -15,6 +15,7 @@ public class Feedback : MonoBehaviour
 
     public string FeedbackInfo1;
     public string FeedbackInfo2;
+    public string FeedbackInfo3;
 
 
     public void Awake()
@@ -54,9 +55,15 @@ public class Feedback : MonoBehaviour
         //{
         //    AddTextToBottom("new");
         //}
-        //FeedbackInfo1 = GameController.currentState.ToString();
-        FeedbackInfo2 = Input.GetKey(KeyCode.G).ToString();
-        FeedbackInfo1 = GameController.currentTarget.ToString();
+        FeedbackInfo2 = GameController.currentState.ToString();
+        FeedbackInfo3 = GameController.currentCondition.ToString();
+        if (GameController.currentTarget != null)
+        {
+            FeedbackInfo1 = GameController.currentTarget.ToString();
+
+        }
+        else
+            FeedbackInfo1= "No Target";
     }
 
 

@@ -5,6 +5,8 @@ using UnityEngine;
 public enum ButtonNames 
 {
     GenerateSubjectID,
+    SelectTask1,
+    SelectTask2,
     StartTask1,
     StartTask2
 }

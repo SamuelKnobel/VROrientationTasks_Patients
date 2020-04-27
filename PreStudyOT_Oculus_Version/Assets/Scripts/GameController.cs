@@ -101,7 +101,7 @@ public class GameController : MonoBehaviour
         return true;
     }
 
-   public void StartTask(GameState gameState)
+   public void StartTutorial(GameState gameState)
     {
         if (gameState == GameState.Task_Orientation)
         {
@@ -114,10 +114,44 @@ public class GameController : MonoBehaviour
             lokalisationTask = gameObject.AddComponent<LokalisationTask>();
             Feedback.AddTextToBottom("To Be Implemented", false);
         }
+    }
+
+    public void StartTask(GameState gameState)
+    {
+        if (gameState == GameState.Task_Orientation)
+        {
+            currentState = GameState.Task_Orientation_Task;
+            int[] nbTargetsPerRound = new int[2];
+            nbTargetsPerRound[0] = 4;
+            nbTargetsPerRound[1] = 10;
+             
+            List<int[]> CueOder = new List<int[]>();
+            int[] orderSession1 = new int[4];
+            orderSession1[0] = 3;
+            orderSession1[1] = 2;
+            orderSession1[2] = 1;
+            orderSession1[3] = 0;
+            int[] orderSession2 = new int[4];
+            orderSession2[0] = 1;
+            orderSession2[1] = 0;
+            orderSession2[2] = 3;
+            orderSession2[3] = 2;
+            CueOder.Add(orderSession1);
+            CueOder.Add(orderSession2);
+            
+
+
+            orientationTask.StartTask(nbTargetsPerRound, CueOder);
 
 
 
-        //FixationCross.SetActive(true);
+        }
+        //else if (gameState == GameState.Task_Lokalisation)
+        //{
+        //    currentState = GameState.Task_Lokalisation;
+        //    lokalisationTask = gameObject.AddComponent<LokalisationTask>();
+        //    Feedback.AddTextToBottom("To Be Implemented", false);
+        //}
     }
 
     //public void Restart()
@@ -166,36 +200,16 @@ public class GameController : MonoBehaviour
     /// <param name="ver_top"></param>
     /// <param name="ver_bot"></param>
     /// <returns></returns>
-    public static Vector3 SpherToCart(TargetSpace targetSpace, TargetPosition targetPosition)
+    public static Vector3 SpherToCart(float angle)
     {
-        float radius = 0;
-        float angelPhi = 0;
+        float radius = ConfigurationUtils.Radius;
+        float angelPhi = angle;//  y in Unity entspricht höhe, x entspricht  links/rechts, z entspricht der tiefe
         float angelTheta= 0;
 
         float hor_left = ConfigurationUtils.HorizontalAngleLeft;
         float hor_right = ConfigurationUtils.HorizontalAngleRight;
         float ver_top = ConfigurationUtils.VerticalAngleTop;
         float ver_bot = ConfigurationUtils.VerticalAngleBottom;
-        switch (targetSpace)
-        {
-            case TargetSpace.NearSpace:
-                //radius = ConfigurationUtils.RadiusNearspace;
-                radius =.55f;
-                Debug.LogWarning("Radius Near Space Hardcoded");
-                break;
-            case TargetSpace.FarSpace:
-                radius = ConfigurationUtils.RadiusFarspace;
-                break;
-        }
-        switch (targetPosition)
-        {
-            case TargetPosition.left:
-                angelPhi = hor_left;//  y in Unity entspricht höhe, x entspricht  links/rechts, z entspricht der tiefe
-                break;
-            case TargetPosition.right:
-                angelPhi = hor_right;
-                break;
-        }
 
         angelTheta = UnityEngine.Random.Range(ver_bot, ver_top) + 90;  // have to be turned by 90 degree!
 
@@ -204,20 +218,9 @@ public class GameController : MonoBehaviour
         float z_cor = radius * Mathf.Cos(angelPhi / 180 * Mathf.PI) * Mathf.Sin(angelTheta / 180 * Mathf.PI);
         return new Vector3(x_cor, y_cor, z_cor);
     }
-    public static Vector3 SpherToCart(TargetSpace targetSpace, float anglePhi, float angleTheta)
+    public static Vector3 SpherToCart( float anglePhi, float angleTheta)
     {
-        float radius = 0;
-
-
-        switch (targetSpace)
-        {
-            case TargetSpace.NearSpace:
-                radius = ConfigurationUtils.RadiusNearspace;
-                break;
-            case TargetSpace.FarSpace:
-                radius = ConfigurationUtils.RadiusFarspace;
-                break;
-        }
+        float radius = ConfigurationUtils.Radius;
 
         angleTheta = angleTheta + 90;  // have to be turned by 90 degree!
 

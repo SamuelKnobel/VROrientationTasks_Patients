@@ -8,9 +8,13 @@ public class HUD : MonoBehaviour
 {
 
     // InteractableUI Elements
-    public Button startButtonTask1;
-    public Button startButtonTask2;
+    public Button selectTask1;
+    public Button selectTask2;
     public Button generateSubjectID;
+    public Button startTask1;
+
+
+
     public GameObject AndroidWidget;
 
     // Script References
@@ -47,24 +51,32 @@ public class HUD : MonoBehaviour
                     {
                         SubjectID_InputFieldHandler(Random.Range(0, 999).ToString());
                         generateSubjectID.gameObject.SetActive(false);
-                        startButtonTask1.gameObject.SetActive(true);
-                        startButtonTask2.gameObject.SetActive(true);
+                        selectTask1.gameObject.SetActive(true);
+                        selectTask2.gameObject.SetActive(true);
                     }
                     break;
-                case ButtonNames.StartTask1:
+                case ButtonNames.SelectTask1:
                     if (GameController.currentState == GameState.MainMenu_ChooseTask)
                     {
-                        startButtonTask1.gameObject.SetActive(false);
-                        startButtonTask2.gameObject.SetActive(false);
-                        gameController.StartTask(GameState.Task_Orientation);
+                        selectTask1.gameObject.SetActive(false);
+                        selectTask2.gameObject.SetActive(false);
+                        gameController.StartTutorial(GameState.Task_Orientation);
                     }
                         break;
-                case ButtonNames.StartTask2:
+                case ButtonNames.SelectTask2:
                     if (GameController.currentState == GameState.MainMenu_ChooseTask)
                     {
-                        startButtonTask1.gameObject.SetActive(false);
-                        startButtonTask2.gameObject.SetActive(false);
-                        gameController.StartTask(GameState.Task_Lokalisation);
+                        selectTask1.gameObject.SetActive(false);
+                        selectTask2.gameObject.SetActive(false);
+                        gameController.StartTutorial(GameState.Task_Lokalisation);
+                    }
+                    break;
+
+                case ButtonNames.StartTask1:
+                    if (GameController.currentState == GameState.Task_Orientation_Tutorial)
+                    {
+                        startTask1.gameObject.SetActive(false);
+                        gameController.StartTask(GameState.Task_Orientation);
                     }
                     break;
                 default:

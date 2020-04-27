@@ -179,9 +179,9 @@ public class ControllerHandler_Quest : MonoBehaviour
     }
 
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        EventManager.CallColliderInteractionEvent(collision.gameObject);
-    }
+    //private void OnCollisionEnter(Collision collision)
+    //{
+    //    EventManager.CallColliderInteractionEvent(collision.gameObject);
+    //}
 
 }

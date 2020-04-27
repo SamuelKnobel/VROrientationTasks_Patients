@@ -30,8 +30,19 @@ public static class  EventManager
     public static event EventAction TouchRightEvent;// NO listener yet
 
     public static event EventAction TriggerEvent;// NO listener yet    
+    public static event EventAction DefineNewTargetEvent;
 
-
+    public static void CallDefineNewTargetEvent()
+    {
+        if (DefineNewTargetEvent != null)
+        {
+            DefineNewTargetEvent.Invoke();
+        }
+        else
+        {
+            Feedback.AddTextToSide("No Listener for DefineNewTargetEvent", false);
+        }
+    }     
     public static void CallTriggerLeftEvent()
     {
         //TriggerLeftEvent?.Invoke();

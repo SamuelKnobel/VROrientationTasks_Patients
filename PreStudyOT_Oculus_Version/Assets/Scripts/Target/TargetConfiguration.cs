@@ -6,20 +6,19 @@ public class TargetConfiguration
 {
     protected float Size;
     protected float Speed;
-    protected TargetSpace Space;
     protected TargetPosition Position;
     protected float Radius;
     protected int direction;
 
-    protected TargetConfiguration(TargetSpace space, TargetPosition position)
+    public TargetConfiguration(TargetPosition position)
     {
-        Space = space;
         Position = position;
     }
 
-    public virtual void Initialize()
+    public void Initialize()
     {
         Speed = ConfigurationUtils.TargetSpeed;
+        Size = ConfigurationUtils.TargetSizeFar;
     }
 
     public int getDirection()
@@ -50,29 +49,27 @@ public class TargetConfiguration
     }
 }
 
-public class TargetNear : TargetConfiguration
-{
-    public TargetNear(TargetSpace space, TargetPosition position) : base (space, position)
-    {
-    }
-    public override void Initialize()
-    {
-        base.Initialize();
-        //Size = ConfigurationUtils.TargetSizeNear;
-        Size = 0.1f;
-        Debug.LogWarning("TargetSize Near Space Hardcoded");
-        Space = TargetSpace.NearSpace;
-    }
-}
-public class TargetFar : TargetConfiguration
-{
-    public TargetFar(TargetSpace space, TargetPosition position): base (space, position)
-    {
-    }
-    public override void Initialize()
-    {
-        base.Initialize();
-        Size = ConfigurationUtils.TargetSizeFar;
-        Space = TargetSpace.FarSpace;
-    }
-}
+//public class TargetNear : TargetConfiguration
+//{
+//    public TargetNear( TargetPosition position) : base ( position)
+//    {
+//    }
+//    public override void Initialize()
+//    {
+//        base.Initialize();
+//        //Size = ConfigurationUtils.TargetSizeNear;
+//        Size = 0.1f;
+//        Debug.LogWarning("TargetSize Near Space Hardcoded");
+//    }
+//}
+//public class TargetFar : TargetConfiguration
+//{
+//    public TargetFar( TargetPosition position): base ( position)
+//    {
+//    }
+//    public override void Initialize()
+//    {
+//        base.Initialize();
+//        Size = ConfigurationUtils.TargetSizeFar;
+//    }
+//}
