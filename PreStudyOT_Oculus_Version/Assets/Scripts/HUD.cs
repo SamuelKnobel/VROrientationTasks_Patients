@@ -20,9 +20,6 @@ public class HUD : MonoBehaviour
     // Script References
     GameController gameController;
 
-
-
-
     void Awake()
     {
         gameController = FindObjectOfType<GameController>();
@@ -30,7 +27,6 @@ public class HUD : MonoBehaviour
 
     void Update()
     {
-
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             Application.Quit();
@@ -86,23 +82,7 @@ public class HUD : MonoBehaviour
         }
         else
             Feedback.AddTextToBottom(buttonNameString + " not defined ", true);
-
-
-
-       
-
-        //switch (buttonName) 
-        //{
-        //    //case "ResetButton":
-        //    //    gameController.Restart();
-        //    //    break;
-        //}
     }
-
-
-
-
-
 
     public void SubjectID_InputFieldHandler(string text)
     {

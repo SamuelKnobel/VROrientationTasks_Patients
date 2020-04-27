@@ -17,26 +17,17 @@ public class TargetSpawner : MonoBehaviour
 
     void OnEnable()
     {
-        // Check when those ar called !
-        //EventManager.ColliderInteractionEvent += TargetShot;
         EventManager.TargetShotEvent += TargetShot;
     }
     void OnDisable()
     {
-        //EventManager.ColliderInteractionEvent -= TargetShot;
         EventManager.TargetShotEvent -= TargetShot;
     }
 
-
-    // Start is called before the first frame update
     void Start()
     {
         instance = FindObjectOfType<TargetSpawner>();
         TargetContainer = GameObject.FindGameObjectWithTag("TargetContainer");
-
-        //TimeBetweenTimer = gameObject.AddComponent<Timer>();
-        ////TimeBetweenTimer.AddTimerFinishedEventListener(SpawnTarget); // Call new function where the parameters are random, so it can be called from Timer event
-        //TimeBetweenTimer.Duration = ConfigurationUtils.TimeBetweenTargets;
     }
 
     // Update is called once per frame
@@ -53,7 +44,6 @@ public class TargetSpawner : MonoBehaviour
     }
 
 
-    // TO Check
     void TargetShot(GameObject shotObject)
     {
         if (shotObject != null)
@@ -68,19 +58,6 @@ public class TargetSpawner : MonoBehaviour
                 {
                     EventManager.CallDefineNewTargetEvent();
                 }
-                //TimeBetweenTimer.Duration = ConfigurationUtils.TimeBetweenTargets;
-                //TimeBetweenTimer.Run();
-
-                //switch (GameController.currentState)
-                //{
-                //    case GameState.Task_Orientation:
-                //        break;
-                //    case GameState.Task_Lokalisation:
-                //        GameController.currentTarget = null;
-                //        break;
-                //    default:
-                //        break;
-                //}
             }
         }
     }
@@ -90,12 +67,10 @@ public class TargetSpawner : MonoBehaviour
         if (GameController.currentState == GameState.Task_Orientation_Tutorial|| GameController.currentState == GameState.Task_Orientation_Task)
         {
             GameController.currentTarget = instance.SpawnTarget_OrientationTask(condition, angle);
-
         }
         else if (GameController.currentState == GameState.Task_Lokalisation)
         {
             instance.SpawnTargets_LokalizationTask();
-
         }
     }
 
@@ -145,16 +120,16 @@ public class TargetSpawner : MonoBehaviour
 
     GameObject SetTargetConfiguration(float anglePhi, float angleTheata)
     {
-        TargetContainer.transform.position = Camera.main.transform.position;
+        //TargetContainer.transform.position = Camera.main.transform.position;
 
-        GameObject NewTarget = Instantiate(TargetPrefab);
+        //GameObject NewTarget = Instantiate(TargetPrefab);
 
-        NewTarget.transform.position = GameController.SpherToCart(anglePhi, angleTheata);
-        NewTarget.transform.SetParent(TargetContainer.transform, false);
-        NewTarget.GetComponent<Target>().angle = anglePhi;
+        //NewTarget.transform.position = GameController.SpherToCart(anglePhi, angleTheata);
+        //NewTarget.transform.SetParent(TargetContainer.transform, false);
+        //NewTarget.GetComponent<Target>().angle = anglePhi;
 
-        NewTarget.transform.eulerAngles = new Vector3(0, anglePhi, 0);
-        GameController.Targets.Add(NewTarget);
-        return NewTarget;
+        //NewTarget.transform.eulerAngles = new Vector3(0, anglePhi, 0);
+        //GameController.Targets.Add(NewTarget);
+        return null;// NewTarget;
     }
 }

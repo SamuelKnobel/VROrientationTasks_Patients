@@ -15,17 +15,11 @@ public class ControllerHandler_Quest : MonoBehaviour
     public OVRInput.Button B_Squeeze_Left;
     public OVRInput.Button B_Squeeze_Right;
 
-    GameController gameController;
-
-
     private void Awake()
     {
-        gameController = FindObjectOfType<GameController>();
     }
-    // Start is called before the first frame update
     void Start()
     {
-        Feedback.AddTextToButton("Y for Give Cue", false);
     }
 
     // Update is called once per frame
@@ -34,11 +28,6 @@ public class ControllerHandler_Quest : MonoBehaviour
         FindController();
         FindTargetCross();
         createLaser(true);
-
-        //if (OVRInput.GetDown(OVRInput.Button.Four)) // Y- Button
-        //{
-        //    EventManager.CallCueEvent(Random.Range((int)0,4));
-        //}
     }
 
     void SideSpecificLaser(GameObject controller, GameObject targetCross, LineRenderer laser, OVRInput.Button squeeze)
@@ -70,7 +59,7 @@ public class ControllerHandler_Quest : MonoBehaviour
 
         if (OVRInput.GetDown(squeeze)|| Input.GetKeyDown(KeyCode.L))
         {
-            EventManager.CallTriggerEvent();
+            //EventManager.CallTriggerEvent();
             if (hit.collider != null)
             {
                 if (hit.collider.gameObject.tag == "Target")
@@ -84,15 +73,7 @@ public class ControllerHandler_Quest : MonoBehaviour
                     uiButton.OnSubmit(null);
                 }
             }
- 
-
-            //gameControll.ButtonFunctions(hit.collider.gameObject.name);
-
-
-
-
         }
-
     }
 
     public void createLaser(bool useLaser)

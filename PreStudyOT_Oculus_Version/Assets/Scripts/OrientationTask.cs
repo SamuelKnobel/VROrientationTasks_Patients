@@ -35,12 +35,10 @@ public class OrientationTask : MonoBehaviour
     {
         EventManager.DefineNewTargetEvent -= DefineNextTarget;
         EventManager.StartSeachringEvent -= ShowNextTarget;
-
     }
 
 
 
-    // Start is called before the first frame update
     void Start()
     {
         GameController.currentState = GameState.Task_Orientation_Tutorial;
@@ -67,7 +65,6 @@ public class OrientationTask : MonoBehaviour
         B_Menu = OVRInput.Button.Start;
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (!OVRInput.Get(B_HandTrigger_R))
@@ -122,10 +119,7 @@ public class OrientationTask : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.S))
         {
             EventManager.CallTargetShotEvent(GameController.currentTarget);
-
         }
-
-
     }
 
     public void SpawnObjectAtPosition(int cueType, float angle)

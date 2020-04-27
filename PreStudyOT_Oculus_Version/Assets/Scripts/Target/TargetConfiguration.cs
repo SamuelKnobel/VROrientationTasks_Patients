@@ -48,28 +48,3 @@ public class TargetConfiguration
         return Size;
     }
 }
-
-//public class TargetNear : TargetConfiguration
-//{
-//    public TargetNear( TargetPosition position) : base ( position)
-//    {
-//    }
-//    public override void Initialize()
-//    {
-//        base.Initialize();
-//        //Size = ConfigurationUtils.TargetSizeNear;
-//        Size = 0.1f;
-//        Debug.LogWarning("TargetSize Near Space Hardcoded");
-//    }
-//}
-//public class TargetFar : TargetConfiguration
-//{
-//    public TargetFar( TargetPosition position): base ( position)
-//    {
-//    }
-//    public override void Initialize()
-//    {
-//        base.Initialize();
-//        Size = ConfigurationUtils.TargetSizeFar;
-//    }
-//}

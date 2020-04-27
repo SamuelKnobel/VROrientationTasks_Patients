@@ -17,7 +17,6 @@ public class Feedback : MonoBehaviour
     public string FeedbackInfo2;
     public string FeedbackInfo3;
 
-
     public void Awake()
     {
         Text[] textFields = GetComponentsInChildren<Text>();
@@ -42,19 +41,9 @@ public class Feedback : MonoBehaviour
     }
     public void Start()
     {
-        //AddTextToBottom("New 2");
-        //AddTextToBottom("New 1");
-        //AddTextToBottom("New 3");
-        //AddTextToBottom("New 4");
-        //AddTextToBottom("New 5");
-
     }
     private void Update()
     {
-        //if (Input.GetKeyDown(KeyCode.I))
-        //{
-        //    AddTextToBottom("new");
-        //}
         FeedbackInfo2 = GameController.currentState.ToString();
         FeedbackInfo3 = GameController.currentCondition.ToString();
         if (GameController.currentTarget != null)
@@ -65,18 +54,21 @@ public class Feedback : MonoBehaviour
         else
             FeedbackInfo1= "No Target";
     }
-
+    public void UIVisibility(bool active)
+    {
+        InfoTextBottom.gameObject.SetActive(active);
+        InfoTextButtons.gameObject.SetActive(active);
+        InfoTextSide.gameObject.SetActive(active);
+    }
 
     static void UpdateFeedback()
     {
-
         updateText(textsBottom, InfoTextBottom);
         updateText(textsSide, InfoTextSide);
         updateText(textsButtons, InfoTextButtons);
     }
     static void updateText(List<string> stringList, Text textfield)
     {
-
         while (stringList.Count> 9)
         {
             stringList.RemoveAt(0);
@@ -116,7 +108,4 @@ public class Feedback : MonoBehaviour
         textsButtons.Add(text);
         UpdateFeedback();
     }
-
-
-
 }

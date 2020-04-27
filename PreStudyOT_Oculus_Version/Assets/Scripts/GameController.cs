@@ -27,31 +27,24 @@ public class GameController : MonoBehaviour
 
     public static bool isConnected;
 
-
     public static GameObject currentTarget;
 
 
-    // Task 1
-    //Timer CountdownTimerTask1;
 
-    // Task 2
-    public static List<GameObject> Targets = new List<GameObject>();
-    //public bool b_StartTask2;
-    //Timer CountdownTimerTask2;
+    //public static List<GameObject> Targets = new List<GameObject>();
+
 
 
     void OnEnable()
     {
-        //EventManager.ColliderInteractionEvent += StartCountdownTimerTask1;
-        //EventManager.ColliderInteractionEvent += StartTimerTask2; ;
-        EventManager.TriggerEvent += TriggerCalledEvent;
+
+        //EventManager.TriggerEvent += TriggerCalledEvent;
         EventManager.CueEvent += CueCalledEvent;
     }
     void OnDisable()
     {
-        //EventManager.ColliderInteractionEvent -= StartCountdownTimerTask1;
-        //EventManager.ColliderInteractionEvent -= StartTimerTask2; ;
-        EventManager.TriggerEvent -= TriggerCalledEvent;
+
+        //EventManager.TriggerEvent -= TriggerCalledEvent;
         EventManager.CueEvent -= CueCalledEvent;
     }
 
@@ -69,8 +62,6 @@ public class GameController : MonoBehaviour
     {
         spawner = FindObjectOfType<TargetSpawner>();
         currentCondition = Condition.None;
-        //CountdownTimerTask2 = gameObject.AddComponent<Timer>();
-        //CountdownTimerTask2.AddTimerFinishedEventListener(spawner.SpawnTarget);
     }
     void DoNotDestroyOnLoad()
     {
@@ -85,7 +76,10 @@ public class GameController : MonoBehaviour
         }
     }
 
-
+    private void Start()
+    {
+        FindObjectOfType<Feedback>().UIVisibility(true);
+    }
     private void Update()
     {
         if (currentState == GameState.Initializing && !isConnected)
@@ -152,13 +146,10 @@ public class GameController : MonoBehaviour
         //    Feedback.AddTextToBottom("To Be Implemented", false);
         //}
     }
-
-
-
-    void TriggerCalledEvent()
-    {
-        Feedback.AddTextToBottom("Trigger Called",true);
-    }
+    //void TriggerCalledEvent()
+    //{
+    //    Feedback.AddTextToBottom("Trigger Called",true);
+    //}
 
     void CueCalledEvent(float CueType)
     {
@@ -211,19 +202,6 @@ public class GameController : MonoBehaviour
         float z_cor = radius * Mathf.Cos(anglePhi / 180 * Mathf.PI) * Mathf.Sin(angleTheta / 180 * Mathf.PI);
         return new Vector3(x_cor, y_cor, z_cor);
     }
-
-    //public static Vector3 CartToSpher(Vector3 position)
-    //{
-
-    //    float anglePhi=0;
-    //    float angleTheta = 0;
-    //    float radius = 0;
-
-
-
-
-    //    return new Vector3(anglePhi, angleTheta, radius);
-    //}
 
     void DefineHMD()
     {
