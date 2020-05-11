@@ -87,6 +87,14 @@ public class GameController : MonoBehaviour
             isConnected = TryToConnect();
             currentState = GameState.MainMenu_EnterSubjectID;
         }
+        if (currentState == GameState.Task_Lokalisation) // Check if this is the correct Gamestate maybe its GameState.Task_Orientation_Tutorial
+        {
+            FixationCross fc = FindObjectOfType<FixationCross>();
+            if (fc != null)
+            {
+                FixationCross = fc.gameObject;
+            }
+        }
     }
     
     bool TryToConnect()
