@@ -1,21 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
 
-    // Script References
-    public TargetSpawner spawner;
-
     // Tasks
     public OrientationTask orientationTask;
     public LokalisationTask lokalisationTask;
-
-    // Environment Elemtent References
-    public GameObject FixationCross;
 
     // General Informations
     public static string SubjectID;
@@ -26,24 +20,15 @@ public class GameController : MonoBehaviour
     public static GameState currentState;
 
     public static bool isConnected;
-
     public static GameObject currentTarget;
-
-
-
-    //public static List<GameObject> Targets = new List<GameObject>();
-
-
 
     void OnEnable()
     {
-
         //EventManager.TriggerEvent += TriggerCalledEvent;
         EventManager.CueEvent += CueCalledEvent;
     }
     void OnDisable()
     {
-
         //EventManager.TriggerEvent -= TriggerCalledEvent;
         EventManager.CueEvent -= CueCalledEvent;
     }
@@ -52,33 +37,32 @@ public class GameController : MonoBehaviour
     private void Awake()
     {
         currentState = GameState.Initializing;
-        // TODO: make  things dependent from Type of HMD -->Use ENUM
-        DefineHMD();
         DoNotDestroyOnLoad();
         OnAwake();
 
     }
     void OnAwake()
     {
-        spawner = FindObjectOfType<TargetSpawner>();
         currentCondition = Condition.None;
     }
     void DoNotDestroyOnLoad()
     {
-        if (FindObjectOfType<GameController>() != null)
-        {
-            DontDestroyOnLoad(this.gameObject);
-        }
-        else
+         GameController[] GCList = FindObjectsOfType<GameController>();
+        if (GCList.Length>1)
         {
             print("multiple scripts found(" + FindObjectsOfType<GameController>().Length + "), destroy the additional");
-            Destroy(this.gameObject);
+            for (int i = GCList.Length; i > 0; i--)
+            {
+                Destroy(GCList[i]);
+            }
         }
+
+        DontDestroyOnLoad(this.gameObject);
     }
 
     private void Start()
     {
-        FindObjectOfType<Feedback>().UIVisibility(true);
+        FindObjectOfType<Feedback>().UIVisibility(false);
     }
     private void Update()
     {
@@ -86,14 +70,6 @@ public class GameController : MonoBehaviour
         {
             isConnected = TryToConnect();
             currentState = GameState.MainMenu_EnterSubjectID;
-        }
-        if (currentState == GameState.Task_Lokalisation) // Check if this is the correct Gamestate maybe its GameState.Task_Orientation_Tutorial
-        {
-            FixationCross fc = FindObjectOfType<FixationCross>();
-            if (fc != null)
-            {
-                FixationCross = fc.gameObject;
-            }
         }
     }
     
@@ -108,13 +84,12 @@ public class GameController : MonoBehaviour
         if (gameState == GameState.Task_Orientation)
         {
             currentState = GameState.Task_Orientation;
-            orientationTask = gameObject.AddComponent<OrientationTask>();
+            SceneManager.LoadScene(sceneIndexFromName("OT"));
         }
         else if (gameState == GameState.Task_Lokalisation)
         {
             currentState = GameState.Task_Lokalisation;
-            lokalisationTask = gameObject.AddComponent<LokalisationTask>();
-            Feedback.AddTextToBottom("To Be Implemented", false);
+            SceneManager.LoadScene(sceneIndexFromName("LT"));
         }
     }
 
@@ -124,29 +99,7 @@ public class GameController : MonoBehaviour
         {
             Destroy(currentTarget);
         }
-        if (gameState == GameState.Task_Orientation)
-        {
-            currentState = GameState.Task_Orientation_Task;
-            int[] nbTargetsPerRound = new int[2];
-            nbTargetsPerRound[0] = 2;
-            nbTargetsPerRound[1] = 3;
-             
-            List<int[]> CueOder = new List<int[]>();
-            int[] orderSession1 = new int[4];
-            orderSession1[0] = 3;
-            orderSession1[1] = 2;
-            orderSession1[2] = 1;
-            orderSession1[3] = 0;
-            int[] orderSession2 = new int[4];
-            orderSession2[0] = 1;
-            orderSession2[1] = 0;
-            orderSession2[2] = 3;
-            orderSession2[3] = 2;
-            CueOder.Add(orderSession1);
-            CueOder.Add(orderSession2);
-           
-            orientationTask.StartTask(nbTargetsPerRound, CueOder);  
-        }
+
         //else if (gameState == GameState.Task_Lokalisation)
         //{
         //    currentState = GameState.Task_Lokalisation;
@@ -154,23 +107,41 @@ public class GameController : MonoBehaviour
         //    Feedback.AddTextToBottom("To Be Implemented", false);
         //}
     }
-    //void TriggerCalledEvent()
-    //{
-    //    Feedback.AddTextToBottom("Trigger Called",true);
-    //}
-
     void CueCalledEvent(float CueType)
     {
         if (currentTarget != null)
         {
             currentTarget.GetComponent<Target>().GiveClue((int)CueType);
-            Feedback.AddTextToSide("CueType:" + CueType + " for Object position: " + currentTarget.transform.position, true);
+            //Feedback.AddTextToSide("CueType:" + CueType + " for Object position: " + currentTarget.transform.position, true);
         }
-        else
-            Feedback.AddTextToSide("No TargetDefined", true);
+        //else
+            //Feedback.AddTextToSide("No TargetDefined", true);
     }
 
 
+    public static string NameFromIndex(int BuildIndex)
+    {
+        string path = SceneUtility.GetScenePathByBuildIndex(BuildIndex);
+        int slash = path.LastIndexOf('/');
+        string name = path.Substring(slash + 1);
+        int dot = name.LastIndexOf('.');
+        return name.Substring(0, dot);
+    }
+    public static int sceneIndexFromName(string sceneName)
+    {
+        for (int i = 0; i < SceneManager.sceneCountInBuildSettings; i++)
+        {
+            string testedScreen = NameFromIndex(i);
+            //print("sceneIndexFromName: i: " + i + " sceneName = " + testedScreen);
+            if (testedScreen.Contains(sceneName))
+                return i;
+            if (testedScreen == sceneName)
+                return i;
+        }
+        return -1;
+    }
+
+    #region Vector Conversion
     /// <summary>
     /// Converts Angles in Cartesian Coordinates
     /// </summary>
@@ -211,23 +182,5 @@ public class GameController : MonoBehaviour
         return new Vector3(x_cor, y_cor, z_cor);
     }
 
-    void DefineHMD()
-    {
-        string hardware;
-
-        //string model = UnityEngine.VR.VRDevice.model != null ? UnityEngine.VR.VRDevice.model : "";
-        string model = UnityEngine.XR.XRDevice.model != null ? UnityEngine.XR.XRDevice.model : "";
-        if (model.IndexOf("Vive") >= 0)
-        {
-            hardware = "htc_vive";
-        }
-        else
-        {
-            hardware = "Others";
-        }
-
-        //print(UnityEngine.XR.XRDevice.model);
-
-    }
-
+    #endregion
 }

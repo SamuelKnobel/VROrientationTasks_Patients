@@ -238,7 +238,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &83733432
 RectTransform:
   m_ObjectHideFlags: 0
@@ -958,7 +958,7 @@ RectTransform:
   - {fileID: 1779150373}
   - {fileID: 83733432}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -977,10 +977,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f274ad45ba9a0f4fade0bcdd8075ac0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  selectTask1: {fileID: 0}
-  selectTask2: {fileID: 0}
-  generateSubjectID: {fileID: 0}
-  startTask1: {fileID: 0}
+  currentGUI: 0
   AndroidWidget: {fileID: 0}
 --- !u!1 &355438565
 GameObject:
@@ -1161,7 +1158,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &518812286
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1824,7 +1821,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &732460079
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1977,7 +1974,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 792071107}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -1985,8 +1982,8 @@ Transform:
   - {fileID: 504133111}
   - {fileID: 664699993}
   - {fileID: 364315076}
-  m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_Father: {fileID: 2141433027}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &933699420
 GameObject:
@@ -2173,7 +2170,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 958296675}
-  - component: {fileID: 958296676}
   - component: {fileID: 958296677}
   m_Layer: 0
   m_Name: UserInterface
@@ -2196,23 +2192,8 @@ Transform:
   - {fileID: 244726091}
   - {fileID: 1116382624}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &958296676
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 958296674}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a888630189584364a8125e04ecff1375, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  FeedbackInfo1: 
-  FeedbackInfo2: 
-  FeedbackInfo3: 
 --- !u!114 &958296677
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2225,10 +2206,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f274ad45ba9a0f4fade0bcdd8075ac0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  selectTask1: {fileID: 1885998612}
-  selectTask2: {fileID: 1284008168}
-  generateSubjectID: {fileID: 732460079}
-  startTask1: {fileID: 2013801026}
+  currentGUI: 0
   AndroidWidget: {fileID: 0}
 --- !u!1 &1022533706
 GameObject:
@@ -3105,7 +3083,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1379758910
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4302,7 +4280,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1779150373
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5107,8 +5085,8 @@ GameObject:
   - component: {fileID: 2141433027}
   - component: {fileID: 2141433030}
   - component: {fileID: 2141433029}
-  - component: {fileID: 2141433028}
   - component: {fileID: 2141433031}
+  - component: {fileID: 2141433032}
   m_Layer: 0
   m_Name: GameControll
   m_TagString: Untagged
@@ -5128,24 +5106,10 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2008670790}
+  - {fileID: 792071108}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2141433028
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2141433026}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bd1b41e5c0767f4438ad035af1d55e9b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TargetPrefab: {fileID: 379640100633855780, guid: 23153c946aecfd94295c57626f9b0f6e,
-    type: 3}
-  TargetContainer: {fileID: 0}
 --- !u!114 &2141433029
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5158,10 +5122,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9b47e410e79b47449bdf124c8112443, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawner: {fileID: 0}
   orientationTask: {fileID: 0}
   lokalisationTask: {fileID: 0}
-  FixationCross: {fileID: 0}
 --- !u!114 &2141433030
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5194,3 +5156,18 @@ MonoBehaviour:
   VibrationOn: 0
   ActivationAngle: 0
   StopVibrationTimer: {fileID: 0}
+--- !u!114 &2141433032
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2141433026}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a888630189584364a8125e04ecff1375, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  FeedbackInfo1: 
+  FeedbackInfo2: 
+  FeedbackInfo3: 

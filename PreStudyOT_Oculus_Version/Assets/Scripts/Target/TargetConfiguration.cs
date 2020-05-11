@@ -6,13 +6,20 @@ public class TargetConfiguration
 {
     protected float Size;
     protected float Speed;
-    protected TargetPosition Position;
+    protected TargetSide Side;
     protected float Radius;
     protected int direction;
+    protected float startAngle;
 
-    public TargetConfiguration(TargetPosition position)
+    public TargetConfiguration(float angle)
     {
-        Position = position;
+        TargetSide position;
+        if (angle < 0)
+            position = TargetSide.left;
+        else
+            position = TargetSide.right;
+        Side = position;
+        startAngle = angle;
     }
 
     public void Initialize()
@@ -25,14 +32,14 @@ public class TargetConfiguration
     {
         int direction;
 
-        switch (Position)
+        switch (Side)
         {
-            case TargetPosition.left:
+            case TargetSide.left :
                 direction = 1;
                 break;
-            case TargetPosition.right:
+            case TargetSide.right:
                 direction = -1;
-                break;
+                break;        
             default:
                 direction = 0;
                 break;
@@ -42,6 +49,10 @@ public class TargetConfiguration
     public float getSpeed()
     {
         return Speed;
+    }   
+    public float getStartAngle()
+    {
+        return startAngle;
     }   
     public float getSize()
     {

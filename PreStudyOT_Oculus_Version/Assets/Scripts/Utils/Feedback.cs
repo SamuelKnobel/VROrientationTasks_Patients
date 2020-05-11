@@ -56,9 +56,9 @@ public class Feedback : MonoBehaviour
     }
     public void UIVisibility(bool active)
     {
-        InfoTextBottom.gameObject.SetActive(active);
-        InfoTextButtons.gameObject.SetActive(active);
-        InfoTextSide.gameObject.SetActive(active);
+        //InfoTextBottom.gameObject.SetActive(active);
+        //InfoTextButtons.gameObject.SetActive(active);
+        //InfoTextSide.gameObject.SetActive(active);
     }
 
     static void UpdateFeedback()

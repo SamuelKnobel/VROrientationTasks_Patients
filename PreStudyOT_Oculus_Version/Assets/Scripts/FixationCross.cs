@@ -31,18 +31,32 @@ public class FixationCross : MonoBehaviour
 
     private void Update()
     {
-        if (GameController.currentState == GameState.Task_Orientation_Task)
+        if (GameController.currentState == GameState.Task_Orientation_Task || GameController.currentState == GameState.Task_Orientation_Tutorial)
         {
             checkInFOV();
             if (isSeen && TimeSeen > 2)
             {
-                EventManager.CallStartSearchingEvent();
+                if (GameController.currentState == GameState.Task_Orientation_Task)
+                    EventManager.CallStartSearchingEvent();
+
                 TimeSeen = 0;
                 isSeen = false;
                 gameObject.SetActive(false);
             }
         }
+        if (GameController.currentState == GameState.Task_Lokalisation)
+        {
+            checkInFOV();
+            if (isSeen && TimeSeen > 2)
+            {
+                //if (GameController.currentState == GameState.Task_Orientation_Task)
+                //    EventManager.CallStartSearchingEvent();
 
+                TimeSeen = 0;
+                isSeen = false;
+                gameObject.SetActive(false);
+            }
+        }
     }
 
     public void ChangeColorToRed()

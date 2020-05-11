@@ -6,13 +6,17 @@ using UnityEngine;
 
 public class Target : MonoBehaviour
 {
-    [SerializeField]
-    public TargetConfiguration targetConfiguration;
+    TargetConfiguration targetConfiguration;
 
-    public float angle;
+    public float StartAngle{
+        get {
+            return targetConfiguration.getStartAngle();
+        }
+    }
 
     public bool b_settingsdefined;
     public bool b_isMoving;
+    bool MovementAllowed = false;
 
     public Timer deathTimer;
     AudioSource audioSource;
@@ -42,7 +46,7 @@ public class Target : MonoBehaviour
             default:
                 break;
         }
-        Feedback.AddTextToBottom("Cue " + c.ToString() + "At position:" + this.transform.position, true);
+        //Feedback.AddTextToBottom("Cue " + c.ToString() + "At position:" + this.transform.position, true);
     }
 
 
@@ -61,29 +65,26 @@ public class Target : MonoBehaviour
         }
     }
 
-    public void defineConfiguration(float angle)
+    public void defineConfiguration(float angle, bool moving)
     {
-        TargetPosition position;
-        if (angle < 0)
-            position = TargetPosition.left;
-        else
-            position = TargetPosition.right;
-
         transform.eulerAngles = new Vector3(0, angle, 0);
-        targetConfiguration = new TargetConfiguration(position);
+        targetConfiguration = new TargetConfiguration(angle);
         targetConfiguration.Initialize();
         transform.localScale = targetConfiguration.getSize()* Vector3.one;
         transform.position = GameController.SpherToCart(angle);
         b_settingsdefined = true;
+        MovementAllowed = moving;
     }
-
 
     void MoveTarget()
     {
-        int direction = targetConfiguration.getDirection();
-        float speed = targetConfiguration.getSpeed();
-        transform.RotateAround(transform.parent.transform.position, Vector3.up, direction*speed * Time.deltaTime);
-        b_isMoving = true;
+        if (MovementAllowed)
+        {
+            int direction = targetConfiguration.getDirection();
+            float speed = targetConfiguration.getSpeed();
+            transform.RotateAround(transform.parent.transform.position, Vector3.up, direction * speed * Time.deltaTime);
+            b_isMoving = true;
+        }
     }
 
     void SelfDestruction()

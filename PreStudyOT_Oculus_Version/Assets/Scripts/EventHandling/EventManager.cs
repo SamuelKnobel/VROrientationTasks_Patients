@@ -24,7 +24,7 @@ public static class  EventManager
         }
         else
         {
-            Feedback.AddTextToSide("No Listener for StartSeachringEvent", false);
+            //Feedback.AddTextToSide("No Listener for StartSeachringEvent", false);
         }
     }      
     public static void CallDefineNewTargetEvent()
@@ -35,7 +35,7 @@ public static class  EventManager
         }
         else
         {
-            Feedback.AddTextToSide("No Listener for DefineNewTargetEvent", false);
+            //Feedback.AddTextToSide("No Listener for DefineNewTargetEvent", false);
         }
     }     
     //public static void CallTriggerLeftEvent()
@@ -115,7 +115,7 @@ public static class  EventManager
         }
         else
         {
-            Feedback.AddTextToSide("No Listener",false);
+            //Feedback.AddTextToSide("No Listener",false);
         }
     }
 
@@ -169,7 +169,7 @@ public static class  EventManager
         }
         else
         {
-            Feedback.AddTextToSide("No Listener for Call TargetShotEvent",false);
+            //Feedback.AddTextToSide("No Listener for Call TargetShotEvent",false);
         }
     }
     public static void CallStartVibrationEvent(GameObject GO)
@@ -180,7 +180,7 @@ public static class  EventManager
         }
         else
         {
-            Feedback.AddTextToSide("No Listener", false);
+            //Feedback.AddTextToSide("No Listener", false);
         }
     }
 

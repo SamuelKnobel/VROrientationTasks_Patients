@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LokalisationTask : MonoBehaviour
+public class HUD_OT : MonoBehaviour
 {
     // Start is called before the first frame update
     void Start()
