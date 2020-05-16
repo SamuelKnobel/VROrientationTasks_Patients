@@ -2,9 +2,8 @@
 
 public enum Condition 
 {
-    None,
-    NonSpatialAudio,
-    SpatialAudio,
-    Tactile,
-    Combined
+    None = 1,
+    SpatialAudio=2,
+    Tactile=3,
+    Combined=4
 }

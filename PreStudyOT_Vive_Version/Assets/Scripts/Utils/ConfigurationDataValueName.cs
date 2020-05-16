@@ -17,6 +17,7 @@ public enum ConfigurationDataValueName
     NumberOfTrials,
     RadiusNearspace,
     RadiusFarspace,
+    Radius,
     HorizontalAngleLeft,
     HorizontalAngleRight,
     VerticalAngleTop,

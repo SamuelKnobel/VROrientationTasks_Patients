@@ -98,6 +98,13 @@ public class ConfigurationData
     public float RadiusNearspace
     {
         get { return values[ConfigurationDataValueName.RadiusNearspace]; }
+    }    
+    /// <summary>
+    ///  Movement Radius 
+    /// </summary>
+    public float Radius
+    {
+        get { return values[ConfigurationDataValueName.Radius]; }
     }
 
     /// <summary>
@@ -206,6 +213,7 @@ public class ConfigurationData
         values.Add(ConfigurationDataValueName.NumberOfTrials, 3);
         values.Add(ConfigurationDataValueName.RadiusFarspace, 10);
         values.Add(ConfigurationDataValueName.RadiusNearspace,.5f);
+        values.Add(ConfigurationDataValueName.Radius,10f);
         values.Add(ConfigurationDataValueName.HorizontalAngleLeft,-90);
         values.Add(ConfigurationDataValueName.HorizontalAngleRight,90);
         values.Add(ConfigurationDataValueName.VerticalAngleTop,15);

@@ -1,41 +1,36 @@
 ﻿
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class Target : MonoBehaviour
 {
-    [SerializeField]
-    public TargetConfiguration targetConfiguration;
+    //TargetConfiguration targetConfiguration;
 
-    public float angle;
+    public Data_Targets_OT DataContainer;
+    public bool moving;
+
+    public void Awake()
+    {
+        DataContainer = GetComponent<Data_Targets_OT>();
+    }
 
     public bool b_settingsdefined;
-    public bool b_isMoving;
 
     public Timer deathTimer;
     AudioSource audioSource;
     public bool hit;
 
-    Rigidbody rb;
-
-    void Start()
+    public void GiveClue(int CueType)
     {
-
-        //GiveClue();
-    }
-    public void GiveClue()
-    {
+        Condition c = (Condition)CueType;
         audioSource = GetComponent<AudioSource>();
         deathTimer = gameObject.AddComponent<Timer>();
         deathTimer.AddTimerFinishedEventListener(SelfDestruction);
         deathTimer.Duration = ConfigurationUtils.TimeBetweenTargets - 0.1f;
-        switch (GameController.currentCondition)
+        switch (c)
         {
-            case Condition.NonSpatialAudio:
-                audioSource.spatialBlend = 0;
-                audioSource.Play();
-                break;
             case Condition.SpatialAudio:
                 audioSource.spatialBlend = 1;
                 audioSource.Play();
@@ -51,6 +46,7 @@ public class Target : MonoBehaviour
             default:
                 break;
         }
+        //Feedback.AddTextToBottom("Cue " + c.ToString() + "At position:" + this.transform.position, true);
     }
 
 
@@ -69,30 +65,23 @@ public class Target : MonoBehaviour
         }
     }
 
-    public void defineConfiguration(TargetSpace space, TargetPosition position)
+    public void defineConfiguration(float angle, bool moving)
     {
-        switch (space)
-        {
-            case TargetSpace.NearSpace:
-                targetConfiguration = new TargetNear(space,position);
-                break;
-            case TargetSpace.FarSpace:
-                targetConfiguration = new TargetFar(space, position);
-                break;
-        }
-        targetConfiguration.Initialize();
-        transform.localScale = targetConfiguration.getSize()* Vector3.one;
-        transform.position = GameController.SpherToCart(space, position);
+        //DataContainer = GetComponent<Data_Targets_OT>();
+        transform.eulerAngles = new Vector3(0, angle, 0);
+        transform.position = GameController.SpherToCart(angle);
+        GetComponent<Data_Targets_OT>().WriteStartInfo(angle, moving);
+        print(DataContainer);
+        transform.localScale = DataContainer.Size * Vector3.one;
         b_settingsdefined = true;
+        
     }
-
 
     void MoveTarget()
     {
-        int direction = targetConfiguration.getDirection();
-        float speed = targetConfiguration.getSpeed();
-        transform.RotateAround(transform.parent.transform.position, Vector3.up, direction*speed * Time.deltaTime);
-        b_isMoving = true;
+        int direction = DataContainer.Direction; ;
+        float speed = DataContainer.Speed;
+        transform.RotateAround(transform.parent.transform.position, Vector3.up, direction * speed * Time.deltaTime);
     }
 
     void SelfDestruction()

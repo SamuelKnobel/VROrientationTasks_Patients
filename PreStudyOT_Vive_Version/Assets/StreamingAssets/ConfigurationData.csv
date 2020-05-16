@@ -8,6 +8,7 @@ NumberOfTargetsPerTrial,10
 NumberOfTrials,3
 RadiusNearspace,0.55
 RadiusFarspace,10
+Radius,10
 HorizontalAngleLeft,-90
 HorizontalAngleRight,90
 VerticalAngleTop,15

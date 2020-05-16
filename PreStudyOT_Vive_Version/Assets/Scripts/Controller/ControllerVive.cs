@@ -31,7 +31,7 @@ public class ControllerVive : MonoBehaviour {
 
     private void OnCollisionEnter(Collision collision)
     {
-        EventManager.CallColliderInteractionEvent(collision.gameObject);        
+       EventManager.CallTargetShotEvent(collision.collider.gameObject);
     }
 
     private void OnTriggerEnter(Collider other)

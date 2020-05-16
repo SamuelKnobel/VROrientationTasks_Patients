@@ -13,38 +13,50 @@ public class FixationCross : MonoBehaviour
     public bool isSeen;
     public float TimeSeen = 0;
     Vector3 screenPoint;
-    float borderLeft= 0.225f;
-    float borderRight = 0.775f;  
-    float borderTop= 0.775f;
-    float borderBottom = 0.225f;
+    public float borderLeft;
+    public float borderRight;
+    public float borderTop;
+    public float borderBottom;
 
 
     // Start is called before the first frame update
     void Start()
     {
         m = new Material(Shader.Find("Diffuse"));
-    }
+        borderLeft = 0.275f;
+        borderRight = 0.725f;
+        borderTop = 0.775f;
+        borderBottom = 0.225f;
+}
 
     private void Update()
     {
-        //if (isSeen&& TimeSeen <=2)
-        //{
-        //    ChangeColorToRed();
-        //    TimeSeen += Time.deltaTime;
-        //}
-        //else if (TimeSeen > 2)
-        //{
-        //    ChangeColorToGreen();
-        //}
-        //else
-        //{
-        //    ChangeColorToRed();
-        //    TimeSeen = 0;
-        //}
+        if (GameController.currentState == GameState.Task_Orientation_Task || GameController.currentState == GameState.Task_Orientation_Tutorial)
+        {
+            checkInFOV();
+            if (isSeen && TimeSeen > 2)
+            {
+                if (GameController.currentState == GameState.Task_Orientation_Task)
+                    EventManager.CallStartSearchingEvent();
 
+                TimeSeen = 0;
+                isSeen = false;
+                gameObject.SetActive(false);
+            }
+        }
+        if (GameController.currentState == GameState.Task_Lokalisation)
+        {
+            checkInFOV();
+            if (isSeen && TimeSeen > 2)
+            {
+                //if (GameController.currentState == GameState.Task_Orientation_Task)
+                //    EventManager.CallStartSearchingEvent();
 
-        checkInFOV();
-
+                TimeSeen = 0;
+                isSeen = false;
+                gameObject.SetActive(false);
+            }
+        }
     }
 
     public void ChangeColorToRed()
@@ -68,6 +80,7 @@ public class FixationCross : MonoBehaviour
         if (B_OnScreen)
         {
             ChangeColorToGreen();
+            TimeSeen += Time.deltaTime;
             isSeen = true;
         }
         else

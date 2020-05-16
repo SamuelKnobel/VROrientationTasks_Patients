@@ -69,6 +69,10 @@ public static class ConfigurationUtils
     public static float RadiusNearspace
     {
         get { return configurationData.RadiusNearspace; }
+    }   
+    public static float Radius
+    {
+        get { return configurationData.Radius; }
     }    
     public static float HorizontalAngleLeft
     {

@@ -228,12 +228,15 @@ public class ControllerHandler_Vive : MonoBehaviour
                     {
                         LeftController = Controllers[i];
                         LaserLeft = LeftController.GetComponentInChildren<LineRenderer>();
+                        LeftController.GetComponent<Data_Hardware>().HardwareName = "left";
+
 
                     }
                     else if (Controllers[i].name.Contains("right"))
                     {
                         RightController = Controllers[i];
                         LaserRight = RightController.GetComponentInChildren<LineRenderer>();
+                        RightController.GetComponent<Data_Hardware>().HardwareName = "right";
                     }
                     else
                     {
@@ -308,8 +311,7 @@ public class ControllerHandler_Vive : MonoBehaviour
         {
             if (hit.collider != null)
             {
-                EventManager.CallColliderInteractionEvent(hit.collider.gameObject);
-
+                EventManager.CallTargetShotEvent(hit.collider.gameObject);
             }
 
 
