@@ -7,22 +7,22 @@ using UnityEngine;
 [Serializable]
 public class Data_Targets_OT : MonoBehaviour
 {
-    [SerializeField] float speed;
-    [SerializeField] float size;
+    [SerializeField] string identifyer = "Target";
+    [SerializeField] GameState gameState;
+    [SerializeField] Condition cueType;
+    [SerializeField] double spawnTime;
     [SerializeField] Vector3 startPosition_wp;
     [SerializeField] Vector3 startPosition_lp;
-    [SerializeField]double spawnTime;
+    [SerializeField] float startAngle;
 
     [SerializeField] Vector3 endPosition_wp;
     [SerializeField] Vector3 endPosition_lp;
     [SerializeField] double deathTime;
     [SerializeField] ReasonOfDeath deathReason;
-
-
-    [SerializeField] float startAngle;
     [SerializeField] float radius;
-
     [SerializeField] int direction;
+    [SerializeField] float speed;
+    [SerializeField] float size;
 
     private void Awake()
     {
@@ -30,9 +30,9 @@ public class Data_Targets_OT : MonoBehaviour
     }
     private void Start()
     {
+        gameState = GameController.currentState;
         deathReason = ReasonOfDeath.notdefined;
-
-           //FindObjectOfType<DataHandler>().data_Targets.Add(this);
+        cueType = GameController.currentCondition;
         spawnTime = DataHandler.currentTimeStamp;
         startPosition_wp = transform.position;
         startPosition_lp = transform.localPosition;

@@ -5,7 +5,6 @@ using UnityEngine;
 public enum GameState 
 {
      Initializing,     // MainMenu State should not be entered until a Connection to the server has be established!
-
     MainMenu_EnterSubjectID,
     MainMenu_ChooseTask,
     Task_Orientation,

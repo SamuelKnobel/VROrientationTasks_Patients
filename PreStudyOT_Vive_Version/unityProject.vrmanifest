@@ -5,7 +5,7 @@
       "app_key": "application.generated.unity.prestudy_orientationtask_patients.exe",
       "launch_type": "url",
       "url": "steam://launch/",
-      "action_manifest_path": "C:\\Users\\samue\\OneDrive - Universitaet Bern\\_Unity_Projects\\Prestudy_OrientationTask_Patients\\Assets\\StreamingAssets\\SteamVR\\actions.json",
+      "action_manifest_path": "C:\\Users\\samue\\OneDrive - Universitaet Bern\\_Unity_Projects\\Prestudy_OrientationTask_Patients\\PreStudyOT_Vive_Version\\Assets\\StreamingAssets\\SteamVR\\actions.json",
       "strings": {
         "en_us": {
           "name": "Prestudy_OrientationTask_Patients [Testing]"

@@ -54,7 +54,6 @@ public class HUD_Main : MonoBehaviour
 
     #region SubjectID
 
-
     void guiSubjectID(int windowID)
     {
         subjectID = GUILayout.TextField(subjectID);
@@ -104,6 +103,7 @@ public class HUD_Main : MonoBehaviour
 
     }
     #endregion
+
 
 
     #region Overview

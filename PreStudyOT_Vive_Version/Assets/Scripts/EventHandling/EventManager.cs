@@ -47,7 +47,7 @@ public static class  EventManager
         }
         else
         {
-            Feedback.AddTextToSide("No Listener for TriggerLeftEvent", false);
+            //Feedback.AddTextToSide("No Listener for TriggerLeftEvent", false);
         }
     }
     public static void CallTriggerEvent()
@@ -58,7 +58,7 @@ public static class  EventManager
         }
         else
         {
-            Feedback.AddTextToSide("No Listener for TriggerEvent", false);
+            //Feedback.AddTextToSide("No Listener for TriggerEvent", false);
         }
     }
     public static void CallTriggerRightEvent()
@@ -69,7 +69,7 @@ public static class  EventManager
         }
         else
         {
-            Feedback.AddTextToSide("No Listener for RightTriggerEvent", false);
+            //Feedback.AddTextToSide("No Listener for RightTriggerEvent", false);
         }
     }
     public static void CallTouchLeftEvent()
@@ -80,7 +80,7 @@ public static class  EventManager
         }
         else
         {
-            Feedback.AddTextToSide("No Listener for LeftTouchEvent", false);
+            //Feedback.AddTextToSide("No Listener for LeftTouchEvent", false);
         }
     }
     public static void CallTouchRightEvent()
@@ -91,7 +91,7 @@ public static class  EventManager
         }
         else
         {
-            Feedback.AddTextToSide("No Listener for RightTouchEvent", false);
+            //Feedback.AddTextToSide("No Listener for RightTouchEvent", false);
         }
     }
 

@@ -50,23 +50,12 @@ public class OrientationTask : MonoBehaviour
 
     void Start()
     {
+        GameController.recording = true;
+        GameController.SavePath = Application.streamingAssetsPath + "/Output/" + GameController.SubjectID+"/";
         FindObjectOfType<GameController>().orientationTask = this;
         GameController.currentState = GameState.Task_Orientation_Tutorial;
 
-        //Feedback.AddTextToButton("Hold MenuButton for Activating Task Start Button", true);
-
-        //Feedback.AddTextToButton("Press X for first SpawnPostion", false);
-        //Feedback.AddTextToButton("Press Y for second SpawnPostion", false);
-        //Feedback.AddTextToButton("Press A for third SpawnPostion", false);
-        //Feedback.AddTextToButton("Press B for forth SpawnPostion", false);
-
-        //Feedback.AddTextToButton("Hold R - HandTrigger and Press X for CueType: Nothing", false);
-        //Feedback.AddTextToButton("Hold R - HandTrigger and Press Y for CueType: Audio", false);
-        //Feedback.AddTextToButton("Hold R - HandTrigger and Press A for CueType: Tactile", false);
-        //Feedback.AddTextToButton("Hold R - HandTrigger and Press B for CueType: Combined", false);
-        //Feedback.AddTextToButton("Press MenuButton for Activating FixationCross", false);
-
-
+      
         //B_X = OVRInput.Button.Three;
         //B_Y = OVRInput.Button.Four;
         //B_A =OVRInput.Button.One;
@@ -129,10 +118,6 @@ public class OrientationTask : MonoBehaviour
         //{
         //     timerToShowStartTaskButton = 0;
         //}
-        if (Input.GetKeyDown(KeyCode.S))
-        {
-           print(GameController.currentTarget.GetComponent<Data_Targets_OT>().StartAngle);
-        }
         if (TaskReady)
         {
             GameController.currentState = GameState.Task_Orientation_Task;
@@ -169,8 +154,6 @@ public class OrientationTask : MonoBehaviour
   
     public void StartTask()
     {
-        //Feedback.AddTextToButton("GameStarts", true);
-
         Debug.Log("StartTask");
 
         if (NumTargetsPerRound.Length != OrderCues.Count)
@@ -182,7 +165,6 @@ public class OrientationTask : MonoBehaviour
         }
         currentCueOrder = OrderCues[currentSessionNumber];
         GameController.currentCondition = (Condition)currentCueOrder[currentRoundNumber];
-        print((Condition)currentCueOrder[currentRoundNumber]);
         maxSessionNumber = OrderCues.Count;
         maxRoundNumber = OrderCues[0].Length;
         maxTargetNbr = NumTargetsPerRound[currentSessionNumber];
@@ -200,12 +182,14 @@ public class OrientationTask : MonoBehaviour
     {
         if (shotObject != null)
         {
-            if (shotObject.tag == "Target")
+            if (shotObject.tag.Contains("Target"))
             {
                 shotObject.tag = "Untagged";
-                shotObject.GetComponent<Target>().deathTimer.Run();
+                shotObject.GetComponent<Target>().hit = true;
+               shotObject.GetComponent<Target>().deathTimer.Run();
                 shotObject.GetComponent<Rigidbody>().useGravity = true;
                 //Feedback.AddTextToBottom("Target Shot", true);
+                //shotObject.GetComponent<Data_Targets_OT>()..Run();
                 if (GameController.currentState == GameState.Task_Orientation_Task)
                 {
                     EventManager.CallDefineNewTargetEvent();
@@ -234,14 +218,14 @@ public class OrientationTask : MonoBehaviour
         {
             //Feedback.AddTextToButton("Game Ends",true);
             Debug.Log("Game Ends");
+            TaskReady = false;
+            GameController.currentState = GameState.End;
            
         }
         else
         {
             maxTargetNbr = NumTargetsPerRound[currentSessionNumber];
             currentCueOrder = OrderCues[currentSessionNumber];
-
-            print((Condition)currentCueOrder[currentRoundNumber]);
             GameController.currentCondition= (Condition)currentCueOrder[currentRoundNumber]; 
             FixationCross.SetActive(true);
             currentTargetNbr++;

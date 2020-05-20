@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System;
 
 public class GameController : MonoBehaviour
 {
@@ -12,7 +13,10 @@ public class GameController : MonoBehaviour
     public LokalisationTask lokalisationTask;
 
     // General Informations
-    public static string SubjectID;
+    public static string SubjectID = "test";
+
+    // Paths
+    public static string SavePath;
 
 
     // General Task Skript
@@ -22,6 +26,9 @@ public class GameController : MonoBehaviour
     public static bool isConnected;
     public static GameObject currentTarget;
     public static bool recording = false;
+
+    public static int startTime;
+
 
     void OnEnable()
     {
@@ -37,6 +44,7 @@ public class GameController : MonoBehaviour
 
     private void Awake()
     {
+        startTime = (int)DataHandler.ConvertToTimestamp(DateTime.UtcNow);
         currentState = GameState.Initializing;
         DoNotDestroyOnLoad();
         OnAwake();
@@ -68,9 +76,10 @@ public class GameController : MonoBehaviour
             isConnected = TryToConnect();
             currentState = GameState.MainMenu_EnterSubjectID;
         }
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.S))
         {
-            recording = !recording;
+            print("Saving");
+            FindObjectOfType<DataHandler>().writeToFile();
         }
         if (Input.GetKeyDown(KeyCode.D))
         {

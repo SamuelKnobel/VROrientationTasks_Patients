@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
+using System.IO;
 using UnityEngine;
 using Valve.VR;
 
@@ -24,11 +26,7 @@ public class DataHandler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.S))
-        {
-            GameController.recording = false;
-            writeHardwareToJson();
-        }
+
     }
 
     private void FixedUpdate()
@@ -50,23 +48,42 @@ public class DataHandler : MonoBehaviour
         foreach (Data_Hardware item in data_Hardware)
         {
             string NewJSON = JsonUtility.ToJson(item);
-            JSONsToSave.Add("Hardware:"+NewJSON);
+            JSONsToSave.Add(NewJSON);
             NewJSON = "";
             item.ResetAll();
         }
-        //foreach (Data_Targets_OT item in data_Targets)
-        //{
-        //    string NewJSON = JsonUtility.ToJson(item);
-        //    JSONsToSave.Add(NewJSON);
-        //    NewJSON = "";
-        //    item.ResetAll();
-        //}
     }
     public void WriteTargetToJSON(Data_Targets_OT data)
     {
         string NewJSON = JsonUtility.ToJson(data);
-        JSONsToSave.Add("Target:" + NewJSON);
+        JSONsToSave.Add(NewJSON);
         NewJSON = "";
+    }
+    public string data;
+    public void writeToFile()
+    {
+        GameController.recording = false;
+        string pathToDir = GameController.SavePath;
+        string pathToFile = pathToDir + GameController.startTime +"_"+GameController.SubjectID+ "_SaveData.JSON";
+        if (!Directory.Exists(pathToDir))
+        {
+            Directory.CreateDirectory(pathToDir);
+        }
+        writeHardwareToJson();
+        string data = "[";
+        File.WriteAllText(pathToFile, "[");
+
+        for (int i = 0; i < JSONsToSave.Count - 1; i++)
+        {
+            data = data + JSONsToSave[i] + ",\n";
+            File.AppendAllText(pathToFile, JSONsToSave[i] + ",");
+        }
+        data = data + JSONsToSave[JSONsToSave.Count - 1] +"]";
+        File.AppendAllText(pathToFile, JSONsToSave[JSONsToSave.Count - 1]);
+        File.AppendAllText(pathToFile,"]");
+        //JSONsToSave.Clear();
+        SQLCreator.AddToTable(GameController.SubjectID, GameController.startTime, data);
+
     }
 }
 [Serializable]

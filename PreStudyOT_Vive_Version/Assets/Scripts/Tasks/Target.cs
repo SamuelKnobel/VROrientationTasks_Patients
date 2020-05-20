@@ -71,7 +71,6 @@ public class Target : MonoBehaviour
         transform.eulerAngles = new Vector3(0, angle, 0);
         transform.position = GameController.SpherToCart(angle);
         GetComponent<Data_Targets_OT>().WriteStartInfo(angle, moving);
-        print(DataContainer);
         transform.localScale = DataContainer.Size * Vector3.one;
         b_settingsdefined = true;
         
@@ -86,6 +85,7 @@ public class Target : MonoBehaviour
 
     void SelfDestruction()
     {
-        Destroy(this.gameObject);        
+        gameObject.SetActive(false);
+        //Destroy(this.gameObject);        
     }
 }

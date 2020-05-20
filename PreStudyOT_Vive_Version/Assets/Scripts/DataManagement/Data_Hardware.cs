@@ -8,11 +8,12 @@ using UnityEngine;
 [Serializable]
 public class Data_Hardware : MonoBehaviour
 {
-    public string HardwareName;
-    public List<Vector3> Position;
-    public List<Vector3> Euler_Rotation;
-    public List<Quaternion> Rotation;
-    public List<double> Timestamps;
+    [SerializeField] string identifyer = "Hardware";
+    [SerializeField] public string HardwareName;
+    [SerializeField] public List<Vector3> Position;
+    [SerializeField] public List<Vector3> Euler_Rotation;
+    [SerializeField] public List<Quaternion> Rotation;
+    [SerializeField] public List<double> Timestamps;
 
     // Start is called before the first frame update
     void Start()
