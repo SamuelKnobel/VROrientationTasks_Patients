@@ -15,7 +15,7 @@ public static class SQLConnector
 	{
 		try
 		{
-			db_connection_string = "URI=file:" + Application.persistentDataPath + "/" + database_name;
+			db_connection_string = "URI=file:" + Application.streamingAssetsPath + "/" + database_name;
 			Debug.Log("db_connection_string" + db_connection_string);
 			db_connection = new SqliteConnection(db_connection_string);
 			db_connection.Open();

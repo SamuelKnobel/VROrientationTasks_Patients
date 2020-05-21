@@ -1,6 +1,6 @@
 UseLaser,1
 UseTargetCross,1
-TimeBetweenTargets,1
+TimeBetweenTargets,11
 TargetSpeed,8
 TargetSizeNear,0.1
 TargetSizeFar,2

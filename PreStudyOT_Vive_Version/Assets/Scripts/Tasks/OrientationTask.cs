@@ -6,13 +6,6 @@ using UnityEngine;
 
 public class OrientationTask : MonoBehaviour
 {
-     //OVRInput.Button B_X;
-     //OVRInput.Button B_Y;
-     //OVRInput.Button B_A;
-     //OVRInput.Button B_B;
-     //OVRInput.Button B_HandTrigger_R;
-     //OVRInput.Button B_Menu;
-
     public float timerToShowStartTaskButton;
 
     public int currentTargetNbr = 0;
@@ -25,7 +18,7 @@ public class OrientationTask : MonoBehaviour
     public int maxSessionNumber = 0;
 
     public int[] NumTargetsPerRound;
-    public List<int[]> OrderCues= new List<int[]>();
+    public List<int[]> OrderCues = new List<int[]>();
     public bool TaskReady = false;
 
     // Environment Elemtent References
@@ -51,50 +44,14 @@ public class OrientationTask : MonoBehaviour
     void Start()
     {
         GameController.recording = true;
-        GameController.SavePath = Application.streamingAssetsPath + "/Output/" + GameController.SubjectID+"/";
+        GameController.SavePath = Application.streamingAssetsPath + "/Output/" + GameController.SubjectID + "/";
         FindObjectOfType<GameController>().orientationTask = this;
         GameController.currentState = GameState.Task_Orientation_Tutorial;
-
-      
-        //B_X = OVRInput.Button.Three;
-        //B_Y = OVRInput.Button.Four;
-        //B_A =OVRInput.Button.One;
-        //B_B = OVRInput.Button.Two;
-        //B_HandTrigger_R = OVRInput.Button.SecondaryHandTrigger;
-        //B_Menu = OVRInput.Button.Start;
     }
 
     void Update()
     {
-        //if (!OVRInput.Get(B_HandTrigger_R))
-        //{
-        //    if (OVRInput.GetDown(B_X)/*|| Input.GetKeyDown(KeyCode.Alpha1)*/)
-        //        SpawnTarget_OrientationTask(0,-80,true);
-        //    if (OVRInput.GetDown(B_Y)/* || Input.GetKeyDown(KeyCode.Alpha2)*/)
-        //        SpawnTarget_OrientationTask(0, -40, true);
-        //    if (OVRInput.GetDown(B_A) /*|| Input.GetKeyDown(KeyCode.Alpha3)*/)
-        //        SpawnTarget_OrientationTask(0, 40, true);
-        //    if (OVRInput.GetDown(B_B)/* || Input.GetKeyDown(KeyCode.Alpha4)*/)
-        //        SpawnTarget_OrientationTask(0, 80, true);
-        //}
-        //if (OVRInput.Get(B_HandTrigger_R) /*|| Input.GetKey(KeyCode.G)*/)
-        //{
-        //    if (GameController.currentTarget == null)
-        //        SpawnTarget_OrientationTask(0, -80, true);
-
-        //    if (OVRInput.GetDown(B_X)/* || Input.GetKeyDown(KeyCode.Q)*/)
-        //        EventManager.CallCueEvent(0);
-
-        //    if (OVRInput.GetDown(B_Y)/* || Input.GetKeyDown(KeyCode.W)*/)
-        //        EventManager.CallCueEvent(1);
-
-        //    if (OVRInput.GetDown(B_A)/* || Input.GetKeyDown(KeyCode.E)*/)
-        //        EventManager.CallCueEvent(2);
-
-        //    if (OVRInput.GetDown(B_B) /*|| Input.GetKeyDown(KeyCode.R)*/)
-        //        EventManager.CallCueEvent(3);
-
-        //}
+       
         if (/*OVRInput.GetDown(B_Menu) || */Input.GetKeyDown(KeyCode.T))
         {
             FixationCross.SetActive(!FixationCross.activeSelf);
@@ -102,25 +59,11 @@ public class OrientationTask : MonoBehaviour
             FixationCross.GetComponent<FixationCross>().isSeen = false;
 
         }
-        //if (OVRInput.Get(B_Menu) /*|| Input.GetKey(KeyCode.M)*/)
-        //{
-        //    if (GameController.currentState == GameState.Task_Orientation_Tutorial)
-        //    {
-        //        timerToShowStartTaskButton += Time.deltaTime;
-        //        if (timerToShowStartTaskButton > 2)
-        //        {
-        //            //FindObjectOfType<HUD_Main>().startTask1.gameObject.SetActive(true);
-        //        }
-        //    }
 
-        //}
-        //if (OVRInput.GetUp(B_Menu) || Input.GetKeyUp(KeyCode.M))
-        //{
-        //     timerToShowStartTaskButton = 0;
-        //}
         if (TaskReady)
         {
             GameController.currentState = GameState.Task_Orientation_Task;
+            TaskReady = false;
         }
 
     }
@@ -151,7 +94,7 @@ public class OrientationTask : MonoBehaviour
 
         return NewTarget;
     }
-  
+
     public void StartTask()
     {
         Debug.Log("StartTask");
@@ -161,7 +104,7 @@ public class OrientationTask : MonoBehaviour
             Debug.Log(NumTargetsPerRound.Length);
             Debug.Log(OrderCues.Count);
             Debug.LogError("INVALD INPUT");
-            TaskReady= false;
+            TaskReady = false;
         }
         currentCueOrder = OrderCues[currentSessionNumber];
         GameController.currentCondition = (Condition)currentCueOrder[currentRoundNumber];
@@ -170,11 +113,11 @@ public class OrientationTask : MonoBehaviour
         maxTargetNbr = NumTargetsPerRound[currentSessionNumber];
         currentTargetNbr++;
         FixationCross.SetActive(true);
-        TaskReady =  true;
+        TaskReady = true;
     }
     void ShowNextTarget()
     {
-        GameController.currentTarget=  SpawnTarget_OrientationTask((int)GameController.currentCondition, getRandomAngle(),true);
+        GameController.currentTarget = SpawnTarget_OrientationTask((int)GameController.currentCondition, getRandomAngle(), true);
     }
 
 
@@ -186,7 +129,7 @@ public class OrientationTask : MonoBehaviour
             {
                 shotObject.tag = "Untagged";
                 shotObject.GetComponent<Target>().hit = true;
-               shotObject.GetComponent<Target>().deathTimer.Run();
+                shotObject.GetComponent<Target>().deathTimer.Run();
                 shotObject.GetComponent<Rigidbody>().useGravity = true;
                 //Feedback.AddTextToBottom("Target Shot", true);
                 //shotObject.GetComponent<Data_Targets_OT>()..Run();
@@ -207,7 +150,7 @@ public class OrientationTask : MonoBehaviour
             currentTargetNbr = 0;
             currentRoundNumber++;
         }
-        if (currentRoundNumber >=maxRoundNumber)
+        if (currentRoundNumber >= maxRoundNumber)
         {
             currentTargetNbr = 0;
             currentRoundNumber = 0;
@@ -220,13 +163,13 @@ public class OrientationTask : MonoBehaviour
             Debug.Log("Game Ends");
             TaskReady = false;
             GameController.currentState = GameState.End;
-           
+
         }
         else
         {
             maxTargetNbr = NumTargetsPerRound[currentSessionNumber];
             currentCueOrder = OrderCues[currentSessionNumber];
-            GameController.currentCondition= (Condition)currentCueOrder[currentRoundNumber]; 
+            GameController.currentCondition = (Condition)currentCueOrder[currentRoundNumber];
             FixationCross.SetActive(true);
             currentTargetNbr++;
         }
@@ -247,182 +190,182 @@ public class OrientationTask : MonoBehaviour
         return spawnAngle;
     }
 
-    #region HUD
+    //#region HUD
 
-    private float vh, vw;
-    private Rect centerRect;
-    private Rect activeWindow;
+    //private float vh, vw;
+    //private Rect centerRect;
+    //private Rect activeWindow;
 
-    public enum GuiMode { Tutorial, SetUpTask,Task, None };
-    public GuiMode currentGUI;
-
-
-
-    private void OnGUI()
-    {
-        vh = Screen.height / 100f;
-        vw = Screen.width / 100f;
-        centerRect = new Rect(30 * vw, 30 * vh, 40 * vw, 60 * vh);
-        activeWindow = centerRect;
-        switch (currentGUI)
-        {
-            case GuiMode.Tutorial:
-                activeWindow = GUI.Window(0, activeWindow, guiTutorial, "Enter Subject ID"); ;
-                break;
-            //case GuiMode.Task:
-                //activeWindow = GUI.Window(2, activeWindow, guiTaskselection, "Select a Task"); ;   
-            case GuiMode.SetUpTask:
-                activeWindow = GUI.Window(1, activeWindow, guiSetUpTask, "Select a Task"); ;
-                break;
-            default:
-                break;
-        }
-    }
+    //public enum GuiMode { Tutorial, SetUpTask, Task, None };
+    //public GuiMode currentGUI;
 
 
 
-    bool AudioOn = false;
-    bool VibrationOn = false;
-    float angle = 0;
-    int cueType = -1;
-    bool moving = true;
-    private void guiTutorial(int windowID)
-    {
-        GUILayout.BeginVertical();
-        GUILayout.Label("Define Position of Next Target");
-        GUILayout.BeginHorizontal();
-       
-        angle= GUILayout.HorizontalSlider(angle, -80, 80);
-
-        GUILayout.Label(angle.ToString());
-        GUILayout.EndHorizontal();
-
-        AudioOn= GUILayout.Toggle(AudioOn, "Audio");
-        VibrationOn= GUILayout.Toggle(VibrationOn, "Vibration");
-        moving= GUILayout.Toggle(moving, "Movement");
-       
-        if (!AudioOn& ! VibrationOn)
-            cueType = 1;  
-        if (AudioOn & !VibrationOn)
-            cueType = 2;
-        if (!AudioOn & VibrationOn)
-            cueType = 3;
-        if (AudioOn & VibrationOn)
-            cueType = 4;
-
-        if (GUILayout.Button("Spawn"))
-        {
-            if (angle < -60)
-                angle = -80;
-            if (angle>= -60 & angle <= 0)
-                angle = -40;
-            if (angle > 60)
-                angle = 80;
-            if (angle <= 60 & angle > 0)
-                angle = 40;
-            GameController.currentTarget = SpawnTarget_OrientationTask(cueType, angle, moving);
-        }
-
-        GUILayout.FlexibleSpace();
-        if (GUILayout.Button("Set Up Task"))
-        {
-            currentGUI = GuiMode.SetUpTask;
-            Destroy(GameController.currentTarget);
-            GameController.currentTarget = null;
-        }
-        GUILayout.EndVertical();
-        GUI.DragWindow();
-    }
+    //private void OnGUI()
+    //{
+    //    vh = Screen.height / 100f;
+    //    vw = Screen.width / 100f;
+    //    centerRect = new Rect(30 * vw, 30 * vh, 40 * vw, 60 * vh);
+    //    activeWindow = centerRect;
+    //    switch (currentGUI)
+    //    {
+    //        case GuiMode.Tutorial:
+    //            activeWindow = GUI.Window(0, activeWindow, guiTutorial, "Enter Subject ID"); ;
+    //            break;
+    //        //case GuiMode.Task:
+    //        //activeWindow = GUI.Window(2, activeWindow, guiTaskselection, "Select a Task"); ;   
+    //        case GuiMode.SetUpTask:
+    //            activeWindow = GUI.Window(1, activeWindow, guiSetUpTask, "Select a Task"); ;
+    //            break;
+    //        default:
+    //            break;
+    //    }
+    //}
 
 
-    public string numOfSessionsString;
-    public int numOfSessionsInt = 0;
-    public string[] nbObPerRound = new string[0];
-    public string[] orderCuesString = new string[0];
-    private void guiSetUpTask(int windowID)
-    {
-        GUILayout.BeginVertical();
-        GUILayout.Label("Wählen sie die Anzahl Sessionen (1 Session = 4 Runden) ,    (0 - 4)");
-        numOfSessionsString = GUILayout.TextField(numOfSessionsString);
 
-        bool valid = int.TryParse(numOfSessionsString, out numOfSessionsInt);
+    //bool AudioOn = false;
+    //bool VibrationOn = false;
+    //float angle = 0;
+    //int cueType = -1;
+    //bool moving = true;
+    //private void guiTutorial(int windowID)
+    //{
+    //    GUILayout.BeginVertical();
+    //    GUILayout.Label("Define Position of Next Target");
+    //    GUILayout.BeginHorizontal();
 
-        if (!valid)
-            numOfSessionsString = "";
-        else
-            if (nbObPerRound.Length != numOfSessionsInt)
-            {
-                nbObPerRound = new string[numOfSessionsInt];
-                orderCuesString = new string[numOfSessionsInt];
-            }
+    //    angle = GUILayout.HorizontalSlider(angle, -80, 80);
 
-        GUILayout.Label("Anzahl Objekte pro Runde je Session");
-        GUILayout.BeginHorizontal();
-        for (int i = 0; i < numOfSessionsInt; i++)
-        {
-            nbObPerRound[i] = GUILayout.TextField(nbObPerRound[i]);
-        }
-        GUILayout.EndHorizontal();
+    //    GUILayout.Label(angle.ToString());
+    //    GUILayout.EndHorizontal();
 
-        GUILayout.Label("Reihenfolge der Cues je Session: z.B: 3 2 4 1");
-        GUILayout.BeginHorizontal();
-        for (int i = 0; i < numOfSessionsInt; i++)
-        {
-            orderCuesString[i] = GUILayout.TextField(orderCuesString[i]);
-        }
-        GUILayout.EndHorizontal();
+    //    AudioOn = GUILayout.Toggle(AudioOn, "Audio");
+    //    VibrationOn = GUILayout.Toggle(VibrationOn, "Vibration");
+    //    moving = GUILayout.Toggle(moving, "Movement");
 
-        GUILayout.FlexibleSpace();
+    //    if (!AudioOn & !VibrationOn)
+    //        cueType = 1;
+    //    if (AudioOn & !VibrationOn)
+    //        cueType = 2;
+    //    if (!AudioOn & VibrationOn)
+    //        cueType = 3;
+    //    if (AudioOn & VibrationOn)
+    //        cueType = 4;
 
-        if (GUILayout.Button("Start Task"))
-        {
-            if (TranslateEntrys(nbObPerRound, orderCuesString))
-            {
-                currentGUI = GuiMode.Task;
-                StartTask();
-            }
-        }
-        GUILayout.EndVertical();
-        GUI.DragWindow();
-    }
+    //    if (GUILayout.Button("Spawn"))
+    //    {
+    //        if (angle < -60)
+    //            angle = -80;
+    //        if (angle >= -60 & angle <= 0)
+    //            angle = -40;
+    //        if (angle > 60)
+    //            angle = 80;
+    //        if (angle <= 60 & angle > 0)
+    //            angle = 40;
+    //        GameController.currentTarget = SpawnTarget_OrientationTask(cueType, angle, moving);
+    //    }
 
-    bool TranslateEntrys(string[] perRound, string[] cueorder)
-    {
-        bool result = false;
-
-        NumTargetsPerRound = new int[perRound.Length];
-        OrderCues = new List<int[]>();
-        for (int i = 0; i < NumTargetsPerRound.Length; i++)
-        {
-           result=  int.TryParse(perRound[i], out NumTargetsPerRound[i]);
-            if (result == false)
-            {
-                return result;
-            }
-        } 
-        for (int i = 0; i < cueorder.Length; i++)
-        {
-            string[] SplitString = cueorder[i].Split(' ');
-            int[] orderSession = new int[4];
-            int sum = 0;
-            for (int j = 0; j < SplitString.Length; j++)
-            {
-                result = int.TryParse(SplitString[j], out orderSession[j]);
-                sum += orderSession[j];
-                if (result == false)
-                {
-                    return result;
-                }
-            }
-            if (sum !=10)
-            {
-                return false;
-            }
-            OrderCues.Add(orderSession);
-        }
-        return result;
-    }
+    //    GUILayout.FlexibleSpace();
+    //    if (GUILayout.Button("Set Up Task"))
+    //    {
+    //        currentGUI = GuiMode.SetUpTask;
+    //        Destroy(GameController.currentTarget);
+    //        GameController.currentTarget = null;
+    //    }
+    //    GUILayout.EndVertical();
+    //    GUI.DragWindow();
+    //}
 
 
-    #endregion
+    //public string numOfSessionsString;
+    //public int numOfSessionsInt = 0;
+    //public string[] nbObPerRound = new string[0];
+    //public string[] orderCuesString = new string[0];
+    //private void guiSetUpTask(int windowID)
+    //{
+    //    GUILayout.BeginVertical();
+    //    GUILayout.Label("Wählen sie die Anzahl Sessionen (1 Session = 4 Runden) ,    (0 - 4)");
+    //    numOfSessionsString = GUILayout.TextField(numOfSessionsString);
+
+    //    bool valid = int.TryParse(numOfSessionsString, out numOfSessionsInt);
+
+    //    if (!valid)
+    //        numOfSessionsString = "";
+    //    else
+    //        if (nbObPerRound.Length != numOfSessionsInt)
+    //    {
+    //        nbObPerRound = new string[numOfSessionsInt];
+    //        orderCuesString = new string[numOfSessionsInt];
+    //    }
+
+    //    GUILayout.Label("Anzahl Objekte pro Runde je Session");
+    //    GUILayout.BeginHorizontal();
+    //    for (int i = 0; i < numOfSessionsInt; i++)
+    //    {
+    //        nbObPerRound[i] = GUILayout.TextField(nbObPerRound[i]);
+    //    }
+    //    GUILayout.EndHorizontal();
+
+    //    GUILayout.Label("Reihenfolge der Cues je Session: z.B: 3 2 4 1");
+    //    GUILayout.BeginHorizontal();
+    //    for (int i = 0; i < numOfSessionsInt; i++)
+    //    {
+    //        orderCuesString[i] = GUILayout.TextField(orderCuesString[i]);
+    //    }
+    //    GUILayout.EndHorizontal();
+
+    //    GUILayout.FlexibleSpace();
+
+    //    if (GUILayout.Button("Start Task"))
+    //    {
+    //        if (TranslateEntrys(nbObPerRound, orderCuesString))
+    //        {
+    //            currentGUI = GuiMode.Task;
+    //            StartTask();
+    //        }
+    //    }
+    //    GUILayout.EndVertical();
+    //    GUI.DragWindow();
+    //}
+
+    //bool TranslateEntrys(string[] perRound, string[] cueorder)
+    //{
+    //    bool result = false;
+
+    //    NumTargetsPerRound = new int[perRound.Length];
+    //    OrderCues = new List<int[]>();
+    //    for (int i = 0; i < NumTargetsPerRound.Length; i++)
+    //    {
+    //        result = int.TryParse(perRound[i], out NumTargetsPerRound[i]);
+    //        if (result == false)
+    //        {
+    //            return result;
+    //        }
+    //    }
+    //    for (int i = 0; i < cueorder.Length; i++)
+    //    {
+    //        string[] SplitString = cueorder[i].Split(' ');
+    //        int[] orderSession = new int[4];
+    //        int sum = 0;
+    //        for (int j = 0; j < SplitString.Length; j++)
+    //        {
+    //            result = int.TryParse(SplitString[j], out orderSession[j]);
+    //            sum += orderSession[j];
+    //            if (result == false)
+    //            {
+    //                return result;
+    //            }
+    //        }
+    //        if (sum != 10)
+    //        {
+    //            return false;
+    //        }
+    //        OrderCues.Add(orderSession);
+    //    }
+    //    return result;
+    //}
+
+
+    //#endregion
 }

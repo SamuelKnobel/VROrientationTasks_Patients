@@ -13,14 +13,14 @@ public static class  EventManager
     //public static event EventAction TouchLeftEvent; // NO listener yet
     //public static event EventAction TouchRightEvent;// NO listener yet
     //public static event EventAction TriggerEvent;// NO listener yet    
-    public static event EventAction DefineNewTargetEvent;
-    public static event EventAction StartSeachringEvent;
+    public static event EventAction EventDefineNewTarget;
+    public static event EventAction EventStartSeachring;
 
     public static void CallStartSearchingEvent()
     {
-        if (StartSeachringEvent != null)
+        if (EventStartSeachring != null)
         {
-            StartSeachringEvent.Invoke();
+            EventStartSeachring.Invoke();
         }
         else
         {
@@ -29,9 +29,9 @@ public static class  EventManager
     }      
     public static void CallDefineNewTargetEvent()
     {
-        if (DefineNewTargetEvent != null)
+        if (EventDefineNewTarget != null)
         {
-            DefineNewTargetEvent.Invoke();
+            EventDefineNewTarget.Invoke();
         }
         else
         {
@@ -103,15 +103,15 @@ public static class  EventManager
     //public static event FloatEventAction EventFloat;
     //public static event FloatEventAction DefineSpaceEvent;
 
-    public static event FloatEventAction CueEvent;
+    public static event FloatEventAction EventCue;
 
 
 
     public static void CallCueEvent(float Float)
     {
-        if (CueEvent != null)
+        if (EventCue != null)
         {
-            CueEvent.Invoke(Float);
+            EventCue.Invoke(Float);
         }
         else
         {
@@ -142,7 +142,7 @@ public static class  EventManager
     #region Events with GameObject Input
     public delegate void GOEventAction(GameObject GO);
     //public static event GOEventAction ColliderInteractionEvent;
-    public static event GOEventAction TargetShotEvent;
+    public static event GOEventAction EventTargetShot;
     public static event GOEventAction StartVibrationEvent;
 
 
@@ -163,9 +163,9 @@ public static class  EventManager
 
     public static void CallTargetShotEvent(GameObject GO)
     {
-        if (TargetShotEvent != null)
+        if (EventTargetShot != null)
         {
-            TargetShotEvent.Invoke(GO);
+            EventTargetShot.Invoke(GO);
         }
         else
         {

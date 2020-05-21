@@ -112,6 +112,7 @@ public static class  EventManager
         if (CueEvent != null)
         {
             CueEvent.Invoke(Float);
+            Debug.Log("CueEventCalled");
         }
         else
         {

@@ -10,10 +10,11 @@ public class Data_Hardware : MonoBehaviour
 {
     [SerializeField] string identifyer = "Hardware";
     [SerializeField] public string HardwareName;
+    [SerializeField] public List<double> Timestamps;
     [SerializeField] public List<Vector3> Position;
     [SerializeField] public List<Vector3> Euler_Rotation;
     [SerializeField] public List<Quaternion> Rotation;
-    [SerializeField] public List<double> Timestamps;
+
 
     // Start is called before the first frame update
     void Start()

@@ -17,6 +17,8 @@ public class FixationCross : MonoBehaviour
     public float borderRight;
     public float borderTop;
     public float borderBottom;
+    // Script References
+    GameController gameController;
 
 
     // Start is called before the first frame update
@@ -31,12 +33,16 @@ public class FixationCross : MonoBehaviour
 
     private void Update()
     {
-        if (GameController.currentState == GameState.Task_Orientation_Task || GameController.currentState == GameState.Task_Orientation_Tutorial)
+        if (gameController == null)
+        {
+            gameController = FindObjectOfType<GameController>();
+        }
+        if (gameController.currentState == GameState.Task_Orientation_Task || gameController.currentState == GameState.Task_Orientation_Tutorial)
         {
             checkInFOV();
             if (isSeen && TimeSeen > 2)
             {
-                if (GameController.currentState == GameState.Task_Orientation_Task)
+                if (gameController.currentState == GameState.Task_Orientation_Task)
                     EventManager.CallStartSearchingEvent();
 
                 TimeSeen = 0;
@@ -44,7 +50,7 @@ public class FixationCross : MonoBehaviour
                 gameObject.SetActive(false);
             }
         }
-        if (GameController.currentState == GameState.Task_Lokalisation)
+        if (gameController.currentState == GameState.Task_Lokalisation)
         {
             checkInFOV();
             if (isSeen && TimeSeen > 2)

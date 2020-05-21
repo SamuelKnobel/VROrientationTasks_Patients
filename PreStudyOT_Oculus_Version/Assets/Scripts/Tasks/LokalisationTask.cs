@@ -12,23 +12,32 @@ public class LokalisationTask : MonoBehaviour
     public GameObject TargetContainer;
     [SerializeField] GameObject TargetPrefab;
 
+    //Script References
+    private GameController gameController;
+    private RemoteController localController;
+
 
 
     // Start is called before the first frame update
     void Start()
     {
-        FindObjectOfType<GameController>().lokalisationTask = this;
-        GameController.currentState = GameState.Task_Lokalisation;
+        gameController = FindObjectOfType<GameController>();
+        gameController.currentState = GameState.Task_Lokalisation;
 
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.P))
+        if (gameController == null)
         {
-            SpawnTargets_LokalizationTask(2, 0);
+            gameController = GameObject.FindObjectOfType<GameController>();
         }
+
+        //if (Input.GetKeyDown(KeyCode.P))
+        //{
+        //    SpawnTargets_LokalizationTask(2, 0);
+        //}
     }
 
     GameObject SpawnTargets_LokalizationTask(int condition, int targetPosition)
@@ -37,10 +46,10 @@ public class LokalisationTask : MonoBehaviour
         {
             Destroy(t.gameObject);
         }
-        if (GameController.currentTarget != null)
-            Destroy(GameController.currentTarget);
+        if (gameController.currentTarget != null)
+            Destroy(gameController.currentTarget);
 
-        GameController.currentCondition = (Condition)condition;
+        gameController.currentCondition = (Condition)condition;
 
         Targets = new GameObject[6];
 
@@ -60,11 +69,11 @@ public class LokalisationTask : MonoBehaviour
 
         if (targetPosition< Targets.Length)
         {
-            GameController.currentTarget = Targets[targetPosition];
+            gameController.currentTarget = Targets[targetPosition];
         }
         foreach (GameObject item in Targets)
         {
-            if (!item.Equals(GameController.currentTarget))
+            if (!item.Equals(gameController.currentTarget))
                 item.tag = "Untagged";
             item.transform.SetParent(TargetContainer.transform);
         }

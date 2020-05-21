@@ -19,6 +19,11 @@ public class HUD_Main : MonoBehaviour
     // Script References
     GameController gameController;
 
+
+
+
+
+
     void Awake()
     {
         gameController = FindObjectOfType<GameController>();

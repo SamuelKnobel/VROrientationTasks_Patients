@@ -44,7 +44,9 @@ public class GameController : MonoBehaviour
 
     private void Awake()
     {
-        startTime = (int)DataHandler.ConvertToTimestamp(DateTime.UtcNow);
+        Time.timeScale = 1;
+        startTime = Mathf.RoundToInt((float)DataHandler.ConvertToTimestamp(DateTime.UtcNow));
+        print(startTime);
         currentState = GameState.Initializing;
         DoNotDestroyOnLoad();
         OnAwake();
@@ -129,10 +131,8 @@ public class GameController : MonoBehaviour
         if (currentTarget != null)
         {
             currentTarget.GetComponent<Target>().GiveClue((int)CueType);
-            //Feedback.AddTextToSide("CueType:" + CueType + " for Object position: " + currentTarget.transform.position, true);
         }
-        //else
-            //Feedback.AddTextToSide("No TargetDefined", true);
+
     }
 
 

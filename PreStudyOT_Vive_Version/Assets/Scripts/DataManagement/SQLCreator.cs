@@ -8,7 +8,12 @@ using System.Data;
 
 public class SQLCreator : MonoBehaviour
 {
-
+    private void OnEnable()
+    {
+        SQLConnector.ConnectToDatabase();
+        CreateTables();
+        SQLConnector.Close();
+    }
     private void OnDisable()
     {
         if (SQLConnector.db_connection != null)
@@ -42,7 +47,7 @@ public class SQLCreator : MonoBehaviour
         SQLConnector.ConnectToDatabase();
         IDbCommand dbcmd = SQLConnector.GetDbCommand();
         string q_createTable =
-            "INSERT INTO Subjects(subjectID, timestamp, json) VALUES ('"+ subjectID+"','"+ timestamp + "','\"" + data + "\"')";
+            "INSERT INTO Subjects(subjectID, timestamp, json) VALUES ('"+ subjectID+"','"+ timestamp + "','" + data + "')";
         dbcmd.CommandText = q_createTable;
         dbcmd.ExecuteReader();
         SQLConnector.Close();

@@ -21,14 +21,54 @@ public class Target : MonoBehaviour
     public Timer deathTimer;
     AudioSource audioSource;
     public bool hit;
+    public Timer CueTimer;
+    public int NbOfCues = 4;
+
+
+    public void Start()
+    {
+        NbOfCues = 4;
+        audioSource = GetComponent<AudioSource>();
+        deathTimer = gameObject.AddComponent<Timer>();
+        deathTimer.AddTimerFinishedEventListener(OutOfTime);
+        deathTimer.Duration = ConfigurationUtils.TimeBetweenTargets - 0.1f;
+        deathTimer.Run();
+        CueTimer = gameObject.AddComponent<Timer>();
+        CueTimer.Duration = 3;
+        CueTimer.Run();
+        CueTimer.AddTimerFinishedEventListener(RepeatCue);
+
+    }
+
+
+    void OutOfTime()
+    {
+        if (GameController.currentState == GameState.Task_Orientation_Task)
+        {
+            EventManager.CallDefineNewTargetEvent();
+        }
+        SelfDestruction();
+    }
+
+    void RepeatCue()
+    {
+        if (NbOfCues >0)
+        {
+            GiveClue((int)GameController.currentCondition);
+            CueTimer.Duration = 3;
+            CueTimer.Run();
+        }      
+    }
 
     public void GiveClue(int CueType)
     {
+        NbOfCues--;
         Condition c = (Condition)CueType;
-        audioSource = GetComponent<AudioSource>();
-        deathTimer = gameObject.AddComponent<Timer>();
-        deathTimer.AddTimerFinishedEventListener(SelfDestruction);
-        deathTimer.Duration = ConfigurationUtils.TimeBetweenTargets - 0.1f;
+        if (audioSource == null)
+        {
+            audioSource=GetComponent<AudioSource>();
+        }
+
         switch (c)
         {
             case Condition.SpatialAudio:

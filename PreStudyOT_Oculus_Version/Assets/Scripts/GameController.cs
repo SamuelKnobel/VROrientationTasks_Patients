@@ -1,43 +1,48 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 using UnityEngine.UI;
+using Mirror;
+using System;
 using UnityEngine.SceneManagement;
-
-public class GameController : MonoBehaviour
+public class GameController : NetworkBehaviour
 {
+    // Script References
+    public SyncListString tasks = new SyncListString();
+    public RemoteController localController;
 
-    // Tasks
-    public OrientationTask orientationTask;
-    public LokalisationTask lokalisationTask;
+    //// Tasks
+    //public OrientationTask orientationTask;
+    //public LokalisationTask lokalisationTask;
 
     // General Informations
-    public static string SubjectID;
-
+    [SyncVar] public string SubjectID;
 
     // General Task Skript
-    public static Condition currentCondition;
-    public static GameState currentState;
+    [SyncVar] public Condition currentCondition;
+    [SyncVar] public GameState currentState = GameState.Initializing;
+    [SyncVar] public bool showFixationCross;
+    [SyncVar] public GameObject currentTarget;
 
     public static bool isConnected;
-    public static GameObject currentTarget;
+
 
     void OnEnable()
     {
-        //EventManager.TriggerEvent += TriggerCalledEvent;
-        EventManager.CueEvent += CueCalledEvent;
+        EventManager.EventCue += CueCalledEvent;
     }
     void OnDisable()
     {
-        //EventManager.TriggerEvent -= TriggerCalledEvent;
-        EventManager.CueEvent -= CueCalledEvent;
+        EventManager.EventCue -= CueCalledEvent;
     }
 
 
     private void Awake()
     {
         currentState = GameState.Initializing;
-        DoNotDestroyOnLoad();
+        DontDestroyOnLoad(this.gameObject); // TODO: ENSURE THAT ONLY ONE INSTANCE EXISTS!
+        getLocalController();
         OnAwake();
 
     }
@@ -45,54 +50,71 @@ public class GameController : MonoBehaviour
     {
         currentCondition = Condition.None;
     }
-    void DoNotDestroyOnLoad()
+    //void DoNotDestroyOnLoad()
+    //{
+    //     GameController[] GCList = FindObjectsOfType<GameController>();
+    //    if (GCList.Length>1)
+    //    {
+    //        print("multiple scripts found(" + FindObjectsOfType<GameController>().Length + "), destroy the additional");
+    //        for (int i = GCList.Length; i > 0; i--)
+    //        {
+    //            Destroy(GCList[i]);
+    //        }
+    //    }
+
+    //    DontDestroyOnLoad(this.gameObject);
+    //}
+
+    public RemoteController getLocalController()
     {
-         GameController[] GCList = FindObjectsOfType<GameController>();
-        if (GCList.Length>1)
+        foreach (RemoteController controller in GameObject.FindObjectsOfType<RemoteController>())
         {
-            print("multiple scripts found(" + FindObjectsOfType<GameController>().Length + "), destroy the additional");
-            for (int i = GCList.Length; i > 0; i--)
+            if (controller.isLocalPlayer)
             {
-                Destroy(GCList[i]);
+                localController = controller;
+                return controller;
             }
         }
-
-        DontDestroyOnLoad(this.gameObject);
+        return null;
     }
 
-    private void Start()
-    {
-        FindObjectOfType<Feedback>().UIVisibility(false);
-    }
     private void Update()
     {
-        if (currentState == GameState.Initializing && !isConnected)
+        if (localController == null || !localController.isLocalPlayer)
         {
-            isConnected = TryToConnect();
+            getLocalController();
+        }
+        if (currentState == GameState.Initializing)
+        {
             currentState = GameState.MainMenu_EnterSubjectID;
         }
     }
-    
-    bool TryToConnect()
+
+    public void ShowFixationCross(bool show)
     {
-        // Netwerk and Connection Settings
-        return true;
+        if (localController != null)
+        {
+            //localControl.CmdShowFixationCross(show);
+        }
     }
+
+
 
    public void StartTutorial(GameState gameState)
     {
-        if (gameState == GameState.Task_Orientation)
+        localController.CmdSetGameState(gameState);
+        switch (gameState)
         {
-            currentState = GameState.Task_Orientation;
-            SceneManager.LoadScene(sceneIndexFromName("OT"));
-        }
-        else if (gameState == GameState.Task_Lokalisation)
-        {
-            currentState = GameState.Task_Lokalisation;
-            SceneManager.LoadScene(sceneIndexFromName("LT"));
+            case GameState.Task_Orientation:
+                localController.CmdChangeScene(CompleteSceneName("OT"));
+                break;
+            case GameState.Task_Lokalisation:
+                localController.CmdChangeScene(CompleteSceneName("LT"));
+                break;
         }
     }
 
+    [Server]
     public void StartTask(GameState gameState)
     {
         if (currentTarget != null)
@@ -112,10 +134,11 @@ public class GameController : MonoBehaviour
         if (currentTarget != null)
         {
             currentTarget.GetComponent<Target>().GiveClue((int)CueType);
-            //Feedback.AddTextToSide("CueType:" + CueType + " for Object position: " + currentTarget.transform.position, true);
         }
-        //else
-            //Feedback.AddTextToSide("No TargetDefined", true);
+    }
+    public static string CompleteSceneName(string part)
+    {
+        return NameFromIndex(sceneIndexFromName(part));
     }
 
 

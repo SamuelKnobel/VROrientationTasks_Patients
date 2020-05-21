@@ -13,29 +13,14 @@ public class DataHandler : MonoBehaviour
 
     public List<Data_Hardware> data_Hardware;
 
-    //public List<Data_Targets_OT> data_Targets;
-
     public List<string> JSONsToSave = new List<string>();
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
 
     private void FixedUpdate()
     {
         currentTimeStamp = ConvertToTimestamp(DateTime.UtcNow);
     }
-
-
-
 
     public static double ConvertToTimestamp(DateTime value)
     {
@@ -81,7 +66,6 @@ public class DataHandler : MonoBehaviour
         data = data + JSONsToSave[JSONsToSave.Count - 1] +"]";
         File.AppendAllText(pathToFile, JSONsToSave[JSONsToSave.Count - 1]);
         File.AppendAllText(pathToFile,"]");
-        //JSONsToSave.Clear();
         SQLCreator.AddToTable(GameController.SubjectID, GameController.startTime, data);
 
     }
