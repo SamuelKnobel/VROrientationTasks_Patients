@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class Target : NetworkBehaviour
 {
-    public Data_Targets_OT DataContainer; // replaces TargetConfiguration.cs
+    public Data_Targets DataContainer; // replaces TargetConfiguration.cs
 
     GameController gameController;
     public bool b_settingsdefined;
@@ -22,7 +22,7 @@ public class Target : NetworkBehaviour
     private void Awake()
     {
         gameController = FindObjectOfType<GameController>();
-        DataContainer = GetComponent<Data_Targets_OT>();
+        DataContainer = GetComponent<Data_Targets>();
     }
 
 
@@ -114,7 +114,7 @@ public class Target : NetworkBehaviour
     {
         transform.eulerAngles = new Vector3(0, angle, 0);
         transform.position = GameController.SpherToCart(angle);
-        GetComponent<Data_Targets_OT>().WriteStartInfo(angle, moving);
+        GetComponent<Data_Targets>().WriteStartInfo(angle, moving);
         transform.localScale = DataContainer.Size * Vector3.one;
         b_settingsdefined = true;
     }

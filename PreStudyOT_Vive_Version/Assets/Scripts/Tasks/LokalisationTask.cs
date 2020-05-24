@@ -29,7 +29,6 @@ public class LokalisationTask : MonoBehaviour
     void OnEnable()
     {
         EventManager.TargetShotEvent += TargetShot;
-
         EventManager.DefineNewTargetEvent += DefineNextTarget;
         EventManager.StartSeachringEvent += ShowNextTarget;
     }
@@ -48,10 +47,7 @@ public class LokalisationTask : MonoBehaviour
         gameController = FindObjectOfType<GameController>();
         //gameController.recording = true;
         GameController.SavePath = UnityEngine.Application.persistentDataPath + "/Output/" + GameController.SubjectID + "/";
-
         FindObjectOfType<GameController>().lokalisationTask = this;
-
-
         GameController.currentState = GameState.Task_Lokalisation_Tutorial;
     }
 
@@ -95,13 +91,6 @@ public class LokalisationTask : MonoBehaviour
         //ShowNextTarget();
     }
 
-
-
-
-
-
-
-
     public void SpawnTargets_LokalizationTask(int condition, int targetPosition,bool audioTest)
     {
         foreach (var t in FindObjectsOfType<Target>())
@@ -135,7 +124,7 @@ public class LokalisationTask : MonoBehaviour
         if (targetPosition< Targets.Length)
         {
             GameController.currentTarget = Targets[targetPosition];
-            Targets[targetPosition].GetComponent<Data_Targets_OT>().LT_tag = "Target";
+            Targets[targetPosition].GetComponent<Data_Targets>().LT_tag = "Target";
             Targets[targetPosition].GetComponent<Target>().GiveClue(condition);
         }
 
@@ -162,18 +151,23 @@ public class LokalisationTask : MonoBehaviour
 
     void TargetShot(GameObject shotObject)
     {
-        if (shotObject != null)
+        print("shot:" + shotObject.tag);
+        if (shotObject.tag == "Target")
         {
-            if (shotObject.tag == "Target")
+            shotObject.tag = "Untagged";
+            shotObject.GetComponent<Target>().hit = true;
+            shotObject.GetComponent<Target>().deathTimer.Run();
+            shotObject.GetComponent<Rigidbody>().useGravity = true;
+            if (GameController.currentState == GameState.Task_Orientation_Task)
             {
-                shotObject.tag = "Untagged";
-                shotObject.GetComponent<Target>().hit = true;
-                shotObject.GetComponent<Target>().deathTimer.Run();
-                shotObject.GetComponent<Rigidbody>().useGravity = true;
-                if (GameController.currentState == GameState.Task_Orientation_Task)
-                {
-                    EventManager.CallDefineNewTargetEvent();
-                }
+                EventManager.CallDefineNewTargetEvent();
+            }
+        }
+        else
+        {
+            if (shotObject.GetComponent<Data_Targets>() != null)
+            {
+                shotObject.GetComponent<Data_Targets>().shootLog.Add(DataHandler.currentTimeStamp);
             }
         }
     }

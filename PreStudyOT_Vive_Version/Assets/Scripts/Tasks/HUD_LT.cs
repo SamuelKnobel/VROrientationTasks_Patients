@@ -143,6 +143,10 @@ public class HUD_LT : MonoBehaviour
         if (GUILayout.Button("Set Up Task"))
         {
             currentGUI = GuiMode.SetUpTask;
+            foreach (Target item in FindObjectsOfType<Target>())
+            {
+                Destroy(item.gameObject);
+            }
             Destroy(GameController.currentTarget);
             GameController.currentTarget = null;
         }

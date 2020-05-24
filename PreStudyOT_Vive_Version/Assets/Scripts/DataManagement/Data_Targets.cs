@@ -5,10 +5,8 @@ using System.Runtime.InteropServices;
 using UnityEngine;
 
 [Serializable]
-public class Data_Targets_OT : MonoBehaviour
+public class Data_Targets : MonoBehaviour
 {
-    GameController gameController;
-
     [SerializeField] string identifyer = "Target";
     [SerializeField] public string LT_tag = "untagged";
     [SerializeField] GameState gameState;
@@ -26,29 +24,21 @@ public class Data_Targets_OT : MonoBehaviour
     [SerializeField] int direction;
     [SerializeField] float speed;
     [SerializeField] float size;
+    [SerializeField] public List<double> shootLog;
 
     private void Awake()
     {
         size = ConfigurationUtils.TargetSizeFar;
-        gameController = GameObject.FindObjectOfType<GameController>();
-
     }
     private void Start()
     {
-        gameState = gameController.currentState;
+        gameState = GameController.currentState;
         deathReason = ReasonOfDeath.notdefined;
-        cueType = gameController.currentCondition;
+        cueType = GameController.currentCondition;
         spawnTime = DataHandler.currentTimeStamp;
         startPosition_wp = transform.position;
         startPosition_lp = transform.localPosition;
 
-    }
-    private void Update()
-    {
-        if (gameController == null)
-        {
-            gameController = GameObject.FindObjectOfType<GameController>();
-        }
     }
 
     private void FixedUpdate()
@@ -101,12 +91,14 @@ public class Data_Targets_OT : MonoBehaviour
         {
             return speed;
         }
+      
     }
     public float StartAngle
     {
         get
         {
             return startAngle;
+
         }
     }   
     public float Size

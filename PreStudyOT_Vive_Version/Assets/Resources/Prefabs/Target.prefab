@@ -98,10 +98,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b5330977cb89bb4a98d15afb1812bf7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DataContainer: {fileID: 0}
   b_settingsdefined: 0
-  b_isMoving: 0
   deathTimer: {fileID: 0}
   hit: 0
+  CueTimer: {fileID: 0}
+  NbOfCues: 4
 --- !u!114 &2013104244483630377
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -111,9 +113,25 @@ MonoBehaviour:
   m_GameObject: {fileID: 379640100633855780}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d29985315e9cb5b4f8076c7163f412d5, type: 3}
+  m_Script: {fileID: 11500000, guid: f2d4d3e58b8aa9a498545274fc5371a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  identifyer: Target
+  LT_tag: untagged
+  gameState: 0
+  cueType: 0
+  spawnTime: 0
+  startPosition_wp: {x: 0, y: 0, z: 0}
+  startPosition_lp: {x: 0, y: 0, z: 0}
+  startAngle: 0
+  endPosition_wp: {x: 0, y: 0, z: 0}
+  endPosition_lp: {x: 0, y: 0, z: 0}
+  deathTime: 0
+  deathReason: 0
+  radius: 0
+  direction: 0
+  speed: 0
+  size: 0
 --- !u!65 &7127254059858823057
 BoxCollider:
   m_ObjectHideFlags: 0

@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class Target : MonoBehaviour
 {
-    public Data_Targets_OT DataContainer; // replaces  TargetConfiguration
+    public Data_Targets DataContainer; // replaces  TargetConfiguration
 
 
 
@@ -20,7 +20,7 @@ public class Target : MonoBehaviour
 
     public void Awake()
     {
-        DataContainer = GetComponent<Data_Targets_OT>();
+        DataContainer = GetComponent<Data_Targets>();
     }
     public void Start()
     {
@@ -116,7 +116,7 @@ public class Target : MonoBehaviour
         //DataContainer = GetComponent<Data_Targets_OT>();
         transform.eulerAngles = new Vector3(0, angle, 0);
         transform.position = GameController.SpherToCart(angle);
-        GetComponent<Data_Targets_OT>().WriteStartInfo(angle, moving);
+        GetComponent<Data_Targets>().WriteStartInfo(angle, moving);
         transform.localScale = DataContainer.Size * Vector3.one;
         b_settingsdefined = true;
         

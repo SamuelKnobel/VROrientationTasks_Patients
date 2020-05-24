@@ -59,7 +59,7 @@ public class DataHandler : MonoBehaviour
             item.ResetAll();
         }
     }
-    public void WriteTargetToJSON(Data_Targets_OT data)
+    public void WriteTargetToJSON(Data_Targets data)
     {
         string NewJSON = JsonUtility.ToJson(data);
         JSONsToSave.Add(NewJSON);

@@ -162,7 +162,7 @@ public static class  EventManager
     //    }
     //}   
 
-    public static void CallTargetShotEvent(GameObject GO)
+    public static void CallShotEvent(GameObject GO)
     {
         if (TargetShotEvent != null)
         {

@@ -148,11 +148,19 @@ public class ControllerHandler_Vive : MonoBehaviour
         HandelController();
         B_Squeeze_Left = getSqueeze_left();
         B_Squeeze_Right = getSqueeze_right();
-       
-       createLaser(ConfigurationUtils.UseLaser);
+        if (!B_Squeeze_Right && !B_Squeeze_Left)
+        {
+            squeezed = false;
+        }
 
-       TargetCross_L.SetActive(ConfigurationUtils.UseTargetCross && B_isConected_Left);       
-       TargetCross_R.SetActive(ConfigurationUtils.UseTargetCross && B_isConected_Right);       
+        if (!squeezed)
+        {
+           createLaser(ConfigurationUtils.UseLaser);
+        }
+
+        TargetCross_L.SetActive(ConfigurationUtils.UseTargetCross && B_isConected_Left);       
+       TargetCross_R.SetActive(ConfigurationUtils.UseTargetCross && B_isConected_Right);
+
     }
     
 
@@ -286,6 +294,8 @@ public class ControllerHandler_Vive : MonoBehaviour
 
     }
 
+    bool squeezed = false;
+
     void SideSpecificLaser(GameObject controller, GameObject targetCross, LineRenderer laser, bool squeeze)
     {
         Ray ray = new Ray(controller.transform.position, controller.transform.forward);
@@ -311,22 +321,22 @@ public class ControllerHandler_Vive : MonoBehaviour
         {
             if (hit.collider != null)
             {
-                if (hit.collider.gameObject.tag == "Target")
-                    EventManager.CallTargetShotEvent(hit.collider.gameObject);
+
+                EventManager.CallShotEvent(hit.collider.gameObject);
 
                 var uiButton = hit.collider.GetComponent<Button>();
                 if (uiButton != null)
                 {
                     uiButton.OnSubmit(null);
+
                 }
+                squeezed = true;
             }
-
-
-
             laser.SetPosition(1, targetCross.transform.position);
         }
         else
         {
+            squeezed = false;
             laser.SetPosition(1, controller.transform.position);
         }
     }

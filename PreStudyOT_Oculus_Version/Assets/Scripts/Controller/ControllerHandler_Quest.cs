@@ -70,10 +70,7 @@ public class ControllerHandler_Quest : NetworkBehaviour
             print(hit.collider);
             if (hit.collider != null)
             {
-                if (hit.collider.gameObject.tag == "Target")
-                {
-                    EventManager.CallTargetShotEvent(hit.collider.gameObject);
-                }
+                EventManager.CallTargetShotEvent(hit.collider.gameObject);
                 var uiButton = hit.collider.GetComponent<Button>();
                 if (uiButton != null)
                 {
