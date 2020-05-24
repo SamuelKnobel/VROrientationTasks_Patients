@@ -208,6 +208,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3200665905906129784, guid: 4cee66076c2cdf44aabe948573960cc2,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3200818904833285874, guid: 4cee66076c2cdf44aabe948573960cc2,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3201607329996008208, guid: 4cee66076c2cdf44aabe948573960cc2,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -272,6 +282,11 @@ PrefabInstance:
         type: 3}
       propertyPath: sceneId
       value: 903519252
+      objectReference: {fileID: 0}
+    - target: {fileID: 3311887438786403334, guid: 4cee66076c2cdf44aabe948573960cc2,
+        type: 3}
+      propertyPath: alwaysActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3418243453531035666, guid: 4cee66076c2cdf44aabe948573960cc2,
         type: 3}
@@ -461,8 +476,8 @@ MonoBehaviour:
   startOnHeadless: 1
   showDebugMessages: 0
   serverTickRate: 30
-  offlineScene: 
-  onlineScene: 
+  offlineScene: Assets/_Scenes/MainScene.unity
+  onlineScene: Assets/_Scenes/MainScene.unity
   transport: {fileID: 777966860}
   networkAddress: localhost
   maxConnections: 4
@@ -474,12 +489,14 @@ MonoBehaviour:
   autoCreatePlayer: 1
   playerSpawnMethod: 0
   spawnPrefabs:
+  - {fileID: 4210867528217589531, guid: b342612d910721b4ebeea0debe1a6791, type: 3}
   - {fileID: 9039704335989632262, guid: 231e02cf6c88bd14bb54ba59082aced3, type: 3}
   - {fileID: 8319056569927940377, guid: f669fc54a53ad1e4398a7229d2a542f0, type: 3}
   - {fileID: 3201607329996008209, guid: 4cee66076c2cdf44aabe948573960cc2, type: 3}
   - {fileID: 379640100633855780, guid: 23153c946aecfd94295c57626f9b0f6e, type: 3}
   - {fileID: 3079729000911447686, guid: 8e8aa94e42a949545b22929adf995e10, type: 3}
   - {fileID: 640050961493017743, guid: a428d845ccf67044a95dedf0e2f78900, type: 3}
+  - {fileID: 0}
   controlerPrefab: {fileID: 9039704335989632262, guid: 231e02cf6c88bd14bb54ba59082aced3,
     type: 3}
   videoPlayerPrefab: {fileID: 8319056569927940377, guid: f669fc54a53ad1e4398a7229d2a542f0,
@@ -565,7 +582,7 @@ PrefabInstance:
     - target: {fileID: 640050961493017741, guid: a428d845ccf67044a95dedf0e2f78900,
         type: 3}
       propertyPath: sceneId
-      value: 2291563949
+      value: 1909601830
       objectReference: {fileID: 0}
     - target: {fileID: 640050961493017743, guid: a428d845ccf67044a95dedf0e2f78900,
         type: 3}

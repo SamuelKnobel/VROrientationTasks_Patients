@@ -234,8 +234,9 @@ GameObject:
   - component: {fileID: 3201607329996008208}
   - component: {fileID: 3201607329996008212}
   - component: {fileID: 3201607329996008213}
-  - component: {fileID: 3201607329996008214}
   - component: {fileID: 3201607329996008215}
+  - component: {fileID: 4105984283097410203}
+  - component: {fileID: 3201607329996008214}
   - component: {fileID: 3201607329996008216}
   - component: {fileID: 3201607329996008217}
   - component: {fileID: 6512590543554516546}
@@ -295,6 +296,45 @@ MonoBehaviour:
   VibrationOn: 0
   ActivationAngle: 0
   StopVibrationTimer: {fileID: 0}
+--- !u!114 &3201607329996008215
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3201607329996008209}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9b47e410e79b47449bdf124c8112443, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  localController: {fileID: 0}
+  dataHandler: {fileID: 0}
+  SavePath: 
+  SubjectID: 
+  currentCondition: 0
+  currentState: 0
+  showFixationCross: 0
+  currentTarget: {fileID: 0}
+  recording: 0
+  startTime: 0
+--- !u!114 &4105984283097410203
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3201607329996008209}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2fe454e87e27b24c9720a2692e9db43, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  data_Hardware: []
+  JSONsToSave: []
+  data: 
 --- !u!114 &3201607329996008214
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -311,26 +351,6 @@ MonoBehaviour:
   serverOnly: 0
   m_AssetId: 
   hasSpawned: 0
---- !u!114 &3201607329996008215
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3201607329996008209}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d9b47e410e79b47449bdf124c8112443, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
-  localController: {fileID: 0}
-  SubjectID: 
-  currentCondition: 0
-  currentState: 0
-  showFixationCross: 0
-  currentTarget: {fileID: 0}
 --- !u!114 &3201607329996008216
 MonoBehaviour:
   m_ObjectHideFlags: 0

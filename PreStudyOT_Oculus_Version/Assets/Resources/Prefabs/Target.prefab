@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 4803799265944095551}
   - component: {fileID: 3601785163740277284}
   - component: {fileID: -2165159716310214768}
+  - component: {fileID: 133595589443337533}
   m_Layer: 0
   m_Name: Target
   m_TagString: Target
@@ -101,10 +102,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
+  DataContainer: {fileID: 133595589443337533}
   b_settingsdefined: 0
   b_isMoving: 0
   deathTimer: {fileID: 0}
   hit: 0
+  CueTimer: {fileID: 0}
+  NbOfCues: 4
 --- !u!65 &7127254059858823057
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -245,6 +249,7 @@ MonoBehaviour:
   sceneId: 0
   serverOnly: 0
   m_AssetId: 
+  hasSpawned: 0
 --- !u!114 &-2165159716310214768
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -263,3 +268,31 @@ MonoBehaviour:
   localPositionSensitivity: 0.01
   localRotationSensitivity: 0.01
   localScaleSensitivity: 0.01
+--- !u!114 &133595589443337533
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 379640100633855780}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d29985315e9cb5b4f8076c7163f412d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  identifyer: Target
+  LT_tag: Untagged
+  gameState: 0
+  cueType: 0
+  spawnTime: 0
+  startPosition_wp: {x: 0, y: 0, z: 0}
+  startPosition_lp: {x: 0, y: 0, z: 0}
+  startAngle: 0
+  endPosition_wp: {x: 0, y: 0, z: 0}
+  endPosition_lp: {x: 0, y: 0, z: 0}
+  deathTime: 0
+  deathReason: 0
+  radius: 0
+  direction: 0
+  speed: 0
+  size: 0

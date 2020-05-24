@@ -311,7 +311,9 @@ public class ControllerHandler_Vive : MonoBehaviour
         {
             if (hit.collider != null)
             {
-                EventManager.CallTargetShotEvent(hit.collider.gameObject);
+                if (hit.collider.gameObject.tag == "Target")
+                    EventManager.CallTargetShotEvent(hit.collider.gameObject);
+
                 var uiButton = hit.collider.GetComponent<Button>();
                 if (uiButton != null)
                 {

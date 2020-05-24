@@ -160,6 +160,7 @@ MonoBehaviour:
   sceneId: 0
   serverOnly: 0
   m_AssetId: 
+  hasSpawned: 0
 --- !u!114 &2860048087701253860
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -196,8 +197,8 @@ MonoBehaviour:
   RightController: {fileID: 7320901688841977267}
   TargetCross_L: {fileID: 8894772628883472671}
   TargetCross_R: {fileID: 5198508950084638975}
-  LaserLeft: {fileID: 5607988067410734998}
-  LaserRight: {fileID: 3866871530214005232}
+  LaserLeft: {fileID: 1530671916893489510}
+  LaserRight: {fileID: 7873551895749803776}
   B_Squeeze_Left: 8192
   B_Squeeze_Right: 2097152
   leftPressed: 0
@@ -389,7 +390,7 @@ MonoBehaviour:
   localPositionSensitivity: 0.01
   localRotationSensitivity: 0.01
   localScaleSensitivity: 0.01
-  target: {fileID: 5607988067410734677}
+  target: {fileID: 1530671916893489511}
 --- !u!114 &1011780024231746563
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -408,7 +409,7 @@ MonoBehaviour:
   localPositionSensitivity: 0.01
   localRotationSensitivity: 0.01
   localScaleSensitivity: 0.01
-  target: {fileID: 3866871530214004787}
+  target: {fileID: 7873551895749803777}
 --- !u!1 &7320901688841746147
 GameObject:
   m_ObjectHideFlags: 0
@@ -495,6 +496,7 @@ GameObject:
   - component: {fileID: 7320901688834009321}
   - component: {fileID: 7320901688840646745}
   - component: {fileID: 7320901688831220859}
+  - component: {fileID: 7666612195265267768}
   m_Layer: 0
   m_Name: CenterEyeAnchor
   m_TagString: MainCamera
@@ -583,6 +585,24 @@ MonoBehaviour:
   fadeColor: {r: 0.01, g: 0.01, b: 0.01, a: 1}
   fadeOnStart: 1
   renderQueue: 5000
+--- !u!114 &7666612195265267768
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7320901688841746149}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6eb35fdf0b132504599dcd23ed76492d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  identifyer: Hardware
+  HardwareName: HMD
+  Timestamps: []
+  Position: []
+  Euler_Rotation: []
+  Rotation: []
 --- !u!1 &7320901688841746151
 GameObject:
   m_ObjectHideFlags: 0
@@ -824,6 +844,7 @@ GameObject:
   - component: {fileID: 1504597514780243868}
   - component: {fileID: 3020582815891863780}
   - component: {fileID: 5362462898733054186}
+  - component: {fileID: 4626361209440508422}
   m_Layer: 0
   m_Name: LeftHandAnchor
   m_TagString: Controller
@@ -844,7 +865,7 @@ Transform:
   m_Children:
   - {fileID: 7320583716774431565}
   - {fileID: 3769066208215151476}
-  - {fileID: 5607988067410734677}
+  - {fileID: 1530671916893489511}
   m_Father: {fileID: 7320901688842173627}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -899,6 +920,24 @@ MonoBehaviour:
   m_controller: 1
   m_parentTransform: {fileID: 7320901688842188715}
   m_player: {fileID: 7320901688841746145}
+--- !u!114 &4626361209440508422
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7320901688841937995}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6eb35fdf0b132504599dcd23ed76492d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  identifyer: Hardware
+  HardwareName: left
+  Timestamps: []
+  Position: []
+  Euler_Rotation: []
+  Rotation: []
 --- !u!1 &7320901688841977267
 GameObject:
   m_ObjectHideFlags: 0
@@ -911,6 +950,7 @@ GameObject:
   - component: {fileID: 5251990783390330463}
   - component: {fileID: 6193845124465747347}
   - component: {fileID: 3170837109256072156}
+  - component: {fileID: 4102279469212913754}
   m_Layer: 0
   m_Name: RightHandAnchor
   m_TagString: Controller
@@ -931,7 +971,7 @@ Transform:
   m_Children:
   - {fileID: 7320306133394089219}
   - {fileID: 4755481350648074812}
-  - {fileID: 3866871530214004787}
+  - {fileID: 7873551895749803777}
   m_Father: {fileID: 7320901688842173627}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -986,6 +1026,24 @@ MonoBehaviour:
   m_controller: 2
   m_parentTransform: {fileID: 7320901688842184645}
   m_player: {fileID: 7320901688841746145}
+--- !u!114 &4102279469212913754
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7320901688841977267}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6eb35fdf0b132504599dcd23ed76492d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  identifyer: Hardware
+  HardwareName: right
+  Timestamps: []
+  Position: []
+  Euler_Rotation: []
+  Rotation: []
 --- !u!1 &7320901688841980251
 GameObject:
   m_ObjectHideFlags: 0
@@ -1258,13 +1316,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4801f5160a52af54c837ad3279bacac0, type: 3}
---- !u!4 &3866871530214004787 stripped
+--- !u!4 &7873551895749803777 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6407947792190220163, guid: 4801f5160a52af54c837ad3279bacac0,
     type: 3}
   m_PrefabInstance: {fileID: 3866871530214004866}
   m_PrefabAsset: {fileID: 0}
---- !u!120 &3866871530214005232 stripped
+--- !u!120 &7873551895749803776 stripped
 LineRenderer:
   m_CorrespondingSourceObject: {fileID: 6407947792190220162, guid: 4801f5160a52af54c837ad3279bacac0,
     type: 3}
@@ -1411,13 +1469,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4801f5160a52af54c837ad3279bacac0, type: 3}
---- !u!4 &5607988067410734677 stripped
+--- !u!4 &1530671916893489511 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6407947792190220163, guid: 4801f5160a52af54c837ad3279bacac0,
     type: 3}
   m_PrefabInstance: {fileID: 5607988067410734820}
   m_PrefabAsset: {fileID: 0}
---- !u!120 &5607988067410734998 stripped
+--- !u!120 &1530671916893489510 stripped
 LineRenderer:
   m_CorrespondingSourceObject: {fileID: 6407947792190220162, guid: 4801f5160a52af54c837ad3279bacac0,
     type: 3}

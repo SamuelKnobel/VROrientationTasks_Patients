@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
+  m_IndirectSpecularColor: {r: 0.45096356, g: 0.49934393, b: 0.5664127, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -133,22 +133,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameControll_OT_Task
       objectReference: {fileID: 0}
-    - target: {fileID: 3079729000911447688, guid: 8e8aa94e42a949545b22929adf995e10,
-        type: 3}
-      propertyPath: TargetContainer
-      value: 
-      objectReference: {fileID: 1020494730}
-    - target: {fileID: 3079729000911447688, guid: 8e8aa94e42a949545b22929adf995e10,
-        type: 3}
-      propertyPath: FixationCross
-      value: 
-      objectReference: {fileID: 1020494731}
-    - target: {fileID: 3079729000911447688, guid: 8e8aa94e42a949545b22929adf995e10,
-        type: 3}
-      propertyPath: TargetPrefab
-      value: 
-      objectReference: {fileID: 379640100633855780, guid: 23153c946aecfd94295c57626f9b0f6e,
-        type: 3}
     - target: {fileID: 3079729000911447689, guid: 8e8aa94e42a949545b22929adf995e10,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -214,17 +198,10 @@ PrefabInstance:
       propertyPath: m_AssetId
       value: 8e8aa94e42a949545b22929adf995e10
       objectReference: {fileID: 0}
+    - target: {fileID: 7295383210545115574, guid: 8e8aa94e42a949545b22929adf995e10,
+        type: 3}
+      propertyPath: audioTest
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8e8aa94e42a949545b22929adf995e10, type: 3}
---- !u!1 &1020494730 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3079729000954243591, guid: 8e8aa94e42a949545b22929adf995e10,
-    type: 3}
-  m_PrefabInstance: {fileID: 1020494729}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &1020494731 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3079729002556140241, guid: 8e8aa94e42a949545b22929adf995e10,
-    type: 3}
-  m_PrefabInstance: {fileID: 1020494729}
-  m_PrefabAsset: {fileID: 0}

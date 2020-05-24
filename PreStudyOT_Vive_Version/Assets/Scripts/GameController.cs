@@ -83,13 +83,13 @@ public class GameController : MonoBehaviour
             print("Saving");
             FindObjectOfType<DataHandler>().writeToFile();
         }
-        if (Input.GetKeyDown(KeyCode.D))
-        {
-            if (currentTarget != null)
-            {
-                currentTarget.GetComponent<Target>().hit = true;
-            }
-        }
+        //if (Input.GetKeyDown(KeyCode.D))
+        //{
+        //    if (currentTarget != null)
+        //    {
+        //        currentTarget.GetComponent<Target>().hit = true;
+        //    }
+        //}
     }
     
     bool TryToConnect()

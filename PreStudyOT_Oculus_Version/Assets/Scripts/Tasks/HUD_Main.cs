@@ -34,7 +34,9 @@ public class HUD_Main : NetworkBehaviour
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             Application.Quit();
-        }        
+        }
+
+
     }
 
     private void OnGUI()

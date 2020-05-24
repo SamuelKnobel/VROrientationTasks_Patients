@@ -203,20 +203,20 @@ public class ConfigurationData
     {
         Debug.LogWarning("Set Default Values!");
         values.Clear();
-        values.Add(ConfigurationDataValueName.UseLaser, 0);
-        values.Add(ConfigurationDataValueName.UseTargetCross, 0);
-        values.Add(ConfigurationDataValueName.TimeBetweenTargets, 2);
-        values.Add(ConfigurationDataValueName.TargetSpeed, 5);
-        values.Add(ConfigurationDataValueName.TargetSizeNear, .2f);
+        values.Add(ConfigurationDataValueName.UseLaser, 1);
+        values.Add(ConfigurationDataValueName.UseTargetCross, 1);
+        values.Add(ConfigurationDataValueName.TimeBetweenTargets, 11);
+        values.Add(ConfigurationDataValueName.TargetSpeed, 8);
+        values.Add(ConfigurationDataValueName.TargetSizeNear, .1f);
         values.Add(ConfigurationDataValueName.TargetSizeFar, 2f);
         values.Add(ConfigurationDataValueName.NumberOfTargetsPerTrial, 10);
         values.Add(ConfigurationDataValueName.NumberOfTrials, 3);
         values.Add(ConfigurationDataValueName.RadiusFarspace, 10);
-        values.Add(ConfigurationDataValueName.RadiusNearspace,.5f);
-        values.Add(ConfigurationDataValueName.Radius,10f);
-        values.Add(ConfigurationDataValueName.HorizontalAngleLeft,-90);
-        values.Add(ConfigurationDataValueName.HorizontalAngleRight,90);
-        values.Add(ConfigurationDataValueName.VerticalAngleTop,15);
+        values.Add(ConfigurationDataValueName.RadiusNearspace, .55f);
+        values.Add(ConfigurationDataValueName.Radius, 10f);
+        values.Add(ConfigurationDataValueName.HorizontalAngleLeft, -90);
+        values.Add(ConfigurationDataValueName.HorizontalAngleRight, 90);
+        values.Add(ConfigurationDataValueName.VerticalAngleTop, 15);
         values.Add(ConfigurationDataValueName.VerticalAngleBottom, -15);
     }
 }

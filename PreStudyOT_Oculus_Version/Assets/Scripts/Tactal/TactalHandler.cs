@@ -44,27 +44,6 @@ public class TactalHandler : MonoBehaviour
         {
             HeadBand.Play(ActivationAngle);
         }
-
-        //if (Input.GetKey(KeyCode.Alpha1))
-        //{
-        //    //HeadTactSource.Play();
-        //    HeadBand.Play(-10);
-        //}
-        //if (Input.GetKey(KeyCode.Alpha2))
-        //{
-        //    //HeadTactSource.Play();
-        //    HeadBand.Play(10);
-        //}
-        //if (Input.GetKey(KeyCode.Alpha3))
-        //{
-        //    //HeadTactSource.Play();
-        //    HeadBand.Play(50);
-        //}
-        //if (Input.GetKey(KeyCode.Alpha4))
-        //{
-        //    //HeadTactSource.Play();
-        //    HeadBand.Play(-50);
-        //}
     }
 
     public void StartVibration(GameObject newTarget)

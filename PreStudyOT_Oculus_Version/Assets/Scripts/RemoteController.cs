@@ -46,12 +46,13 @@ public class RemoteController : NetworkBehaviour
 
 		instance.GetComponent<Target>().defineConfiguration(angle, moving);
 		instance.GetComponent<Target>().GiveClue(condition);
-		NetworkServer.Spawn(instance);
+		NetworkServer.Spawn(instance); //??? SPAWN here and in OrientationTask ?? are both functions neede and used ?
 		gameController.currentTarget = instance;
 	}
 
 	[Command] public void CmdDestroyCurrentTarget()
 	{
+		// TODO: FIND all GameObjects with the Target Component and Destroy them
 		NetworkServer.Destroy(gameController.currentTarget);
 		gameController.currentTarget = null;
 	}
@@ -97,6 +98,36 @@ public class RemoteController : NetworkBehaviour
 	{
 		GameObject.FindObjectOfType<OrientationTask>().StartTask();
 	}
+
+	[Command]
+	public void CmdSyncTaskSetupLT(int numOfSessions, int[] objectsPerRound, int[] cueOrder1, int[] cueOrder2, int[] cueOrder3, int[] cueOrder4)
+	{
+		LokalisationTask lt = GameObject.FindObjectOfType<LokalisationTask>();
+		lt.NumTargetsPerRound.Clear();
+		lt.OrderCues1.Clear();
+		lt.OrderCues2.Clear();
+		lt.OrderCues3.Clear();
+		lt.OrderCues4.Clear();
+		for (int i = 0; i < numOfSessions; i++)
+		{
+			lt.NumTargetsPerRound.Add(objectsPerRound[i]);
+		}
+		for (int i = 0; i < 4; i++)
+		{
+			if (numOfSessions > 0) lt.OrderCues1.Add(cueOrder1[i]);
+			if (numOfSessions > 1) lt.OrderCues2.Add(cueOrder2[i]);
+			if (numOfSessions > 2) lt.OrderCues3.Add(cueOrder3[i]);
+			if (numOfSessions > 3) lt.OrderCues4.Add(cueOrder4[i]);
+		}
+		lt.maxSessionNumber = numOfSessions;
+	}
+
+	[Command]
+	public void CmdStartTaskLT()
+	{
+		GameObject.FindObjectOfType<LokalisationTask>().StartTask();
+	}
+
 	[Command] public void CmdCallTargetShotEvent(GameObject target)
 	{
 		EventManager.CallTargetShotEvent(target);

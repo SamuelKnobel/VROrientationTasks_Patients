@@ -1,16 +1,18 @@
 ﻿
+using Mirror;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-public class Target : MonoBehaviour
+public class Target : NetworkBehaviour
 {
-    public Data_Targets_OT DataContainer; // replaces  TargetConfiguration
+    //TargetConfiguration targetConfiguration;
+    public Data_Targets_OT DataContainer;
 
-
-
+    GameController gameController;
     public bool b_settingsdefined;
+    public bool b_isMoving;
 
     public Timer deathTimer;
     AudioSource audioSource;
@@ -18,10 +20,13 @@ public class Target : MonoBehaviour
     public Timer CueTimer;
     public int NbOfCues = 4;
 
-    public void Awake()
+    private void Awake()
     {
+        gameController = FindObjectOfType<GameController>();
         DataContainer = GetComponent<Data_Targets_OT>();
     }
+
+
     public void Start()
     {
         NbOfCues = 4;
@@ -34,27 +39,34 @@ public class Target : MonoBehaviour
         CueTimer.Duration = 3;
         CueTimer.Run();
         CueTimer.AddTimerFinishedEventListener(RepeatCue);
-
     }
 
     void OutOfTime()
     {
-        if (GameController.currentState == GameState.Task_Orientation_Task)
+        if (gameController.currentState == GameState.Task_Orientation_Task)
         {
             EventManager.CallDefineNewTargetEvent();
+        }
+        if (gameController.currentState == GameState.Task_Lokalisation_Task)
+        {
+            if (gameObject.tag == "Target")
+            {
+                EventManager.CallDefineNewTargetEvent();
+            }
         }
         SelfDestruction();
     }
 
     void RepeatCue()
     {
-        if (NbOfCues >0)
+        if (NbOfCues > 0 & hit == false)
         {
-            GiveClue((int)GameController.currentCondition);
+            GiveClue((int)gameController.currentCondition);
             CueTimer.Duration = 3;
             CueTimer.Run();
-        }      
+        }
     }
+
 
     public void GiveClue(int CueType)
     {
@@ -62,9 +74,8 @@ public class Target : MonoBehaviour
         Condition c = (Condition)CueType;
         if (audioSource == null)
         {
-            audioSource=GetComponent<AudioSource>();
+            audioSource = GetComponent<AudioSource>();
         }
-
         switch (c)
         {
             case Condition.SpatialAudio:
@@ -82,7 +93,6 @@ public class Target : MonoBehaviour
             default:
                 break;
         }
-        //Feedback.AddTextToBottom("Cue " + c.ToString() + "At position:" + this.transform.position, true);
     }
 
 
@@ -103,13 +113,11 @@ public class Target : MonoBehaviour
 
     public void defineConfiguration(float angle, bool moving)
     {
-        //DataContainer = GetComponent<Data_Targets_OT>();
         transform.eulerAngles = new Vector3(0, angle, 0);
         transform.position = GameController.SpherToCart(angle);
         GetComponent<Data_Targets_OT>().WriteStartInfo(angle, moving);
         transform.localScale = DataContainer.Size * Vector3.one;
         b_settingsdefined = true;
-        
     }
 
     void MoveTarget()
@@ -121,7 +129,7 @@ public class Target : MonoBehaviour
 
     void SelfDestruction()
     {
-        gameObject.SetActive(false);
-        //Destroy(this.gameObject);        
+        // TODO MIRROR
+        Destroy(this.gameObject);        
     }
 }

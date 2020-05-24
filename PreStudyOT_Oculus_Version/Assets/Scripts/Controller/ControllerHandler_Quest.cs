@@ -3,34 +3,42 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using Mirror;
 
-public class ControllerHandler_Quest : MonoBehaviour
+public class ControllerHandler_Quest : NetworkBehaviour
 {
     //[SerializeField]
     public GameObject LeftController, RightController;
-    [SerializeField]    GameObject TargetCross_L, TargetCross_R;
-    [SerializeField]    LineRenderer LaserLeft, LaserRight;
+    [SerializeField]  GameObject TargetCross_L, TargetCross_R;
+    [SerializeField]  LineRenderer LaserLeft, LaserRight;
 
 
     public OVRInput.Button B_Squeeze_Left;
     public OVRInput.Button B_Squeeze_Right;
 
-    private void Awake()
-    {
-    }
-    void Start()
-    {
-    }
+    [SyncVar]
+    public bool leftPressed;
+    [SyncVar]
+    public bool rightPressed;
+
 
     // Update is called once per frame
     void Update()
     {
-        FindController();
-        FindTargetCross();
+
+        if (isLocalPlayer)
+        {
+            leftPressed = OVRInput.Get(B_Squeeze_Left);
+            rightPressed = OVRInput.Get(B_Squeeze_Right);
+        }
+        createLaser(true);
+
+        //FindController();
+        //FindTargetCross();
         createLaser(true);
     }
 
-    void SideSpecificLaser(GameObject controller, GameObject targetCross, LineRenderer laser, OVRInput.Button squeeze)
+    void SideSpecificLaser(GameObject controller, GameObject targetCross, LineRenderer laser,bool pressed)
     {
         Ray ray = new Ray(controller.transform.position, controller.transform.forward);
         RaycastHit hit;
@@ -51,23 +59,25 @@ public class ControllerHandler_Quest : MonoBehaviour
             targetCross.transform.position = controller.transform.position + controller.transform.forward * 1;
         }
 
-        if (OVRInput.Get(squeeze))   
+        if (pressed)   
             laser.SetPosition(1, targetCross.transform.position);
         else
             laser.SetPosition(1, controller.transform.position);
 
 
-        if (OVRInput.GetDown(squeeze)|| Input.GetKeyDown(KeyCode.L))
+        if (pressed || Input.GetKeyDown(KeyCode.L))
         {
-            print("L");
             print(hit.collider);
-            //EventManager.CallTriggerEvent();
             if (hit.collider != null)
             {
                 if (hit.collider.gameObject.tag == "Target")
                 {
-                    //Feedback.AddTextToBottom("Target Hit", true);
                     EventManager.CallTargetShotEvent(hit.collider.gameObject);
+                }
+                var uiButton = hit.collider.GetComponent<Button>();
+                if (uiButton != null)
+                {
+                    uiButton.OnSubmit(null);
                 }
             }
         }
@@ -77,8 +87,8 @@ public class ControllerHandler_Quest : MonoBehaviour
     {
         if (useLaser)
         {
-            SideSpecificLaser(LeftController, TargetCross_L, LaserLeft, B_Squeeze_Left);
-            SideSpecificLaser(RightController, TargetCross_R, LaserRight, B_Squeeze_Right);
+            SideSpecificLaser(LeftController, TargetCross_L, LaserLeft, leftPressed);
+            SideSpecificLaser(RightController, TargetCross_R, LaserRight, rightPressed);
         }
     }
 
@@ -161,11 +171,4 @@ public class ControllerHandler_Quest : MonoBehaviour
         }
 
     }
-
-
-    //private void OnCollisionEnter(Collision collision)
-    //{
-    //    EventManager.CallColliderInteractionEvent(collision.gameObject);
-    //}
-
 }

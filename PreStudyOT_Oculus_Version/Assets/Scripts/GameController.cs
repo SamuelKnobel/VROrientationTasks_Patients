@@ -9,8 +9,13 @@ using UnityEngine.SceneManagement;
 public class GameController : NetworkBehaviour
 {
     // Script References
-    public SyncListString tasks = new SyncListString();
+    // public SyncListString tasks = new SyncListString();
     public RemoteController localController;
+    public DataHandler dataHandler;
+
+
+    // Paths
+    public string SavePath;
 
     //// Tasks
     //public OrientationTask orientationTask;
@@ -24,6 +29,9 @@ public class GameController : NetworkBehaviour
     [SyncVar] public GameState currentState = GameState.Initializing;
     [SyncVar] public bool showFixationCross;
     [SyncVar] public GameObject currentTarget;
+
+    public bool recording = false;
+    public int startTime;
 
     public static bool isConnected;
 
@@ -49,6 +57,8 @@ public class GameController : NetworkBehaviour
     void OnAwake()
     {
         currentCondition = Condition.None;
+        Time.timeScale = 1;
+
     }
     //void DoNotDestroyOnLoad()
     //{
@@ -78,6 +88,12 @@ public class GameController : NetworkBehaviour
         return null;
     }
 
+    public void Start()
+    {
+        dataHandler = GetComponent<DataHandler>();
+        startTime = Mathf.RoundToInt((float)dataHandler.ConvertToTimestamp(DateTime.UtcNow));
+        print(startTime);
+    }
     private void Update()
     {
         if (localController == null || !localController.isLocalPlayer)
@@ -88,6 +104,7 @@ public class GameController : NetworkBehaviour
         {
             currentState = GameState.MainMenu_EnterSubjectID;
         }
+
     }
 
     public void ShowFixationCross(bool show)

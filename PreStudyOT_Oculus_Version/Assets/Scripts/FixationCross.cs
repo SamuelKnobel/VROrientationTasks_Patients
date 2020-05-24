@@ -1,8 +1,9 @@
-﻿using System.Collections;
+﻿using Mirror;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FixationCross : MonoBehaviour
+public class FixationCross : NetworkBehaviour
 {
     [SerializeField]
     MeshRenderer Part1;
@@ -37,32 +38,33 @@ public class FixationCross : MonoBehaviour
         {
             gameController = FindObjectOfType<GameController>();
         }
-        if (gameController.currentState == GameState.Task_Orientation_Task || gameController.currentState == GameState.Task_Orientation_Tutorial)
-        {
+        //if (gameController.currentState == GameState.Task_Orientation_Task || gameController.currentState == GameState.Task_Orientation_Tutorial)
+        //{
             checkInFOV();
             if (isSeen && TimeSeen > 2)
             {
-                if (gameController.currentState == GameState.Task_Orientation_Task)
+                if (gameController.currentState == GameState.Task_Orientation_Task||
+                    gameController.currentState == GameState.Task_Lokalisation_Task)
                     EventManager.CallStartSearchingEvent();
 
                 TimeSeen = 0;
                 isSeen = false;
                 gameObject.SetActive(false);
             }
-        }
-        if (gameController.currentState == GameState.Task_Lokalisation)
-        {
-            checkInFOV();
-            if (isSeen && TimeSeen > 2)
-            {
-                //if (GameController.currentState == GameState.Task_Orientation_Task)
-                //    EventManager.CallStartSearchingEvent();
+        //}
+        //if (gameController.currentState == GameState.Task_Lokalisation)
+        //{
+        //    checkInFOV();
+        //    if (isSeen && TimeSeen > 2)
+        //    {
+        //        //if (GameController.currentState == GameState.Task_Orientation_Task)
+        //        //    EventManager.CallStartSearchingEvent();
 
-                TimeSeen = 0;
-                isSeen = false;
-                gameObject.SetActive(false);
-            }
-        }
+        //        TimeSeen = 0;
+        //        isSeen = false;
+        //        gameObject.SetActive(false);
+        //    }
+        //}
     }
 
     public void ChangeColorToRed()

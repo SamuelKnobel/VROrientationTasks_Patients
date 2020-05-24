@@ -63,4 +63,3 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   currentGUI: 0
-  AndroidWidget: {fileID: 0}
