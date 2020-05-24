@@ -43,17 +43,27 @@ public class Target : MonoBehaviour
         {
             EventManager.CallDefineNewTargetEvent();
         }
+        if (GameController.currentState == GameState.Task_Lokalisation_Task)
+        {
+            if (gameObject.tag == "Target")
+            {
+                EventManager.CallDefineNewTargetEvent();
+            }
+        }
         SelfDestruction();
     }
 
     void RepeatCue()
     {
-        if (NbOfCues >0)
+        if (gameObject.tag == "Target")
         {
-            GiveClue((int)GameController.currentCondition);
-            CueTimer.Duration = 3;
-            CueTimer.Run();
-        }      
+            if (NbOfCues > 0)
+            {
+                GiveClue((int)GameController.currentCondition);
+                CueTimer.Duration = 3;
+                CueTimer.Run();
+            }
+        }
     }
 
     public void GiveClue(int CueType)

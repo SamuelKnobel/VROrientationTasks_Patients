@@ -11,5 +11,7 @@ public enum GameState
     Task_Orientation_Tutorial,
     Task_Orientation_Task,
     Task_Lokalisation,
+    Task_Lokalisation_Tutorial,
+    Task_Lokalisation_Task,
     End
 }

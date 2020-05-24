@@ -8,6 +8,7 @@ using UnityEngine;
 public class Data_Targets_OT : MonoBehaviour
 {
     [SerializeField] string identifyer = "Target";
+    [SerializeField] public string LT_tag = "untagged";
     [SerializeField] GameState gameState;
     [SerializeField] Condition cueType;
     [SerializeField] double spawnTime;

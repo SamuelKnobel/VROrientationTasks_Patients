@@ -146,12 +146,12 @@ public class LokalisationTask : NetworkBehaviour
 
         TargetContainer.transform.position = Camera.main.transform.position;
 
-
         if (targetPosition< Targets.Length)
         {
             NetworkServer.Spawn(Targets[targetPosition]);
             gameController.currentTarget = Targets[targetPosition];
             Targets[targetPosition].GetComponent<Data_Targets_OT>().LT_tag = "Target";
+            Targets[targetPosition].GetComponent<Target>().GiveClue(condition);
 
         }
 
@@ -160,7 +160,6 @@ public class LokalisationTask : NetworkBehaviour
             if (!item.Equals(gameController.currentTarget))
             {
                item.tag = "Untagged";
-
             }
         }
     }

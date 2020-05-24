@@ -6,8 +6,6 @@ using UnityEngine;
 
 public class OrientationTask : MonoBehaviour
 {
-    public float timerToShowStartTaskButton;
-
     public int currentTargetNbr = 0;
     public int currentRoundNumber = 0;
     public int[] currentCueOrder;
@@ -29,7 +27,6 @@ public class OrientationTask : MonoBehaviour
     void OnEnable()
     {
         EventManager.TargetShotEvent += TargetShot;
-
         EventManager.DefineNewTargetEvent += DefineNextTarget;
         EventManager.StartSeachringEvent += ShowNextTarget;
     }
@@ -43,7 +40,6 @@ public class OrientationTask : MonoBehaviour
 
     void Start()
     {
-        GameController.recording = true;
         GameController.SavePath = Application.streamingAssetsPath + "/Output/" + GameController.SubjectID + "/";
         FindObjectOfType<GameController>().orientationTask = this;
         GameController.currentState = GameState.Task_Orientation_Tutorial;
@@ -52,12 +48,11 @@ public class OrientationTask : MonoBehaviour
     void Update()
     {
        
-        if (/*OVRInput.GetDown(B_Menu) || */Input.GetKeyDown(KeyCode.T))
+        if (Input.GetKeyDown(KeyCode.T))
         {
             FixationCross.SetActive(!FixationCross.activeSelf);
             FixationCross.GetComponent<FixationCross>().TimeSeen = 0;
             FixationCross.GetComponent<FixationCross>().isSeen = false;
-
         }
 
         if (TaskReady)
@@ -68,7 +63,7 @@ public class OrientationTask : MonoBehaviour
 
     }
 
-    public GameObject SpawnTarget_OrientationTask(int condition, float angle, bool moving)
+    public GameObject SpawnTarget_OrientationTask(int condition, float angle, bool moving, bool audioTest)
     {
         foreach (var t in FindObjectsOfType<Target>())
         {
@@ -87,6 +82,10 @@ public class OrientationTask : MonoBehaviour
         TargetContainer.transform.position = Camera.main.transform.position;
 
         GameObject NewTarget = Instantiate(TargetPrefab);
+        if (audioTest)
+        {
+            NewTarget.GetComponent<SpriteRenderer>().sprite = null;
+        }
         NewTarget.GetComponent<Target>().defineConfiguration(angle, moving);
 
         NewTarget.transform.SetParent(TargetContainer.transform, false);
@@ -117,7 +116,7 @@ public class OrientationTask : MonoBehaviour
     }
     void ShowNextTarget()
     {
-        GameController.currentTarget = SpawnTarget_OrientationTask((int)GameController.currentCondition, getRandomAngle(), true);
+        GameController.currentTarget = SpawnTarget_OrientationTask((int)GameController.currentCondition, getRandomAngle(), true,false);
     }
 
 
