@@ -128,7 +128,7 @@ public class HUD_OT : NetworkBehaviour
     public bool VibrationOn = false;
     public int angle = 0;
     public int cueType = -1;
-    public bool moving = true;
+    public bool AngleFixed = true;
     public bool audioTest = true;
     private void guiTutorial(int windowID)
     {
@@ -136,7 +136,7 @@ public class HUD_OT : NetworkBehaviour
         GUILayout.Label("Define Position of Next Target");
         GUILayout.BeginHorizontal();
 
-        angle = Mathf.RoundToInt(GUILayout.HorizontalSlider(angle, -80, 80));
+        angle = Mathf.RoundToInt(GUILayout.HorizontalSlider(angle, -90, 90));
 
         GUILayout.Label(angle.ToString());
         GUILayout.EndHorizontal();
@@ -146,14 +146,14 @@ public class HUD_OT : NetworkBehaviour
         {
             AudioOn = true;
             VibrationOn = false;
-            moving = false;
+            AngleFixed = true;
             GUILayout.Space(66);
         }
         else
         {
             AudioOn = GUILayout.Toggle(AudioOn, "Audio");
             VibrationOn = GUILayout.Toggle(VibrationOn, "Vibration");
-            moving = GUILayout.Toggle(moving, "Movement");
+            AngleFixed = GUILayout.Toggle(AngleFixed, "Fixed Spawnpoints");
         }
         if (!AudioOn & !VibrationOn)
             cueType = 0;
@@ -168,15 +168,18 @@ public class HUD_OT : NetworkBehaviour
 
         if (GUILayout.Button("Spawn"))
         {
-            if (angle < -60)
-                angle = -80;
-            if (angle >= -60 & angle <= 0)
-                angle = -40;
-            if (angle > 60)
-                angle = 80;
-            if (angle <= 60 & angle > 0)
-                angle = 40;
-            OT.SpawnTarget_OrientationTask(cueType, angle, moving, audioTest);
+            if (AngleFixed)
+            {
+                if (angle < -50)
+                    angle = -70;
+                if (angle >= -50 & angle <= 0)
+                    angle = -30;
+                if (angle > 50)
+                    angle = 70;
+                if (angle <= 50 & angle > 0)
+                    angle = 30;
+            }
+            OT.SpawnTarget_OrientationTask(cueType, angle, AngleFixed, audioTest);
         }
         
         GUILayout.EndHorizontal();

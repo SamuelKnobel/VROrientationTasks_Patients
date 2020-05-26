@@ -132,6 +132,7 @@ MonoBehaviour:
   direction: 0
   speed: 0
   size: 0
+  shootLog: []
 --- !u!65 &7127254059858823057
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -171,7 +172,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 34e71edd732995e42ba4a42954777263, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 3124764636f36db42ad93de8b7851c93, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.136
   m_Pitch: 1

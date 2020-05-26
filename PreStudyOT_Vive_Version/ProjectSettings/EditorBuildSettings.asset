@@ -6,6 +6,12 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/_Scenes/MainScene.unity
+    guid: 4ae9fe10e8d8fd648859f3e5a52aa5a2
+  - enabled: 1
     path: Assets/_Scenes/OT_Patients_Task_Vive.unity
     guid: f42c7d8a7ee57fa40b115f6264f37776
+  - enabled: 1
+    path: Assets/_Scenes/LT_Patients_Task_Vive.unity
+    guid: 21837b655959a794e96b0f3a0f6ba792
   m_configObjects: {}

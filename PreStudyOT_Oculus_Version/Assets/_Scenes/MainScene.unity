@@ -208,16 +208,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 3200665905906129784, guid: 4cee66076c2cdf44aabe948573960cc2,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3200818904833285874, guid: 4cee66076c2cdf44aabe948573960cc2,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 3201607329996008208, guid: 4cee66076c2cdf44aabe948573960cc2,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -283,10 +273,10 @@ PrefabInstance:
       propertyPath: sceneId
       value: 903519252
       objectReference: {fileID: 0}
-    - target: {fileID: 3311887438786403334, guid: 4cee66076c2cdf44aabe948573960cc2,
+    - target: {fileID: 3201607329996008214, guid: 4cee66076c2cdf44aabe948573960cc2,
         type: 3}
-      propertyPath: alwaysActive
-      value: 0
+      propertyPath: m_AssetId
+      value: 4cee66076c2cdf44aabe948573960cc2
       objectReference: {fileID: 0}
     - target: {fileID: 3418243453531035666, guid: 4cee66076c2cdf44aabe948573960cc2,
         type: 3}

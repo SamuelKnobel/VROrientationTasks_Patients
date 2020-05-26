@@ -206,7 +206,7 @@ public class ConfigurationData
         values.Add(ConfigurationDataValueName.UseLaser, 1);
         values.Add(ConfigurationDataValueName.UseTargetCross, 1);
         values.Add(ConfigurationDataValueName.TimeBetweenTargets, 11);
-        values.Add(ConfigurationDataValueName.TargetSpeed, 8);
+        values.Add(ConfigurationDataValueName.TargetSpeed, 0);
         values.Add(ConfigurationDataValueName.TargetSizeNear, .1f);
         values.Add(ConfigurationDataValueName.TargetSizeFar, 2f);
         values.Add(ConfigurationDataValueName.NumberOfTargetsPerTrial, 10);

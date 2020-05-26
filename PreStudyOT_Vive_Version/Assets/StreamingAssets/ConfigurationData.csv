@@ -1,7 +1,7 @@
 UseLaser,1
 UseTargetCross,1
 TimeBetweenTargets,11
-TargetSpeed,8
+TargetSpeed,0
 TargetSizeNear,0.1
 TargetSizeFar,2
 NumberOfTargetsPerTrial,10

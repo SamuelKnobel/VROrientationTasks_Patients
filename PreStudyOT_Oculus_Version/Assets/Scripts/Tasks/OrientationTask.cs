@@ -219,13 +219,13 @@ public class OrientationTask : NetworkBehaviour
         int pos = Random.Range(0, 4);
         float spawnAngle = 0;
         if (pos == 0)
-            spawnAngle = -80f;
+            spawnAngle = -70f;
         else if (pos == 1)
-            spawnAngle = -40f;
+            spawnAngle = -30f;
         else if (pos == 2)
-            spawnAngle = 40f;
+            spawnAngle = 30f;
         else if (pos == 3)
-            spawnAngle = 80f;
+            spawnAngle = 70f;
         return spawnAngle;
     }
 }

@@ -17,7 +17,7 @@ public class Target : NetworkBehaviour
     AudioSource audioSource;
     public bool hit;
     public Timer CueTimer;
-    public int NbOfCues = 4;
+    public int NbOfCues;
 
     private void Awake()
     {
@@ -28,14 +28,14 @@ public class Target : NetworkBehaviour
 
     public void Start()
     {
-        NbOfCues = 4;
+        NbOfCues = 5;
         audioSource = GetComponent<AudioSource>();
         deathTimer = gameObject.AddComponent<Timer>();
         deathTimer.AddTimerFinishedEventListener(OutOfTime);
         deathTimer.Duration = ConfigurationUtils.TimeBetweenTargets - 0.1f;
         deathTimer.Run();
         CueTimer = gameObject.AddComponent<Timer>();
-        CueTimer.Duration = 3;
+        CueTimer.Duration = 2;
         CueTimer.Run();
         CueTimer.AddTimerFinishedEventListener(RepeatCue);
     }
