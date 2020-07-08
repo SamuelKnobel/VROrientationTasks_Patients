@@ -106,7 +106,6 @@ public class LokalisationTask : MonoBehaviour
         GameObject TargetContainer = GameObject.Find("GameControll/Targets");
         Targets[0] = Instantiate(TargetPrefab, TargetContainer.transform);
         Targets[0].GetComponent<Target>().defineConfiguration(-80, false); 
-
         Targets[1] = Instantiate(TargetPrefab, TargetContainer.transform);
         Targets[1].GetComponent<Target>().defineConfiguration(-50, false); 
         Targets[2] = Instantiate(TargetPrefab, TargetContainer.transform);

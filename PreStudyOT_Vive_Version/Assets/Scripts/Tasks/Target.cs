@@ -13,7 +13,7 @@ public class Target : MonoBehaviour
     public bool b_settingsdefined;
 
     public Timer deathTimer;
-    AudioSource audioSource;
+    public AudioSource audioSource;
     public bool hit;
     public Timer CueTimer;
     public int NbOfCues;

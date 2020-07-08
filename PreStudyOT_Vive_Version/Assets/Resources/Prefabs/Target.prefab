@@ -30,7 +30,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 379640100633855780}
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 1.027661, y: 0.7070337, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -101,6 +101,7 @@ MonoBehaviour:
   DataContainer: {fileID: 0}
   b_settingsdefined: 0
   deathTimer: {fileID: 0}
+  audioSource: {fileID: 0}
   hit: 0
   CueTimer: {fileID: 0}
   NbOfCues: 4
@@ -144,8 +145,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.0353119, y: 1.1927948, z: 0.079298854}
-  m_Center: {x: 0.0150101185, y: 0.031511277, z: 0.0036001503}
+  m_Size: {x: 1.7, y: 1.6, z: 0.01}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &-9203367936763139629
 Rigidbody:
   m_ObjectHideFlags: 0

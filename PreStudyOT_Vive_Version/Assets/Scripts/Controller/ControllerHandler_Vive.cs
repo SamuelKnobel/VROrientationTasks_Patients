@@ -314,7 +314,7 @@ public class ControllerHandler_Vive : MonoBehaviour
         }
         else
         {
-            targetCross.transform.position = controller.transform.position + controller.transform.forward * 1;
+            targetCross.transform.position = controller.transform.position + controller.transform.forward * 8 ;
         }
 
         if (squeeze || Input.GetKey(KeyCode.L))
