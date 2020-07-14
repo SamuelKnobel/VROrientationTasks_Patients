@@ -14,6 +14,8 @@ public class OrientationTask : MonoBehaviour
     public int maxTargetNbr = 0;
     public int maxRoundNumber = 0;
     public int maxSessionNumber = 0;
+		public float lastPosition;
+
 
     public int[] NumTargetsPerRound;
     public List<int[]> OrderCues = new List<int[]>();
@@ -116,7 +118,11 @@ public class OrientationTask : MonoBehaviour
     }
     void ShowNextTarget()
     {
-        GameController.currentTarget = SpawnTarget_OrientationTask((int)GameController.currentCondition, getRandomAngle(), true,false);
+				float NewPos = getRandomAngle();
+
+        GameController.currentTarget = SpawnTarget_OrientationTask((int)GameController.currentCondition, NewPos, true,false);
+				lastPosition = NewPos;
+
     }
 
 
@@ -172,8 +178,10 @@ public class OrientationTask : MonoBehaviour
         }
     }
 
-    float getRandomAngle()
+	float getRandomAngle()
     {
+		int tries = 0;
+		//return 0;
         int pos = Random.Range(0, 4);
         float spawnAngle = 0;
         if (pos == 0)
@@ -184,7 +192,21 @@ public class OrientationTask : MonoBehaviour
             spawnAngle = 30f;
         else if (pos == 3)
             spawnAngle = 70f;
-        return spawnAngle;
+
+        while (spawnAngle == lastPosition & tries < 10)
+        {
+			tries++;
+			pos = Random.Range(0, 4);
+			if (pos == 0)
+				spawnAngle = -70f;
+			else if (pos == 1)
+				spawnAngle = -30f;
+			else if (pos == 2)
+				spawnAngle = 30f;
+			else if (pos == 3)
+				spawnAngle = 70f;
+		}
+        return spawnAngle;		
     }
 
    
