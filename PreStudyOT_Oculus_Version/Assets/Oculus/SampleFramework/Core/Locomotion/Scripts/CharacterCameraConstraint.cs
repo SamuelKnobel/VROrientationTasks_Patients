@@ -75,6 +75,7 @@ public class CharacterCameraConstraint : MonoBehaviour
 	{
 	}
 
+#if UNITY_ANDROID && !UNITY_EDITOR
 	void OnEnable()
 	{
         _simplePlayerController.CameraUpdated += _cameraUpdateAction;
@@ -84,6 +85,7 @@ public class CharacterCameraConstraint : MonoBehaviour
 	{
         _simplePlayerController.CameraUpdated -= _cameraUpdateAction;
 	}
+#endif
 
     /// <summary>
     /// This method is the handler for the PlayerController.CameraUpdated event, which is used

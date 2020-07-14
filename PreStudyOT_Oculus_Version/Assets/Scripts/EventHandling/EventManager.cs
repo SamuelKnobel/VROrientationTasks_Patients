@@ -3,28 +3,30 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-
-public static class  EventManager 
+using Mirror;
+public static class EventManager 
 {
     #region Events without Input
     public delegate void EventAction();
-    //public static event EventAction TriggerLeftEvent; // NO listener yet
-    //public static event EventAction TriggerRightEvent;// NO listener yet    
-    //public static event EventAction TouchLeftEvent; // NO listener yet
-    //public static event EventAction TouchRightEvent;// NO listener yet
-    //public static event EventAction TriggerEvent;// NO listener yet    
-    public static event EventAction EventDefineNewTarget;
-    public static event EventAction EventStartSeachring;
+	//public static event EventAction TriggerLeftEvent; // NO listener yet
+	//public static event EventAction TriggerRightEvent;// NO listener yet    
+	//public static event EventAction TouchLeftEvent; // NO listener yet
+	//public static event EventAction TouchRightEvent;// NO listener yet
+	//public static event EventAction TriggerEvent;// NO listener yet    
+	[SyncEvent]
+	public static event EventAction EventDefineNewTarget;
+	[SyncEvent]
+	public static event EventAction EventStartSearching;
 
     public static void CallStartSearchingEvent()
     {
-        if (EventStartSeachring != null)
+        if (EventStartSearching != null)
         {
-            EventStartSeachring.Invoke();
+            EventStartSearching.Invoke();
         }
         else
         {
-            //Feedback.AddTextToSide("No Listener for StartSeachringEvent", false);
+           // Feedback.AddTextToSide("No Listener for StartSeachringEvent", false);
         }
     }      
     public static void CallDefineNewTargetEvent()
@@ -35,75 +37,19 @@ public static class  EventManager
         }
         else
         {
-            //Feedback.AddTextToSide("No Listener for DefineNewTargetEvent", false);
+           // Feedback.AddTextToSide("No Listener for DefineNewTargetEvent", false);
         }
     }     
-    //public static void CallTriggerLeftEvent()
-    //{
-    //    //TriggerLeftEvent?.Invoke();
-    //    if (TriggerLeftEvent != null)
-    //    {
-    //        TriggerLeftEvent.Invoke();
-    //    }
-    //    else
-    //    {
-    //        Feedback.AddTextToSide("No Listener for TriggerLeftEvent", false);
-    //    }
-    //}   
-    //public static void CallTriggerEvent()
-    //{
-    //    if (TriggerEvent != null)
-    //    {
-    //        TriggerEvent.Invoke();
-    //    }
-    //    else
-    //    {
-    //        Feedback.AddTextToSide("No Listener for TriggerEvent", false);
-    //    }
-    //}
-    //public static void CallTriggerRightEvent()   
-    //{
-    //    if (TriggerRightEvent!=null)
-    //    {
-    //        TriggerRightEvent.Invoke();
-    //    }
-    //    else
-    //    {
-    //        Feedback.AddTextToSide("No Listener for RightTriggerEvent",false);
-    //    }
-    //}
-    //public static void CallTouchLeftEvent()
-    //{
-    //    if (TouchLeftEvent != null)
-    //    {
-    //        TouchLeftEvent.Invoke();
-    //    }
-    //    else
-    //    {
-    //        Feedback.AddTextToSide("No Listener for LeftTouchEvent", false);
-    //    }
-    //}
-    //public static void CallTouchRightEvent()
-    //{
-    //    if (TouchRightEvent != null)
-    //    {
-    //        TouchRightEvent.Invoke();
-    //    }
-    //    else
-    //    {
-    //        Feedback.AddTextToSide("No Listener for RightTouchEvent",false);
-    //    }
-    //}
-
+   
     #endregion
 
 
     #region Events with Float Input
     public delegate void FloatEventAction(float inp);
-    //public static event FloatEventAction EventFloat;
-    //public static event FloatEventAction DefineSpaceEvent;
-
-    public static event FloatEventAction EventCue;
+	//public static event FloatEventAction EventFloat;
+	//public static event FloatEventAction DefineSpaceEvent;
+	[SyncEvent]
+	public static event FloatEventAction EventCue;
 
 
 
@@ -115,7 +61,7 @@ public static class  EventManager
         }
         else
         {
-            //Feedback.AddTextToSide("No Listener",false);
+         //   Feedback.AddTextToSide("No Listener",false);
         }
     }
 
@@ -141,27 +87,29 @@ public static class  EventManager
 
     #region Events with GameObject Input
     public delegate void GOEventAction(GameObject GO);
-    //public static event GOEventAction ColliderInteractionEvent;
-    public static event GOEventAction EventTargetShot;
-    public static event GOEventAction StartVibrationEvent;
+	//public static event GOEventAction ColliderInteractionEvent;
+	[SyncEvent]
+	public static event GOEventAction EventTargetShot;
+	[SyncEvent]
+	public static event GOEventAction EventStartVibration;
 
 
 
-    //public static void CallColliderInteractionEvent(GameObject GO)
-    //{
-    //    //ColliderInteractionEvent?.Invoke(GO);
-    //    if (ColliderInteractionEvent != null)
-    //    {
-    //        ColliderInteractionEvent.Invoke(GO);
-    //    }
-    //    else
-    //    {
-    //        Feedback.AddTextToSide("No Listener for Call ColliderInteraction", false);
+	//public static void CallColliderInteractionEvent(GameObject GO)
+	//{
+	//    //ColliderInteractionEvent?.Invoke(GO);
+	//    if (ColliderInteractionEvent != null)
+	//    {
+	//        ColliderInteractionEvent.Invoke(GO);
+	//    }
+	//    else
+	//    {
+	//        Feedback.AddTextToSide("No Listener for Call ColliderInteraction", false);
 
-    //    }
-    //}   
+	//    }
+	//}   
 
-    public static void CallTargetShotEvent(GameObject GO)
+	public static void CallTargetShotEvent(GameObject GO)
     {
         if (EventTargetShot != null)
         {
@@ -169,14 +117,14 @@ public static class  EventManager
         }
         else
         {
-            //Feedback.AddTextToSide("No Listener for Call TargetShotEvent",false);
+        //    Feedback.AddTextToSide("No Listener for Call TargetShotEvent",false);
         }
     }
     public static void CallStartVibrationEvent(GameObject GO)
     {
-        if (StartVibrationEvent != null)
+        if (EventStartVibration != null)
         {
-            StartVibrationEvent.Invoke(GO);
+            EventStartVibration.Invoke(GO);
         }
         else
         {

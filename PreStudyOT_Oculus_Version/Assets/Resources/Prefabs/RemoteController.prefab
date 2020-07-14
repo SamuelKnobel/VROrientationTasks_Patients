@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 9039704335989632264}
   - component: {fileID: 8228658622001007057}
   - component: {fileID: 9039704335989632265}
-  - component: {fileID: 1194273482509529981}
+  - component: {fileID: 2778525243744282706}
   m_Layer: 0
   m_Name: RemoteController
   m_TagString: Untagged
@@ -133,7 +133,8 @@ MonoBehaviour:
   syncInterval: 0.1
   replacementCamera: {fileID: 3294018826531727591}
   networkManager: {fileID: 0}
-  target: {fileID: 379640100633855780, guid: 23153c946aecfd94295c57626f9b0f6e, type: 3}
+  targetPrefab: {fileID: 379640100633855780, guid: 23153c946aecfd94295c57626f9b0f6e,
+    type: 3}
 --- !u!114 &9039704335989632265
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -149,7 +150,7 @@ MonoBehaviour:
   sceneId: 0
   serverOnly: 0
   m_AssetId: 
---- !u!114 &1194273482509529981
+--- !u!114 &2778525243744282706
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -163,7 +164,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  clientAuthority: 1
+  clientAuthority: 0
   localPositionSensitivity: 0.01
   localRotationSensitivity: 0.01
   localScaleSensitivity: 0.01

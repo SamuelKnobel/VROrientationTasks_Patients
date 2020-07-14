@@ -1,165 +1,171 @@
 ﻿using Oculus.Platform;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data.Common;
 using UnityEngine;
 using Mirror;
 using System.Text.RegularExpressions;
-using System.IO;
+using UnityEngine.SocialPlatforms;
+using System.Runtime.InteropServices.WindowsRuntime;
 
 public class OrientationTask : NetworkBehaviour
 {
     [SyncVar] public int currentTargetNbr = 0;
-    [SyncVar] public int currentRoundNumber = 0;
-    [SyncVar] public int currentSessionNumber = 0;
-    public int[] currentCueOrder;
+	[SyncVar] public int currentRoundNumber = 0;
+	[SyncVar] public int currentSessionNumber = 0;
+	public int[] currentCueOrder;
 
-    public int maxTargetNbr = 0;
-    public int maxRoundNumber = 0;
-    public int maxSessionNumber = 0;
+	[SyncVar] public int maxTargetNbr = 0;
+	[SyncVar] public int maxRoundNumber = 0;
+	[SyncVar] public int maxSessionNumber = 0;
+	public float lastPosition;
 
     public SyncListInt NumTargetsPerRound = new SyncListInt();
-    //Mirror doesn't support multidimensional arrays
-    public SyncListInt OrderCues1 = new SyncListInt();//first session
-    public SyncListInt OrderCues2 = new SyncListInt();//second session
-    public SyncListInt OrderCues3 = new SyncListInt();//third session
-    public SyncListInt OrderCues4 = new SyncListInt();//fourth session
+	//Mirror doesn't support multidimensional arrays
+	public SyncListInt OrderCues1 = new SyncListInt();//first session
+	public SyncListInt OrderCues2 = new SyncListInt();//second session
+	public SyncListInt OrderCues3 = new SyncListInt();//third session
+	public SyncListInt OrderCues4 = new SyncListInt();//fourth session
 
-    public int[] OrderCues(int i)
-    {
-        int[] result = new int[4];
-        switch (i)
-        {
-            case 0: OrderCues1.CopyTo(result, 0); break;
-            case 1: OrderCues2.CopyTo(result, 0); break;
-            case 2: OrderCues3.CopyTo(result, 0); break;
-            case 3: OrderCues4.CopyTo(result, 0); break;
-        }
-        return result;
-    }
-    [SyncVar] public bool TaskReady = false;
-    [SyncVar] public bool TaskFinished = false;
+	public int[] OrderCues(int i)
+	{
+		int[] result = new int[4];
+		switch (i)
+		{
+			case 0: OrderCues1.CopyTo(result, 0); break;
+			case 1: OrderCues2.CopyTo(result, 0); break;
+			case 2: OrderCues3.CopyTo(result, 0); break;
+			case 3: OrderCues4.CopyTo(result, 0); break;
+		}
+		return result;
+	}
+	[SyncVar] public bool TaskReady = false;
+	[SyncVar] public bool TaskFinished = false;
 
 
-    // Environment Elemtent References
-    public GameObject FixationCross;
-    [SerializeField] GameObject TargetPrefab;
-
+	// Environment Elemtent References
+	public GameObject FixationCross;
+    public GameObject TargetContainer;
+    public GameObject TargetPrefab;
+	
     //Script References
-    private GameController gameController;
-    private RemoteController localController;
+	private GameController gameController;
+	private RemoteController localController;
 
-    void OnEnable()
-    {
-        EventManager.EventTargetShot += TargetShot;
-        EventManager.EventDefineNewTarget += DefineNextTarget;
-        EventManager.EventStartSeachring += ShowNextTarget;
-    }
-    void OnDisable()
-    {
-        EventManager.EventDefineNewTarget -= DefineNextTarget;
-        EventManager.EventStartSeachring -= ShowNextTarget;
-        EventManager.EventTargetShot -= TargetShot;
+	
+	private void OnEnable()
+	{
+		EventManager.EventTargetShot += TargetShot;
+		EventManager.EventDefineNewTarget += DefineNextTarget;
+		EventManager.EventStartSearching += ShowNextTarget;
+	}
+	private void OnDisable()
+	{
+		EventManager.EventDefineNewTarget -= DefineNextTarget;
+		EventManager.EventStartSearching -= ShowNextTarget;
+		EventManager.EventTargetShot -= TargetShot;
+	}
 
-    }
-
-    void Start()
-    {
-
-        gameController = GameObject.FindObjectOfType<GameController>();
+	void Start()
+	{
+		gameController = GameObject.FindObjectOfType<GameController>();
         gameController.recording = true;
-
-        gameController.SavePath = UnityEngine.Application.persistentDataPath + "/Output/" + gameController.SubjectID + "/";
+		
+        gameController.SavePath = gameController.SavePathBase + "/Output/" + gameController.SubjectID + "/";
         Debug.Log(gameController.SavePath);
 
-        gameController = GameObject.FindObjectOfType<GameController>();
-        localController = gameController.getLocalController();
-        localController.CmdSetGameState(GameState.Task_Orientation_Tutorial);
-    }
+		localController = gameController.getLocalController();
+		localController.CmdSetGameState(GameState.Task_Orientation_Tutorial);
+	}
 
-    void Update()
-    {
+	void Update()
+	{
         if (gameController== null)
         {
             gameController = GameObject.FindObjectOfType<GameController>();
         }
-        
-        // TODO! active ONLY IN TUTORIAL
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            FixationCross.SetActive(!FixationCross.activeSelf);
-            FixationCross.GetComponent<FixationCross>().TimeSeen = 0;
-            FixationCross.GetComponent<FixationCross>().isSeen = false;
-        }
 
-        if (TaskReady)
-        {
-            gameController.currentState = GameState.Task_Orientation_Task;
+		if (TaskReady)
+		{
+			localController.CmdSetGameState(GameState.Task_Orientation_Task);
             TaskReady = false;
-        }
-    }
+		}
+		if (gameController.currentState == GameState.Task_Orientation_Tutorial && Input.GetKeyDown(KeyCode.T))
+		{
+			localController.CmdToggleFixationCross();
+		}
 
-    // UNCLEAR CODE, Please Explain
+	}
+
+	/*
+	 * The Spawn Code is available here and in Remotecontroller
+	 * to spawn from the Client, a Command has to be used to execute the Code on the Server
+	 * If this function is called on the Server (e.g. triggered by the event system), the code is run here,
+	 * if the function is called on the Client (e.g. Tutorial) it uses the Remotecontroller which has the Authority to invoke Commands
+	 */
     public void SpawnTarget_OrientationTask(int condition, float angle, bool moving, bool audioTest)
     {
-        if (isServer)
-        {
-            foreach (var t in FindObjectsOfType<Target>())
+
+		if (isServer) {
+
+			foreach (var t in FindObjectsOfType<Target>())
+			{
+				NetworkServer.Destroy(t.gameObject);
+			}
+			if (gameController.currentTarget != null)
+				NetworkServer.Destroy(gameController.currentTarget);
+
+			gameController.currentCondition = (Condition)condition;
+
+			GameObject TargetContainer = GameObject.Find("GameControll/Targets");
+			TargetContainer.transform.position = Camera.main.transform.position;
+
+			GameObject instance = Instantiate(TargetPrefab, TargetContainer.transform);
+			if (audioTest)
             {
-                NetworkServer.Destroy(t.gameObject);
+                instance.GetComponent<SpriteRenderer>().sprite = null; //might have to use a syncvar
             }
-            if (gameController.currentTarget != null)
-                NetworkServer.Destroy(gameController.currentTarget);
+			instance.GetComponent<Target>().defineConfiguration(angle, moving);
+			instance.GetComponent<Target>().GiveClue(condition);
+			NetworkServer.Spawn(instance);
+			gameController.currentTarget = instance;
+		}
+		else
+		{
+			foreach (var t in FindObjectsOfType<Target>())
+			{
+				localController.CmdDestroy(t.gameObject);
+			}
+			if (gameController.currentTarget != null)
+				localController.CmdDestroy(gameController.currentTarget);
 
-            gameController.currentCondition = (Condition)condition;
-
-            GameObject TargetContainer = GameObject.Find("GameControll/Targets");
-            TargetContainer.transform.position = Camera.main.transform.position;
-
-            GameObject instance = Instantiate(TargetPrefab, TargetContainer.transform);
-            if (audioTest)
-            {
-                instance.GetComponent<SpriteRenderer>().sprite = null;
-            }
-            instance.GetComponent<Target>().defineConfiguration(angle, moving);
-            instance.GetComponent<Target>().GiveClue(condition);
-            NetworkServer.Spawn(instance); // ??? SPAWN here and in Remote Controller ?? are both functions neede  and used ?
-            gameController.currentTarget = instance;
-        }
-        else 
-        {
-            foreach (var t in FindObjectsOfType<Target>())
-            {
-                localController.CmdDestroy(t.gameObject);
-            }
-            if (gameController.currentTarget != null)
-                localController.CmdDestroy(gameController.currentTarget);
-
-            localController.CmdSetCondition((Condition)condition);
-            localController.CmdSpawnTarget(condition, angle, moving); //??? SPAWN here and in Remote Controller ?? are both functions neede and used ?
-        }
+			localController.CmdSetCondition((Condition)condition);
+			localController.CmdSpawnTarget(condition, angle, moving, audioTest);
+		}
     }
 
-    [Server]
+
+	[Server]
     public void StartTask()
     {
-        //ToDo: sync all variables which are updated here
+		//ToDo: sync all variables which are updated here
         Debug.Log("StartTask");
-
-        currentCueOrder = OrderCues(currentSessionNumber);
-        gameController.currentCondition = (Condition)currentCueOrder[currentRoundNumber];
-        print((Condition)currentCueOrder[currentRoundNumber]);
+		currentCueOrder = OrderCues(currentSessionNumber);
+		gameController.currentCondition = (Condition)currentCueOrder[currentRoundNumber];
         maxSessionNumber = NumTargetsPerRound.Count;
         maxRoundNumber = 4;
         maxTargetNbr = NumTargetsPerRound[currentSessionNumber];
-        currentTargetNbr++;
-        FixationCross.SetActive(true);
-        TaskReady = true;
-        //ShowNextTarget();
-    }
+        //currentTargetNbr++;
+        FixationCross.GetComponent<FixationCross>().isVisible = true;
+		TaskReady = true;
+	}
+
     void ShowNextTarget()
     {
-        SpawnTarget_OrientationTask((int)gameController.currentCondition, getRandomAngle(), true, false);
-    }
+		float NewPos = getRandomAngle();
+		SpawnTarget_OrientationTask(gameController._currentCondition, NewPos, true, false);
+		lastPosition = NewPos;
+	}
 
 
     void TargetShot(GameObject shotObject)
@@ -168,54 +174,60 @@ public class OrientationTask : NetworkBehaviour
         {
             if (shotObject.tag == "Target")
             {
-                shotObject.tag = "Untagged";
-                shotObject.GetComponent<Target>().hit = true;
-                shotObject.GetComponent<Target>().deathTimer.Run();
-                shotObject.GetComponent<Rigidbody>().useGravity = true;
-                if (gameController.currentState == GameState.Task_Orientation_Task)
+				Debug.Log("OT: Target shot. Try to write Stats: isServer =" + isServer);
+                if (isServer)
                 {
-                    localController.CmdCallDefineNewTargetEvent();
-                }
+					shotObject.GetComponent<Target>().hit = true;
+					shotObject.tag = "Untagged";
+					shotObject.GetComponent<Target>().DataContainer.writeStats();
+					if (gameController.currentState == GameState.Task_Orientation_Task)
+					{
+						localController.CmdCallDefineNewTargetEvent();
+					}
+				}
+				shotObject.GetComponent<Rigidbody>().useGravity = true;
             }
         }
     }
-    // TODO
+
 
     // called if the Target is Hit
-    [Server]
+	[Server]
     public void DefineNextTarget()
     {
+		Debug.Log("next");
         if (currentTargetNbr >= maxTargetNbr)
         {
             currentTargetNbr = 0;
             currentRoundNumber++;
-        }
-        if (currentRoundNumber >=maxRoundNumber)
+		}
+		if (currentRoundNumber >= maxRoundNumber)
         {
             currentTargetNbr = 0;
             currentRoundNumber = 0;
             currentSessionNumber++;
-
-        }
-        if (currentSessionNumber >= maxSessionNumber)
+		}
+		if (currentSessionNumber >= maxSessionNumber)
         {
             Debug.Log("Game Ends");
             gameController.currentState = GameState.End;
-            FindObjectOfType<DataHandler>().writeToFile();
-
+			localController.CmdSave();
+			TaskFinished = true;
         }
         else
         {
-            currentCueOrder = OrderCues(currentSessionNumber);
-            maxTargetNbr = NumTargetsPerRound[currentSessionNumber];
-            gameController.currentCondition= (Condition)currentCueOrder[currentRoundNumber]; 
+			currentCueOrder = OrderCues(currentSessionNumber);
+			maxTargetNbr = NumTargetsPerRound[currentSessionNumber];
+			gameController.currentCondition = (Condition)currentCueOrder[currentRoundNumber]; 
             FixationCross.SetActive(true);
-            currentTargetNbr++;
+			FixationCross.GetComponent<FixationCross>().isVisible = true;
         }
-    }
+	}
 
     float getRandomAngle()
     {
+		int tries = 0;
+		//return 0;
         int pos = Random.Range(0, 4);
         float spawnAngle = 0;
         if (pos == 0)
@@ -226,6 +238,21 @@ public class OrientationTask : NetworkBehaviour
             spawnAngle = 30f;
         else if (pos == 3)
             spawnAngle = 70f;
-        return spawnAngle;
+
+        while (spawnAngle == lastPosition & tries < 10)
+        {
+			tries++;
+			pos = Random.Range(0, 4);
+			if (pos == 0)
+				spawnAngle = -70f;
+			else if (pos == 1)
+				spawnAngle = -30f;
+			else if (pos == 2)
+				spawnAngle = 30f;
+			else if (pos == 3)
+				spawnAngle = 70f;
+		}
+        return spawnAngle;		
     }
+
 }

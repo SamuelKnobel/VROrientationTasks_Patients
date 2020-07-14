@@ -11,7 +11,7 @@ namespace Mirror.Discovery
         public IPEndPoint EndPoint { get; set; }
 
         public Uri uri;
-
+        public string name;
         // Prevent duplicate server appearance when a connection can be made via LAN on multiple NICs
         public long serverId;
     }

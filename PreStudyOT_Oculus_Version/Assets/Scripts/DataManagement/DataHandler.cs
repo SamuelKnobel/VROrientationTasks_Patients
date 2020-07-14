@@ -1,15 +1,17 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using UnityEngine;
+using Mirror;
 
-public class DataHandler : MonoBehaviour
+public class DataHandler : NetworkBehaviour
 {
     // Script References
     GameController gameController;
-
+    private SQLConnector sqlConnector;
     [SerializeField]
     public static double currentTimeStamp;
 
@@ -17,12 +19,13 @@ public class DataHandler : MonoBehaviour
 
     //public List<Data_Targets_OT> data_Targets;
 
-    public List<string> JSONsToSave = new List<string>();
+    public List<string> TargetJsons = new List<string>();
+    public List<string> HardwareJsons = new List<string>();
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        sqlConnector = new SQLConnector();
     }
 
     // Update is called once per frame
@@ -39,9 +42,6 @@ public class DataHandler : MonoBehaviour
         currentTimeStamp = ConvertToTimestamp(DateTime.UtcNow);
     }
 
-
-
-
     public double ConvertToTimestamp(DateTime value)
     {
         TimeSpan span = (value - new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc));
@@ -54,20 +54,26 @@ public class DataHandler : MonoBehaviour
         foreach (Data_Hardware item in data_Hardware)
         {
             string NewJSON = JsonUtility.ToJson(item);
-            JSONsToSave.Add(NewJSON);
+            HardwareJsons.Add(NewJSON);
             NewJSON = "";
             item.ResetAll();
         }
     }
     public void WriteTargetToJSON(Data_Targets data)
     {
+        Debug.Log("target added");
         string NewJSON = JsonUtility.ToJson(data);
-        JSONsToSave.Add(NewJSON);
+        TargetJsons.Add(NewJSON);
         NewJSON = "";
     }
-    public string data;
+    public string Alldata; 
+    public string TargetData;
+    public string HardwareData;
+
+
     public void writeToFile()
     {
+        Debug.Log("Nb of Files:"+TargetJsons.Count);
         gameController.recording = false;
         string pathToDir = gameController.SavePath;
         string pathToFile = pathToDir + gameController.startTime +"_"+ gameController.SubjectID+ "_SaveData.JSON";
@@ -75,24 +81,30 @@ public class DataHandler : MonoBehaviour
         {
             Directory.CreateDirectory(pathToDir);
         }
-        writeHardwareToJson();
-        string data = "[";
-        File.WriteAllText(pathToFile, "[");
-
-        for (int i = 0; i < JSONsToSave.Count - 1; i++)
+        for (int i = 0; i < TargetJsons.Count - 1; i++)
         {
-            data = data + JSONsToSave[i] + ",\n";
-            File.AppendAllText(pathToFile, JSONsToSave[i] + ",");
+            TargetData += TargetJsons[i] + ",\n";
         }
-        data = data + JSONsToSave[JSONsToSave.Count - 1] +"]";
-        File.AppendAllText(pathToFile, JSONsToSave[JSONsToSave.Count - 1]);
-        File.AppendAllText(pathToFile,"]");
-        //JSONsToSave.Clear();
-
-        // TODO: Load it to the SQL Library Database
-       // SQLCreator.AddToTable(gameController.SubjectID, gameController.startTime, data);
-
+        TargetData += TargetJsons[TargetJsons.Count - 1];
+        writeHardwareToJson();
+        for (int i = 0; i < HardwareJsons.Count - 1; i++)
+        {
+            HardwareData += HardwareJsons[i] + ",\n";
+        }
+        HardwareData += HardwareJsons[HardwareJsons.Count - 1];
+        Alldata = TargetData + ',' + HardwareData;
+        File.WriteAllText(pathToFile, "["+ Alldata+ "]");
+        gameController.saved = true;
     }
+    public void SaveToDB()
+    {
+        string table = (FindObjectOfType<LokalisationTask>() != null) ? "LT" : "OT";
+        bool res = sqlConnector.writeToServer(table, gameController.SubjectID, gameController.startTime, TargetData);
+        gameController.savingToDB = false;
+        gameController.savedToDB = res;
+        gameController.dbError = !res;
+    }
+
 }
 [Serializable]
 public enum ReasonOfDeath

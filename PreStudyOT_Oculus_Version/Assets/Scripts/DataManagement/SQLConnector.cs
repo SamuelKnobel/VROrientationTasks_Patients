@@ -3,88 +3,73 @@ using System.Data;
 using Mono.Data.Sqlite;
 using System.IO;
 using System;
+using MySql.Data.MySqlClient;
+using Renci.SshNet;
+using System.Collections.Generic;
+using System.Threading;
 
-public static class SQLConnector
+public class SQLConnector : MonoBehaviour
 {
 
-	public static string database_name = "OT_Test.sqlite";
-	public static string db_connection_string;
-	public static IDbConnection db_connection;
+	private string _host = "159.100.247.254";
+	private string _username = "ubuntu";
+	private string _password = "aI7reetevcqnzru";
+	private string _usernameDB = "remote";
+	private string _passwordDB = "UP-0fd08hsE0";
 
-	public static void ConnectToDatabase()
+	/* task must be "OT" or "LT" */
+	public bool writeToServer(string task, string subjectID, int startTime, string json)
 	{
+		bool res = false;
 		try
 		{
-			db_connection_string = "URI=file:" + Application.persistentDataPath + "/" + database_name;
-			Debug.Log("db_connection_string" + db_connection_string);
-			db_connection = new SqliteConnection(db_connection_string);
-			db_connection.Open();
-			Debug.Log("Connected");
+			var connectionInfo = new PasswordConnectionInfo(_host, 22, _username, _password);
+
+			using (var client = new SshClient(connectionInfo))
+			{
+				client.Connect();
+				/*
+				//dump file in log folder
+				client.RunCommand($"mkdir -p log/{subjectID.Replace(" ","")}");
+				client.RunCommand($"echo \"{json}\" >> log/{subjectID.Replace(" ", "")}/{startTime.Replace(" ", "")}/log.txt");
+				*/
+				var sql = $"INSERT INTO {task}(subjectID, timestamp, json) VALUES ('{subjectID}', '{startTime}', '')";
+				var sqlCmd = client.RunCommand($"mysql -u {_usernameDB} -p{_passwordDB} -D Subjects -e \"{sql}\"");
+				foreach (string chunk in Chunks(json, 20000))
+				{
+					sql = $"UPDATE {task} SET json = CONCAT(json, '{chunk}') WHERE timestamp = '{startTime}' AND subjectID = '{subjectID}'";
+					sqlCmd = client.RunCommand($"mysql -u {_usernameDB} -p{_passwordDB} -D Subjects -e \"{sql}\"");
+					
+				}
+				client.Disconnect();
+			}
+			res = true;
 		}
-		catch (Exception e)
+		catch (System.Exception e)
 		{
-			Debug.LogWarning("Could not connect To Database");
-			throw e;
+			Debug.Log(e);
+			FindObjectOfType<GameController>().dbErrorText = e.ToString();
 		}
+		return res;
 	}
 
+    //public List<string> Chunks(string str, int maxChunkSize)
+    //   {
+    //	List<string> partitionedString = new List<string>();
+    //       for (int i = 0; i < str.Length; i += maxChunkSize)
+    //		partitionedString.Add(str.Substring(i, Math.Min(maxChunkSize, str.Length - i)));
 
-	//helper functions
-	public static IDbCommand GetDbCommand()
-	{
-		return db_connection.CreateCommand();
-	}
+    //	FindObjectOfType<GameController>().parts = partitionedString;
 
-	public static void Close()
-	{
-		db_connection.Close();
-	}
+    //	return partitionedString;
 
+    //   }
+    static IEnumerable<string> Chunks(string str, int maxChunkSize)
+    {
+        for (int i = 0; i < str.Length; i += maxChunkSize)
+        {
+			yield return str.Substring(i, Math.Min(maxChunkSize, str.Length - i));
+		}
 
-
-//	void start()
-//	{
-//		// Create database
-//		 connection = "URI=file:" + Application.streamingAssetsPath + "/" + "My_Database.sqlite";
-
-//		// Open connection
-//		IDbConnection dbcon = new SqliteConnection(connection);
-//		dbcon.Open();
-
-//		// Create table
-//		IDbCommand dbcmd;
-//		dbcmd = dbcon.CreateCommand();
-//		string q_createTable = "CREATE TABLE IF NOT EXISTS my_table (id INTEGER PRIMARY KEY, val INTEGER )";
-
-//		dbcmd.CommandText = q_createTable;
-//		dbcmd.ExecuteReader();
-
-//		// Insert values in table
-//		//IDbCommand cmnd = dbcon.CreateCommand();
-//		//cmnd.CommandText = "INSERT INTO my_table (id, val) VALUES (1, 5)";
-//		//cmnd.ExecuteNonQuery();
-
-//		// Read and print all values in table
-//		IDbCommand cmnd_read = dbcon.CreateCommand();
-//		IDataReader reader;
-//		string query = "SELECT * FROM my_table";
-//		cmnd_read.CommandText = query;
-//		reader = cmnd_read.ExecuteReader();
-
-//		while (reader.Read())
-//		{
-//			Debug.Log("id: " + reader[0].ToString());
-//			Debug.Log("val: " + reader[1].ToString());
-//		}
-
-//		// Close connection
-//		dbcon.Close();
-
-//	}
-
-//	// Update is called once per frame
-//	void Update()
-//	{
-
-//	}
+    }
 }

@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Net;
 using UnityEngine;
 using UnityEngine.Events;
@@ -7,11 +8,11 @@ namespace Mirror.Discovery
 {
     [Serializable]
     public class ServerFoundUnityEvent : UnityEvent<ServerResponse> { };
-
     [DisallowMultipleComponent]
     [AddComponentMenu("Network/NetworkDiscovery")]
     public class NetworkDiscovery : NetworkDiscoveryBase<ServerRequest, ServerResponse>
     {
+        public string nameFile;
         #region Server
 
         public long ServerId { get; private set; }
@@ -54,12 +55,21 @@ namespace Mirror.Discovery
 
             try
             {
+                string nameFromFile;
+                try
+                {
+                    nameFromFile = File.ReadAllText(nameFile);
+                }
+                catch { 
+                    nameFromFile = "Unnamed";
+                }
                 // this is an example reply message,  return your own
                 // to include whatever is relevant for your game
                 return new ServerResponse
                 {
                     serverId = ServerId,
-                    uri = transport.ServerUri()
+                    uri = transport.ServerUri(),
+                    name = nameFromFile
                 };
             }
             catch (NotImplementedException)
@@ -105,7 +115,6 @@ namespace Mirror.Discovery
                 Host = response.EndPoint.Address.ToString()
             };
             response.uri = realUri.Uri;
-
             OnServerFound.Invoke(response);
         }
 

@@ -5,22 +5,26 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using Mirror;
+using System;
+
 public class HUD_Main : NetworkBehaviour
 {
   
     private float vh, vw;
     private Rect centerRect;
-    string subjectID;
+    String subjectID;
     private Rect activeWindow;
 
     public enum GuiMode { SubjectID, TaskSelection, None };
     public GuiMode currentGUI;
 
+    public GameObject AndroidWidget;
+
     // Script References
     GameController gameController;
 
 
-    void Awake()
+    void Start()
     {
         gameController = FindObjectOfType<GameController>();
 		vh = Screen.height / 100f;
@@ -31,16 +35,18 @@ public class HUD_Main : NetworkBehaviour
 
     void Update()
     {
+        if (gameController == null || !gameController.isActiveAndEnabled)
+        {
+            gameController = FindObjectOfType<GameController>();
+        }
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             Application.Quit();
-        }
-
-
+        }        
     }
 
     private void OnGUI()
-    {
+    {   
         switch (currentGUI)
         {
             case GuiMode.SubjectID:
@@ -52,17 +58,18 @@ public class HUD_Main : NetworkBehaviour
             default:
                 break;
         }
-        guiOverview();
     }
 
     #region SubjectID
+
+
     void guiSubjectID(int windowID)
     {
         subjectID = GUILayout.TextField(subjectID);
 
         if (GUI.Button(new Rect(10 * vw, 10 * vh, 20 * vw, 30), "Enter"))
         {
-			gameController.localController.CmdSetSubjectID(subjectID);
+			gameController.getLocalController().CmdSetSubjectID(subjectID);
 			gameController.localController.CmdSetGameState(GameState.MainMenu_ChooseTask);
             currentGUI = GuiMode.TaskSelection;
         }
@@ -94,24 +101,5 @@ public class HUD_Main : NetworkBehaviour
     #endregion
 
 
-    #region Overview
-    private Rect overviewRect;
-    void guiOverview()
-    {
-        if (gameController == null)
-        {
-            gameController = FindObjectOfType<GameController>();
-        }
-        GUILayout.BeginArea(new Rect(0, 95 * vh, 100 * vw, 5 * vh));
-        GUILayout.BeginHorizontal();
-        GUILayout.Label("State: " + gameController != null ? gameController.currentState.ToString() : "not connected");
-        if (GUILayout.Button("Subject ID: " + gameController.SubjectID))
-        {
-            this.currentGUI = GuiMode.SubjectID;
-        }
-        GUILayout.EndHorizontal();
-        GUILayout.EndArea();
-    }
-    #endregion
 
 }

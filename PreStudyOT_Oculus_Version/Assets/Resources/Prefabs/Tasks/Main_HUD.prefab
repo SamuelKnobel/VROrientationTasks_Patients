@@ -9,8 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 640050961493017740}
-  - component: {fileID: 640050961493017741}
-  - component: {fileID: 5150841697739230607}
+  - component: {fileID: 4249689766131644525}
+  - component: {fileID: 6738218274064918461}
   m_Layer: 0
   m_Name: Main_HUD
   m_TagString: Untagged
@@ -32,7 +32,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &640050961493017741
+--- !u!114 &4249689766131644525
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -47,8 +47,7 @@ MonoBehaviour:
   sceneId: 0
   serverOnly: 0
   m_AssetId: 
-  hasSpawned: 0
---- !u!114 &5150841697739230607
+--- !u!114 &6738218274064918461
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -63,3 +62,4 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   currentGUI: 0
+  AndroidWidget: {fileID: 0}

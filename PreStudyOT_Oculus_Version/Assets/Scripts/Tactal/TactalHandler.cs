@@ -15,18 +15,18 @@ public class TactalHandler : MonoBehaviour
     public bool TactalConnected;
 
 
-    public bool VibrationOn;
+	public bool VibrationOn;
     public float ActivationAngle;
 
     public Timer StopVibrationTimer;
 
     void OnEnable()
     {
-        EventManager.StartVibrationEvent += StartVibration;
+		EventManager.EventStartVibration += StartVibration;
     }
     void OnDisable()
     {
-        EventManager.StartVibrationEvent -= StartVibration;
+		EventManager.EventStartVibration -= StartVibration;
     }
     void Start()
     {
@@ -43,6 +43,27 @@ public class TactalHandler : MonoBehaviour
         if (VibrationOn)
         {
             HeadBand.Play(ActivationAngle);
+        }
+
+        if (Input.GetKey(KeyCode.Alpha1))
+        {
+            //HeadTactSource.Play();
+            HeadBand.Play(-10);
+        }
+        if (Input.GetKey(KeyCode.Alpha2))
+        {
+            //HeadTactSource.Play();
+            HeadBand.Play(10);
+        }
+        if (Input.GetKey(KeyCode.Alpha3))
+        {
+            //HeadTactSource.Play();
+            HeadBand.Play(50);
+        }
+        if (Input.GetKey(KeyCode.Alpha4))
+        {
+            //HeadTactSource.Play();
+            HeadBand.Play(-50);
         }
     }
 

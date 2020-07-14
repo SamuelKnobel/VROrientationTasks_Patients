@@ -227,6 +227,7 @@ public class HUD_OT : NetworkBehaviour
         GUILayout.Label("Tactile", nobreak);
         GUILayout.Label("Combined", nobreak);
         GUILayout.EndVertical();
+        GUI.skin.button.onNormal.textColor = Color.green;
         for (int i = 0; i < localNumOfSessions; i++)
         {
             GUILayout.BeginVertical();
@@ -248,6 +249,7 @@ public class HUD_OT : NetworkBehaviour
         {
             currentGUI = GuiMode.Task;
             localController.CmdSyncTaskSetupOT(localNumOfSessions, localNumTargetsPerRound, localOrderCues1, localOrderCues2, localOrderCues3, localOrderCues4);
+            FindObjectOfType<OrientationTask>().currentTargetNbr = 0;
             localController.CmdStartTaskOT();
         }
         GUILayout.EndVertical();
@@ -258,7 +260,18 @@ public class HUD_OT : NetworkBehaviour
     private void guiTask(int windowID)
     {
         scrollposition = GUILayout.BeginScrollView(scrollposition);
-        GUILayout.BeginVertical();
+        GUILayout.BeginVertical(); 
+        GUILayout.BeginHorizontal();
+        if (GUILayout.Button(gameController.pause ? "Resume" : "Pause"))
+        {
+            localController.CmdTogglePause();
+        }
+        if (GUILayout.Button("Save and Stop"))
+        {
+            localController.CmdEndTaskandSave();
+        }
+        GUILayout.EndHorizontal();
+        GUILayout.Space(20);
         GUILayout.BeginHorizontal();
         GUILayout.Label("Aktuelle Session:");
         GUILayout.Label((OT.currentSessionNumber + 1).ToString() + " / " + OT.maxSessionNumber.ToString());
@@ -323,27 +336,12 @@ public class HUD_OT : NetworkBehaviour
     }
     void guiSaveAndClose(int window)
     {
-        if (!saving)
+        if (gameController.saved && !gameController.savedToDB && !gameController.saveToDB)
         {
-            if (GUI.Button(new Rect(10 * vw, 10 * vh, 20 * vw, 30), "Speichern"))
+            if (GUI.Button(new Rect(10 * vw, 10 * vh, 20 * vw, 30), "In die Datenbank übertragen"))
             {
-                ButtonText = "Quit";
-                FindObjectOfType<DataHandler>().writeToFile();
-                saving = true;
+                localController.CmdSaveToDB();
             }
-        }
-        else if (!saved)
-        {
-            if (GUI.Button(new Rect(10 * vw, 10 * vh, 20 * vw, 30), ButtonText))
-            {
-                saved = true;
-                Invoke("Quit", 5);
-            }
-        }
-        else
-        {
-            ButtonText = "Schliesst nach Speichern automatisch";
-            GUI.Label(new Rect(10 * vw, 10 * vh, 30 * vw, 30), ButtonText);
         }
     }
 

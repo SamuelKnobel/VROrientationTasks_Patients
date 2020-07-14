@@ -11,10 +11,10 @@ public class Timer : MonoBehaviour
 	#region Fields
 
 	// timer duration
-	float totalSeconds = 0;
+	public float totalSeconds = 0;
 
 	// timer execution
-	float elapsedSeconds = 0;
+	public float elapsedSeconds = 0;
 	bool running = false;
 
 	// support for countdown seconds values
@@ -37,11 +37,11 @@ public class Timer : MonoBehaviour
 	/// </summary>
 	/// <value>duration</value>
 	public float Duration
-	{
+    {
 		set
-		{
+        {
 			if (!running)
-			{
+            {
 				totalSeconds = value;
 			}
 		}
@@ -53,8 +53,8 @@ public class Timer : MonoBehaviour
 	/// </summary>
 	/// <value><c>true</c> if finished; otherwise, <c>false</c>.</value>
 	public bool Finished
-	{
-		get { return started && !running; }
+    {
+		get { return started && !running; } 
 	}
 
 	/// <summary>
@@ -62,7 +62,7 @@ public class Timer : MonoBehaviour
 	/// </summary>
 	/// <value><c>true</c> if running; otherwise, <c>false</c>.</value>
 	public bool Running
-	{
+    {
 		get { return running; }
 	}
 
@@ -74,35 +74,35 @@ public class Timer : MonoBehaviour
 	/// </summary>
 	/// <value>The timer changed event.</value>
 	public TimerChangedEvent TimerChangedEvent
-	{
+    {
 		get { return timerChangedEvent; }
 	}
 
-	#endregion
+    #endregion
 
-	#region Public methods
+    #region Public methods
 
-	/// <summary>
-	/// Update is called once per frame
-	/// </summary>
-	void Update()
-	{
+    /// <summary>
+    /// Update is called once per frame
+    /// </summary>
+    void Update()
+    {
 		// update timer
 		if (running)
-		{
+        {
 			elapsedSeconds += Time.deltaTime;
 
 			// check for new countdown value
 			int newCountdownValue = GetCurrentCountdownValue();
 			if (newCountdownValue != previousCountdownValue)
-			{
+            {
 				previousCountdownValue = newCountdownValue;
 				timerChangedEvent.Invoke(previousCountdownValue);
 			}
 
 			// check for timer finished
 			if (elapsedSeconds >= totalSeconds)
-			{
+            {
 				running = false;
 				timerFinishedEvent.Invoke();
 			}
@@ -117,10 +117,10 @@ public class Timer : MonoBehaviour
 	/// set the duration to something higher than 0
 	/// </summary>
 	public void Run()
-	{
+    {
 		// only run with valid duration
 		if (totalSeconds > 0)
-		{
+        {
 			started = true;
 			running = true;
 			elapsedSeconds = 0;
@@ -135,7 +135,7 @@ public class Timer : MonoBehaviour
 	/// Stops the timer
 	/// </summary>
 	public void Stop()
-	{
+    {
 		started = false;
 		running = false;
 	}
@@ -145,7 +145,7 @@ public class Timer : MonoBehaviour
 	/// </summary>
 	/// <param name="handler">the event handler</param>
 	public void AddTimerChangedEventListener(UnityAction<int> handler)
-	{
+    {
 		timerChangedEvent.AddListener(handler);
 	}
 
@@ -154,7 +154,7 @@ public class Timer : MonoBehaviour
 	/// </summary>
 	/// <param name="handler">the event handler</param>
 	public void AddTimerFinishedEventListener(UnityAction handler)
-	{
+    {
 		timerFinishedEvent.AddListener(handler);
 	}
 
@@ -167,7 +167,7 @@ public class Timer : MonoBehaviour
 	/// </summary>
 	/// <returns>the current countdown value</returns>
 	int GetCurrentCountdownValue()
-	{
+    {
 		return (int)Mathf.Ceil(totalSeconds - elapsedSeconds);
 	}
 

@@ -15,7 +15,7 @@ public class Data_Hardware : MonoBehaviour
     [SerializeField] public List<double> Timestamps;
     [SerializeField] public List<Vector3> Position;
     [SerializeField] public List<Vector3> Euler_Rotation;
-    [SerializeField] public List<Quaternion> Rotation;
+    //[SerializeField] public List<Quaternion> Rotation;
 
     private void Awake()
     {
@@ -39,13 +39,21 @@ public class Data_Hardware : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (gameController.recording)
+        //if (Timestamps.Count > 10)
+        //    return;
+        if (gameController.recording && !gameController.pause)
         {
             Position.Add(this.transform.position);
             Euler_Rotation.Add(this.transform.eulerAngles);
-            Rotation.Add(this.transform.rotation);
-            Timestamps.Add(DataHandler.currentTimeStamp);
-            
+            //Rotation.Add(this.transform.rotation);
+            if (HardwareName == "HMD")
+            {
+                Timestamps.Add(DataHandler.currentTimeStamp);
+            }
+            if(HardwareName != "HMD"&& Timestamps.Count<1000)
+            {
+                Timestamps.Add(DataHandler.currentTimeStamp);
+            }
         }
     }
 
@@ -55,8 +63,8 @@ public class Data_Hardware : MonoBehaviour
         Position = new List<Vector3>(); 
         Euler_Rotation.Clear();
         Euler_Rotation = new List<Vector3>();
-        Rotation.Clear();
-        Rotation = new List<Quaternion>();   
+        //Rotation.Clear();
+        //Rotation = new List<Quaternion>();   
         Timestamps.Clear();
         Timestamps = new List<double>();
     }

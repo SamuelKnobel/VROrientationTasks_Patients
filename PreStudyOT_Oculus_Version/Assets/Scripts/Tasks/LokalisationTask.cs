@@ -5,14 +5,16 @@ using Mirror;
 
 public class LokalisationTask : NetworkBehaviour
 {
+    [SyncVar] public int decoyNumber;
     [SyncVar] public int currentTargetNbr = 0;
     [SyncVar] public int currentRoundNumber = 0;
     [SyncVar] public int currentSessionNumber = 0;
     public int[] currentCueOrder;
 
-    public int maxTargetNbr = 0;
-    public int maxRoundNumber = 0;
-    public int maxSessionNumber = 0;
+    [SyncVar] public int maxTargetNbr = 0;
+    [SyncVar] public int maxRoundNumber = 0;
+    [SyncVar] public int maxSessionNumber = 0;
+    int LastPos;
 
     public SyncListInt NumTargetsPerRound = new SyncListInt();
     //Mirror doesn't support multidimensional arrays
@@ -36,9 +38,6 @@ public class LokalisationTask : NetworkBehaviour
     [SyncVar] public bool TaskReady = false;
     [SyncVar] public bool TaskFinished = false;
 
-
-    public GameObject[] Targets = new GameObject[6];
-
     // Environment Elemtent References
     public GameObject FixationCross;
     [SerializeField] GameObject TargetPrefab;
@@ -51,23 +50,22 @@ public class LokalisationTask : NetworkBehaviour
     {
         EventManager.EventTargetShot += TargetShot;
         EventManager.EventDefineNewTarget += DefineNextTarget;
-        EventManager.EventStartSeachring += ShowNextTarget;
+        EventManager.EventStartSearching += ShowNextTarget;
     }
     void OnDisable()
     {
         EventManager.EventDefineNewTarget -= DefineNextTarget;
-        EventManager.EventStartSeachring -= ShowNextTarget;
+        EventManager.EventStartSearching -= ShowNextTarget;
         EventManager.EventTargetShot -= TargetShot;
-
     }
 
 
     // Start is called before the first frame update
     void Start()
     {
-        gameController = FindObjectOfType<GameController>();
-        //gameController.recording = true;
-        gameController.SavePath = UnityEngine.Application.persistentDataPath + "/Output/" + gameController.SubjectID + "/";
+        gameController = GameObject.FindObjectOfType<GameController>();
+		gameController.recording = true;
+		gameController.SavePath = gameController.SavePathBase + "/Output/" + gameController.SubjectID + "/";
 
         localController = gameController.getLocalController();
         localController.CmdSetGameState(GameState.Task_Lokalisation_Tutorial);
@@ -84,10 +82,14 @@ public class LokalisationTask : NetworkBehaviour
 
         if (TaskReady)
         {
-            gameController.currentState = GameState.Task_Lokalisation_Task;
+            localController.CmdSetGameState(GameState.Task_Lokalisation_Task);
             TaskReady = false;
-        }
-    }
+		}
+		if (gameController.currentState == GameState.Task_Lokalisation_Tutorial && Input.GetKeyDown(KeyCode.T))
+		{
+			localController.CmdToggleFixationCross();
+		}
+	}
 
 
 
@@ -104,10 +106,10 @@ public class LokalisationTask : NetworkBehaviour
         maxSessionNumber = NumTargetsPerRound.Count;
         maxRoundNumber = 4;
         maxTargetNbr = NumTargetsPerRound[currentSessionNumber];
-        currentTargetNbr++;
-        FixationCross.SetActive(true);
+        //currentTargetNbr++;
+        //print(currentTargetNbr);
+        FixationCross.GetComponent<FixationCross>().isVisible = true;
         TaskReady = true;
-        //ShowNextTarget();
     }
 
 
@@ -116,93 +118,124 @@ public class LokalisationTask : NetworkBehaviour
 
 
 
-
+	private int[] spawnpositions = { -80, -50, -20, 20, 50, 80 };
     public void SpawnTargets_LokalizationTask(int condition, int targetPosition)
-    {
-        foreach (var t in FindObjectsOfType<Target>())
-        {
-            Destroy(t.gameObject);
-        }
-        if (gameController.currentTarget != null)
-            Destroy(gameController.currentTarget);
-
-        gameController.currentCondition = (Condition)condition;
-
-        Targets = new GameObject[6];
-        GameObject TargetContainer = GameObject.Find("GameControll/Targets");
-        Targets[0] = Instantiate(TargetPrefab, TargetContainer.transform);
-        Targets[0].GetComponent<Target>().defineConfiguration(-80, false); 
-
-        Targets[1] = Instantiate(TargetPrefab, TargetContainer.transform);
-        Targets[1].GetComponent<Target>().defineConfiguration(-50, false); 
-        Targets[2] = Instantiate(TargetPrefab, TargetContainer.transform);
-        Targets[2].GetComponent<Target>().defineConfiguration(-20, false);     
-        Targets[3] = Instantiate(TargetPrefab, TargetContainer.transform);
-        Targets[3].GetComponent<Target>().defineConfiguration(20, false); 
-        Targets[4] = Instantiate(TargetPrefab, TargetContainer.transform);
-        Targets[4].GetComponent<Target>().defineConfiguration(50, false); 
-        Targets[5] = Instantiate(TargetPrefab, TargetContainer.transform);
-        Targets[5].GetComponent<Target>().defineConfiguration(80, false);
-
-        TargetContainer.transform.position = Camera.main.transform.position;
-
-        if (targetPosition< Targets.Length)
-        {
-            NetworkServer.Spawn(Targets[targetPosition]);
-            gameController.currentTarget = Targets[targetPosition];
-            Targets[targetPosition].GetComponent<Data_Targets>().LT_tag = "Target";
-            Targets[targetPosition].GetComponent<Target>().GiveClue(condition);
-
-        }
-
-        foreach (GameObject item in Targets)
-        {
-            if (!item.Equals(gameController.currentTarget))
-            {
-               item.tag = "Untagged";
+	{
+		if (isServer)
+		{
+			foreach (var t in FindObjectsOfType<Target>())
+			{
+				NetworkServer.Destroy(t.gameObject);
             }
-        }
-    }
+            // update to remove all in the array?
+            if (gameController.currentTarget != null)
+				NetworkServer.Destroy(gameController.currentTarget);
+
+			gameController.currentCondition = (Condition)condition;
+
+			GameObject TargetContainer = GameObject.Find("GameControll/Targets");
+			for(int i = 0; i < 6; i++)
+			{
+				GameObject target = Instantiate(TargetPrefab, TargetContainer.transform);
+                target.transform.SetParent(TargetContainer.transform);
+				target.GetComponent<Target>().defineConfiguration(spawnpositions[i], false);
+				if (targetPosition != i)
+				{
+					target.tag = "Decoy";
+				}
+				NetworkServer.Spawn(target);
+
+                if (targetPosition == i)
+                {
+                    gameController.currentTarget = target;
+                    target.GetComponent<Data_Targets>().LT_tag = "Target";
+                    target.GetComponent<Target>().GiveClue(condition);
+                }
+            }
+			TargetContainer.transform.position = Camera.main.transform.position;
+		}
+		else
+		{
+			foreach (var t in FindObjectsOfType<Target>())
+			{
+				localController.CmdDestroy(t.gameObject);
+			}
+			if (gameController.currentTarget != null)
+				localController.CmdDestroy(gameController.currentTarget);
+
+			localController.CmdSetCondition((Condition)condition);
+			localController.CmdSpawnTargets_LokalizationTask(condition, targetPosition);
+		}
+	}
 
     void ShowNextTarget()
     {
-        SpawnTargets_LokalizationTask((int)gameController.currentCondition, getRandomPosition());
+        int randPos = getRandomPosition();
+        SpawnTargets_LokalizationTask(gameController._currentCondition, randPos);
+        LastPos = randPos;
     }
 
-
+    public AudioClip right;
+    public AudioClip wrong;
+    [Server]
     void TargetShot(GameObject shotObject)
     {
         if (shotObject != null)
         {
-            if (shotObject.tag == "Target")
+            if (isServer)
             {
-                shotObject.tag = "Untagged";
-                shotObject.GetComponent<Target>().hit = true;
-                shotObject.GetComponent<Target>().deathTimer.Run();
-                shotObject.GetComponent<Rigidbody>().useGravity = true;
-                if (gameController.currentState == GameState.Task_Orientation_Task)
+                if (shotObject.CompareTag("Target"))
                 {
-                    localController.CmdCallDefineNewTargetEvent();
+                    Debug.Log("LT: Target shot. Try to write Stats: isServer =" + isServer);
+
+                    AudioSource.PlayClipAtPoint(right, shotObject.transform.position);
+                    shotObject.tag = "Untagged";
+                    shotObject.GetComponent<Target>().hit = true;
+                    shotObject.GetComponent<Rigidbody>().useGravity = true;
+                    Target[] decoys = FindObjectsOfType<Target>();
+                    decoyNumber = decoys.Length;
+
+                    foreach (Target decoy in decoys)
+                    {
+                        decoy.GetComponent<Target>().DataContainer.writeStats();
+                        decoy.gameObject.GetComponent<Rigidbody>().useGravity = true;
+				    }
+                    if (gameController.currentState == GameState.Task_Lokalisation_Task)
+                    {
+                        localController.CmdCallDefineNewTargetEvent();
+                    }
                 }
+                else if (shotObject.CompareTag("Decoy"))
+                {
+                    if(!shotObject.GetComponent<Target>().hit)
+                    {
+                        //shotObject.GetComponent<Target>().hit = true;
+                        AudioSource.PlayClipAtPoint(wrong, shotObject.transform.position);
+                    }
+                    shotObject.GetComponent<Data_Targets>().shootLog.Add(DataHandler.currentTimeStamp);
+                }
+
             }
             else
             {
-                if (shotObject.GetComponent<Data_Targets>() != null)
+                if (shotObject.tag == "Target")
                 {
-                    shotObject.GetComponent<Data_Targets>().shootLog.Add(DataHandler.currentTimeStamp);
+                    shotObject.GetComponent<Rigidbody>().useGravity = true;
+                    Target[] decoys = FindObjectsOfType<Target>();
+                    foreach (Target decoy in decoys)
+                    {
+                        decoy.gameObject.GetComponent<Rigidbody>().useGravity = true;
+                    }
                 }
             }
-
         }
     }
-    // TODO
 
     // called if the Target is Hit
     [Server]
     public void DefineNextTarget()
     {
-        print("next");
-
+        Debug.Log("next");
         if (currentTargetNbr >= maxTargetNbr)
         {
             currentTargetNbr = 0;
@@ -213,14 +246,13 @@ public class LokalisationTask : NetworkBehaviour
             currentTargetNbr = 0;
             currentRoundNumber = 0;
             currentSessionNumber++;
-
         }
         if (currentSessionNumber >= maxSessionNumber)
         {
             Debug.Log("Game Ends");
             gameController.currentState = GameState.End;
-            FindObjectOfType<DataHandler>().writeToFile();
-
+            localController.CmdSave();
+            TaskFinished = true;
         }
         else
         {
@@ -228,13 +260,21 @@ public class LokalisationTask : NetworkBehaviour
             maxTargetNbr = NumTargetsPerRound[currentSessionNumber];
             gameController.currentCondition = (Condition)currentCueOrder[currentRoundNumber];
             FixationCross.SetActive(true);
-            currentTargetNbr++;
+            FixationCross.GetComponent<FixationCross>().isVisible = true;
+            //currentTargetNbr++;
         }
 
     }
     int getRandomPosition()
     {
-        return Random.Range(0, 6);
+        int tries=0;
+        int newPost = Random.Range(0, 6);
+        while (newPost == LastPos & tries < 10)
+        {
+            newPost = Random.Range(0, 6);
+            tries++;
+        }
+        return newPost;
     }
 
 }

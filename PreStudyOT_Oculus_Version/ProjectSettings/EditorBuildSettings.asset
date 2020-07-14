@@ -10,14 +10,12 @@ EditorBuildSettings:
     guid: 4ae9fe10e8d8fd648859f3e5a52aa5a2
   - enabled: 1
     path: Assets/_Scenes/OT_Patients_Task.unity
-    guid: f42c7d8a7ee57fa40b115f6264f37776
+    guid: 45eb791a6588b1040a3b6359619d4792
   - enabled: 1
     path: Assets/_Scenes/LT_Patients_Task.unity
     guid: 21837b655959a794e96b0f3a0f6ba792
   m_configObjects:
-    Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 477cf30215f18104c8ce7084e3a7ddb4,
+    Unity.XR.Oculus.Settings: {fileID: 11400000, guid: baf724af4ac11dc4e934146ef6d94ddb,
       type: 2}
-    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 4621ffd4971eeef4e822fef58c1c171a,
-      type: 2}
-    xr.sdk.mock-hmd.settings: {fileID: 11400000, guid: f7b2e9509f9d6c3419cca4237988047d,
+    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 5367f38596ae32c46a608a90c6b86b69,
       type: 2}

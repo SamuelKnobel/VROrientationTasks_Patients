@@ -155,29 +155,47 @@ public class ConfigurationData
     /// </summary>
     public ConfigurationData()
     {
+        GameController gameController = GameObject.FindObjectOfType<GameController>();
+#if UNITY_ANDROID && !UNITY_EDITOR
+        gameController.debugConfig = "Start";
+#endif
+        BetterStreamingAssets.Initialize();
+
+        if (!BetterStreamingAssets.FileExists(ConfigurationDataFileName))
+        {
+            Debug.LogErrorFormat("Streaming asset not found: {0}", ConfigurationDataFileName);
+#if UNITY_ANDROID && !UNITY_EDITOR
+        gameController.debugConfig = "Streaming asset not found";
+#endif
+            return;
+        }
+
         // read and save configuration data from file
         StreamReader input = null;
-        string currentLine= null;
+        string currentLine = null;
+
         try
         {
             // create stream reader object
-            input = File.OpenText(Path.Combine(
-                Application.streamingAssetsPath, ConfigurationDataFileName));
-
+            input = BetterStreamingAssets.OpenText(ConfigurationDataFileName);
             // populate values
             currentLine = input.ReadLine();
             while (currentLine != null)
             {
                 string[] tokens = currentLine.Split(',');
-                ConfigurationDataValueName valueName = 
+                ConfigurationDataValueName valueName =
                     (ConfigurationDataValueName)Enum.Parse(
                         typeof(ConfigurationDataValueName), tokens[0]);
                 values.Add(valueName, float.Parse(tokens[1]));
                 currentLine = input.ReadLine();
+#if UNITY_ANDROID && !UNITY_EDITOR
+                gameController.debugConfig += " - " + tokens[0] + ": " + tokens[1];
+#endif
             }
         }
         catch (Exception e)
         {
+            gameController.debugConfig = e.ToString();
             // set default values if something went wrong
             Debug.Log(e);
             SetDefaultValues();
@@ -191,9 +209,63 @@ public class ConfigurationData
                 input.Close();
             }
         }
+
+
+
+
+
+
+        /*
+        // read and save configuration data from file
+        StreamReader input = null;
+        string currentLine= null;
+        GameController gameController = GameObject.FindObjectOfType<GameController>();
+#if UNITY_ANDROID && !UNITY_EDITOR
+        gameController.debugConfig = "Start";
+#endif
+        try
+        {
+            // create stream reader object
+            input = File.OpenText(Path.Combine(
+                Application.streamingAssetsPath, ConfigurationDataFileName));
+#if UNITY_ANDROID && !UNITY_EDITOR
+            gameController.debugConfig += " " + input + "  ";
+#endif
+            // populate values
+            currentLine = input.ReadLine();
+            while (currentLine != null)
+            {
+                string[] tokens = currentLine.Split(',');
+                ConfigurationDataValueName valueName = 
+                    (ConfigurationDataValueName)Enum.Parse(
+                        typeof(ConfigurationDataValueName), tokens[0]);
+                values.Add(valueName, float.Parse(tokens[1]));
+                currentLine = input.ReadLine();
+#if UNITY_ANDROID && !UNITY_EDITOR
+                gameController.debugConfig += " - " + tokens[0] + ": " + tokens[1];
+#endif
+            }
+        }
+        catch (Exception e)
+        {
+            gameController.debugConfig = e.ToString();
+            // set default values if something went wrong
+            Debug.Log(e);
+            SetDefaultValues();
+            Debug.Log(currentLine);
+        }
+        finally
+        {
+            // always close input file
+            if (input != null)
+            {
+                input.Close();
+            }
+        }
+        */
     }
 
-    #endregion
+#endregion
 
     /// <summary>
     /// Sets the configuration data fields to default values
@@ -203,20 +275,20 @@ public class ConfigurationData
     {
         Debug.LogWarning("Set Default Values!");
         values.Clear();
-        values.Add(ConfigurationDataValueName.UseLaser, 1);
-        values.Add(ConfigurationDataValueName.UseTargetCross, 1);
+        values.Add(ConfigurationDataValueName.UseLaser, 0);
+        values.Add(ConfigurationDataValueName.UseTargetCross, 0);
         values.Add(ConfigurationDataValueName.TimeBetweenTargets, 11);
-        values.Add(ConfigurationDataValueName.TargetSpeed, 0);
-        values.Add(ConfigurationDataValueName.TargetSizeNear, .1f);
+        values.Add(ConfigurationDataValueName.TargetSpeed, 5);
+        values.Add(ConfigurationDataValueName.TargetSizeNear, .2f);
         values.Add(ConfigurationDataValueName.TargetSizeFar, 2f);
         values.Add(ConfigurationDataValueName.NumberOfTargetsPerTrial, 10);
         values.Add(ConfigurationDataValueName.NumberOfTrials, 3);
         values.Add(ConfigurationDataValueName.RadiusFarspace, 10);
-        values.Add(ConfigurationDataValueName.RadiusNearspace, .55f);
-        values.Add(ConfigurationDataValueName.Radius, 10f);
-        values.Add(ConfigurationDataValueName.HorizontalAngleLeft, -90);
-        values.Add(ConfigurationDataValueName.HorizontalAngleRight, 90);
-        values.Add(ConfigurationDataValueName.VerticalAngleTop, 15);
+        values.Add(ConfigurationDataValueName.RadiusNearspace,.5f);
+        values.Add(ConfigurationDataValueName.Radius,10f);
+        values.Add(ConfigurationDataValueName.HorizontalAngleLeft,-90);
+        values.Add(ConfigurationDataValueName.HorizontalAngleRight,90);
+        values.Add(ConfigurationDataValueName.VerticalAngleTop,15);
         values.Add(ConfigurationDataValueName.VerticalAngleBottom, -15);
     }
 }

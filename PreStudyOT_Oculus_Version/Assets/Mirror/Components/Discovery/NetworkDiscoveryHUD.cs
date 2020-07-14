@@ -13,6 +13,7 @@ namespace Mirror.Discovery
         Vector2 scrollViewPos = Vector2.zero;
 
         public NetworkDiscovery networkDiscovery;
+        private string connectedDeviceName = "";
 
 #if UNITY_EDITOR
         void OnValidate()
@@ -32,7 +33,7 @@ namespace Mirror.Discovery
                 return;
 
             if (NetworkServer.active || NetworkClient.active)
-                return;
+                DrawDisconnectionGUI();
 
             if (!NetworkClient.isConnected && !NetworkServer.active && !NetworkClient.active)
                 DrawGUI();
@@ -75,14 +76,27 @@ namespace Mirror.Discovery
             scrollViewPos = GUILayout.BeginScrollView(scrollViewPos);
 
             foreach (ServerResponse info in discoveredServers.Values)
-                if (GUILayout.Button(info.EndPoint.Address.ToString()))
+                if (GUILayout.Button(info.name + " (" +info.EndPoint.Address.ToString() + ")"))
                     Connect(info);
 
             GUILayout.EndScrollView();
         }
-
+        void DrawDisconnectionGUI()
+        {
+            GUILayout.BeginHorizontal();
+            string buttonText = connectedDeviceName == "" ? "Disconnect" : ("Disconnect from " + connectedDeviceName);
+            if (GUILayout.Button(buttonText))
+            {
+                if (NetworkClient.active)
+                    NetworkManager.singleton.StopClient();
+                if (NetworkServer.active)
+                    NetworkManager.singleton.StopServer();
+            }
+            GUILayout.EndScrollView();
+        }
         void Connect(ServerResponse info)
         {
+            connectedDeviceName = info.name;
             NetworkManager.singleton.StartClient(info.uri);
         }
 

@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
+using System;
+
 public class RemoteController : NetworkBehaviour
 {
 	public GameObject replacementCamera;
 	private GameController gameController = null;
 	public NetworkManager networkManager = null;
-	public GameObject target;
+	public GameObject targetPrefab;
+	private FixationCross fixationCross;
 
 	void Awake()
     {
@@ -26,6 +29,7 @@ public class RemoteController : NetworkBehaviour
 		{
 			replacementCamera.SetActive(gameObject.tag != "Player" && GameObject.FindGameObjectWithTag("Player") == null);
 		}
+
 	}
 
 
@@ -37,22 +41,49 @@ public class RemoteController : NetworkBehaviour
 	{
 		NetworkServer.Destroy(target);
 	}
-	[Command] public void CmdSpawnTarget(int condition, float angle, bool moving)
+	[Command] public void CmdSpawnTarget(int condition, float angle, bool moving, bool audioTest)
 	{
 		GameObject TargetContainer = GameObject.Find("GameControll/Targets");
 		TargetContainer.transform.position = Camera.main.transform.position;
 
-		GameObject instance = Instantiate(target, TargetContainer.transform);
-
+		GameObject instance = Instantiate(targetPrefab, TargetContainer.transform);
+		if (audioTest)
+            {
+                instance.GetComponent<SpriteRenderer>().sprite = null;
+            }
 		instance.GetComponent<Target>().defineConfiguration(angle, moving);
 		instance.GetComponent<Target>().GiveClue(condition);
-		NetworkServer.Spawn(instance); //??? SPAWN here and in OrientationTask ?? are both functions neede and used ?
+		NetworkServer.Spawn(instance);
 		gameController.currentTarget = instance;
+	}
+	
+	private int[] spawnpositions = { -80, -50, -20, 20, 50, 80 };
+	[Command] public void CmdSpawnTargets_LokalizationTask(int condition, int targetPosition)
+	{
+		GameObject TargetContainer = GameObject.Find("GameControll/Targets");
+		for (int i = 0; i < 6; i++)
+		{
+			GameObject target = Instantiate(targetPrefab, TargetContainer.transform);
+			target.transform.SetParent(TargetContainer.transform);
+			target.GetComponent<Target>().defineConfiguration(spawnpositions[i], false);
+			if (targetPosition != i)
+			{
+				target.tag = "Decoy";
+			}
+			if (targetPosition == i)
+			{
+				gameController.currentTarget = target;
+				target.GetComponent<Data_Targets>().LT_tag = "Target";
+				target.GetComponent<Target>().GiveClue(condition);
+			}
+			NetworkServer.Spawn(target);
+		}
+		TargetContainer.transform.position = Camera.main.transform.position;
 	}
 
 	[Command] public void CmdDestroyCurrentTarget()
 	{
-		// TODO: FIND all GameObjects with the Target Component and Destroy them
+		FindObjectOfType<OrientationTask>().currentTargetNbr = 0;
 		NetworkServer.Destroy(gameController.currentTarget);
 		gameController.currentTarget = null;
 	}
@@ -65,9 +96,9 @@ public class RemoteController : NetworkBehaviour
 	{
 		gameController.currentCondition = condition;
 	}
-	[Command] public void CmdSetSubjectID(string id)
+	[Command] public void CmdSetSubjectID(string subjectID)
 	{
-		gameController.SubjectID = id;
+		FindObjectOfType<GameController>().SubjectID = subjectID;
 	}
 	[Command] public void CmdSyncTaskSetupOT(int numOfSessions, int[] objectsPerRound, int[] cueOrder1, int[] cueOrder2, int[] cueOrder3, int[] cueOrder4)
 	{
@@ -98,7 +129,60 @@ public class RemoteController : NetworkBehaviour
 	{
 		GameObject.FindObjectOfType<OrientationTask>().StartTask();
 	}
+	//[Command] public void CmdCallTargetShotEvent(GameObject target)
+	//{
+	//	EventManager.CallTargetShotEvent(target);
+	//}
+	[Command] public void CmdCallDefineNewTargetEvent()
+	{
+		Debug.Log("RemoteControler Call from Server:" +isServer );
+		EventManager.CallDefineNewTargetEvent();
+	}
+	[Command] public void CmdUpdateFixationCross(bool isSeen, CrossColor color, float timeSeen)
+	{
+		if (fixationCross == null)
+		{
+			fixationCross = FindObjectOfType<FixationCross>();
+		}
+		if (fixationCross != null)
+		{
+			fixationCross.isSeen = isSeen;
+			fixationCross.CurrentColor = color;
+			fixationCross.TimeSeen = timeSeen;
+		}
+	}
+	[Command]
+	public void CmdEnableFixationCross(bool enabled)
+	{
+		if (fixationCross == null)
+		{
+			fixationCross = FindObjectOfType<FixationCross>();
+		}
+		if (fixationCross != null)
+		{
+			fixationCross.isVisible = enabled;
+		}
+	}
+	[Command]
+	public void CmdToggleFixationCross()
+	{
+		fixationCross = FindObjectOfType<FixationCross>();
+		fixationCross.TimeSeen = 0;
+		fixationCross.isSeen = false;
+		fixationCross.isVisible = !fixationCross.isVisible;
+	}
 
+	[Command] public void CmdCallStartSearching()
+	{
+		EventManager.CallStartSearchingEvent();
+	}
+
+	[Command]
+	public void CmdStartTaskLT()
+	{
+		GameObject.FindObjectOfType<LokalisationTask>().StartTask();
+	}
+	
 	[Command]
 	public void CmdSyncTaskSetupLT(int numOfSessions, int[] objectsPerRound, int[] cueOrder1, int[] cueOrder2, int[] cueOrder3, int[] cueOrder4)
 	{
@@ -122,19 +206,25 @@ public class RemoteController : NetworkBehaviour
 		lt.maxSessionNumber = numOfSessions;
 	}
 
-	[Command]
-	public void CmdStartTaskLT()
+	[Command] public void CmdEndTaskandSave()
 	{
-		GameObject.FindObjectOfType<LokalisationTask>().StartTask();
+		gameController.pause = false;
+		gameController.resetAfterSave = false;
+		gameController.SaveToDB();
+	}
+	[Command]
+	public void CmdSave()
+	{
+		gameController.Save();
+	}
+	[Command] public void CmdSaveToDB()
+	{
+		gameController.resetAfterSave = false;
+		gameController.SaveToDB();
 	}
 
-	[Command] public void CmdCallTargetShotEvent(GameObject target)
+	[Command] public void CmdTogglePause()
 	{
-		EventManager.CallTargetShotEvent(target);
-	}
-	[Command]
-	public void CmdCallDefineNewTargetEvent()
-	{
-		EventManager.CallDefineNewTargetEvent();
+		gameController.pause = !gameController.pause;
 	}
 }

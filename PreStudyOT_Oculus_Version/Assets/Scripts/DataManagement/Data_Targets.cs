@@ -3,14 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using UnityEngine;
-
+using Mirror;
 [Serializable]
-public class Data_Targets : MonoBehaviour
+public class Data_Targets : NetworkBehaviour
 {
     GameController gameController;
 
     [SerializeField] string identifyer = "Target";
-    [SerializeField] public string LT_tag = "untagged";
+    [SyncVar] public string LT_tag = "untagged";
     [SerializeField] GameState gameState;
     [SerializeField] Condition cueType;
     [SerializeField] double spawnTime;
@@ -55,13 +55,13 @@ public class Data_Targets : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (GetComponent<Target>().hit & deathTime == 0)
-        {
-            deathReason = ReasonOfDeath.shot;
-            deathTime = DataHandler.currentTimeStamp;
-            endPosition_wp = transform.position;
-            endPosition_lp = transform.localPosition;
-        }
+        //if (GetComponent<Target>().hit & deathTime == 0)
+        //{
+        //    deathReason = ReasonOfDeath.shot;
+        //    deathTime = DataHandler.currentTimeStamp;
+        //    endPosition_wp = transform.position;
+        //    endPosition_lp = transform.localPosition;
+        //}
     }
 
     public void WriteStartInfo(float angle,bool moving)
@@ -73,17 +73,26 @@ public class Data_Targets : MonoBehaviour
         else
             speed = 0;
     }
-
-    private void OnDisable()
+    public void writeStats()
     {
-        if (!GetComponent<Target>().hit)
+        if (isServer)
         {
-            deathReason = ReasonOfDeath.outOfTime;
-            deathTime = DataHandler.currentTimeStamp;
-            endPosition_wp = transform.position;
-            endPosition_lp = transform.localPosition;
+            if (!GetComponent<Target>().hit)
+            {
+                deathReason = ReasonOfDeath.outOfTime;
+                deathTime = DataHandler.currentTimeStamp;
+                endPosition_wp = transform.position;
+                endPosition_lp = transform.localPosition;
+            }
+            else
+            {
+                deathReason = ReasonOfDeath.shot;
+                deathTime = DataHandler.currentTimeStamp;
+                endPosition_wp = transform.position;
+                endPosition_lp = transform.localPosition;
+            }
+            gameController.dataHandler.WriteTargetToJSON(this);
         }
-        FindObjectOfType<DataHandler>().WriteTargetToJSON(this);
     }
 
     public void ResetAll()
