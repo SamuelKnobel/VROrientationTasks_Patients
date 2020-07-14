@@ -66,7 +66,7 @@ public class DataHandler : MonoBehaviour
         data = data + JSONsToSave[JSONsToSave.Count - 1] +"]";
         File.AppendAllText(pathToFile, JSONsToSave[JSONsToSave.Count - 1]);
         File.AppendAllText(pathToFile,"]");
-        SQLCreator.AddToTable(GameController.SubjectID, GameController.startTime, data);
+        //SQLCreator.AddToTable(GameController.SubjectID, GameController.startTime, data);
 
     }
 }

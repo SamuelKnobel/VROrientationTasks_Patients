@@ -7,38 +7,38 @@ using System;
 public static class SQLConnector
 {
 
-	public static string database_name = "OT_Test.sqlite";
-	public static string db_connection_string;
-	public static IDbConnection db_connection;
+	//public static string database_name = "OT_Test.sqlite";
+	//public static string db_connection_string;
+	//public static IDbConnection db_connection;
 
-	public static void ConnectToDatabase()
-	{
-		try
-		{
-			db_connection_string = "URI=file:" + Application.streamingAssetsPath + "/" + database_name;
-			Debug.Log("db_connection_string" + db_connection_string);
-			db_connection = new SqliteConnection(db_connection_string);
-			db_connection.Open();
-			Debug.Log("Connected");
-		}
-		catch (Exception e)
-		{
-			Debug.LogWarning("Could not connect To Database");
-			throw e;
-		}
-	}
+	//public static void ConnectToDatabase()
+	//{
+	//	try
+	//	{
+	//		db_connection_string = "URI=file:" + Application.streamingAssetsPath + "/" + database_name;
+	//		Debug.Log("db_connection_string" + db_connection_string);
+	//		db_connection = new SqliteConnection(db_connection_string);
+	//		db_connection.Open();
+	//		Debug.Log("Connected");
+	//	}
+	//	catch (Exception e)
+	//	{
+	//		Debug.LogWarning("Could not connect To Database");
+	//		throw e;
+	//	}
+	//}
 
 
-	//helper functions
-	public static IDbCommand GetDbCommand()
-	{
-		return db_connection.CreateCommand();
-	}
+	////helper functions
+	//public static IDbCommand GetDbCommand()
+	//{
+	//	return db_connection.CreateCommand();
+	//}
 
-	public static void Close()
-	{
-		db_connection.Close();
-	}
+	//public static void Close()
+	//{
+	//	db_connection.Close();
+	//}
 
 
 
