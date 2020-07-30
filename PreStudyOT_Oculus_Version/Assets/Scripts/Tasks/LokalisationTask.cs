@@ -150,6 +150,9 @@ public class LokalisationTask : NetworkBehaviour
                     gameController.currentTarget = target;
                     target.GetComponent<Data_Targets>().LT_tag = "Target";
                     target.GetComponent<Target>().GiveClue(condition);
+                    currentTargetNbr++;
+                    Debug.Log("New Target: " + currentTargetNbr);
+
                 }
             }
 			TargetContainer.transform.position = Camera.main.transform.position;
@@ -188,7 +191,7 @@ public class LokalisationTask : NetworkBehaviour
                 {
                     Debug.Log("LT: Target shot. Try to write Stats: isServer =" + isServer);
 
-                    AudioSource.PlayClipAtPoint(right, shotObject.transform.position);
+                    //AudioSource.PlayClipAtPoint(right, shotObject.transform.position);
                     shotObject.tag = "Untagged";
                     shotObject.GetComponent<Target>().hit = true;
                     shotObject.GetComponent<Rigidbody>().useGravity = true;

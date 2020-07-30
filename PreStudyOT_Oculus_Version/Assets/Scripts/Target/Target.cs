@@ -33,8 +33,8 @@ public class Target : NetworkBehaviour
             }
             else if (gameController.currentState == GameState.Task_Lokalisation_Task)
             {
-                FindObjectOfType<LokalisationTask>().currentTargetNbr++;
-                Debug.Log("New Target: " + FindObjectOfType<LokalisationTask>().currentTargetNbr);
+                //FindObjectOfType<LokalisationTask>().currentTargetNbr++;
+                //Debug.Log("New Target: " + FindObjectOfType<LokalisationTask>().currentTargetNbr);
 
             }
         }
